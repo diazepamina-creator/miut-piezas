@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.5
+  Manipulativo para 1.º y 2.º de ESO · versión 0.6
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,22 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.6 · COMO EL PULSO DE LOS DIOSES
+  · LA CABECERA, en una hoja: el nombre, cuatro acciones en letra pequeña
+    —Guía, Practicar, Ajustes, Aula— y los juegos como pestañas debajo. Se
+    lleva la mitad de alto que antes.
+  · LA GUÍA: una visita con un foco sobre cada parte de la mesa, solo las
+    que se ven en el juego abierto. Se abre sola la primera vez.
+  · PRACTICAR: ejercicios nuevos sin fin, que no cuentan para los retos,
+    con cuatro dificultades —fácil, media, difícil y sin piezas— y «tus
+    números», que sustituye al reto libre.
+  · DECIR EL NÚMERO ANTES DE VOLTEAR pasa a ser un ajuste, apagado de
+    serie: frenaba mucho el juego.
+  · DE PIEDRA A PIEZA: cuando lo que queda de la piedra es un primo, la
+    piedra entera se transforma en su pieza.
+  · EL GATO NARANJA: si Miut va a golpear con un primo que no divide, un
+    gato naranja de calcetín blanco le para la pata.
 
   VERSIÓN 0.5 · EL ANDAMIAJE, COMO EN LA TERMINAL
   · CUATRO ETAPAS POR JUEGO, de tres retos cada una, y en cada una las
@@ -117,33 +133,51 @@ body{margin:0;color:var(--tinta);font-family:'Atkinson Hyperlegible',system-ui,s
     repeating-linear-gradient(90deg, transparent 0 178px, var(--veta) 178px 180px),
     linear-gradient(90deg, var(--mesa1), var(--mesa2) 45%, var(--mesa1) 70%, var(--mesa2));
   background-size:auto, 600px 600px, auto, auto;
-  background-attachment:fixed;-webkit-text-size-adjust:100%}
+  background-attachment:fixed;-webkit-text-size-adjust:100%;min-height:100vh}
 .lienzo{max-width:760px;margin:0 auto;padding:12px 12px 36px}
 body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-duration:.001ms !important}
 
-/* ── LA CABECERA: el nombre, los tres juegos y las acciones ── */
-.cab{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 13px;border:1px solid var(--linea);
-  border-radius:13px;background:linear-gradient(180deg,var(--panel2),var(--panel))}
-.cab .sello{width:30px;height:30px;flex:0 0 30px;background:var(--oro);
+/* ── LA CABECERA, como en el pulso de los dioses: una sola hoja con el
+   nombre y, en letra pequeña y sin cajas, las cuatro acciones; debajo, los
+   cuatro juegos como pestañas de la misma hoja. Antes eran una hoja y
+   cuatro fichas grandes, y se comían un tercio de la pantalla. ── */
+.cab{padding:9px 14px 0;border:1px solid var(--linea);border-radius:13px;overflow:hidden;
+  background:linear-gradient(180deg,var(--panel2),var(--panel));box-shadow:0 6px 18px var(--sombra)}
+.rotulo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cab .sello{width:26px;height:26px;flex:0 0 26px;background:var(--oro);
   -webkit-mask:var(--pata) center/contain no-repeat;mask:var(--pata) center/contain no-repeat}
-.cab h1{font-family:'Rokkitt',serif;font-weight:700;font-size:23px;margin:0;color:var(--oro);line-height:1.05}
-.cab .sub{font-family:'Rokkitt',serif;font-size:11.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--tenue);margin:1px 0 0}
-.cab .acc{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap}
+.cab h1{font-family:'Rokkitt',serif;font-weight:700;font-size:19px;letter-spacing:1.8px;text-transform:uppercase;margin:0;color:var(--oro);line-height:1.1}
+.cab .sub{font-family:'Rokkitt',serif;font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:var(--tenue);margin:0}
+.cab .acc{margin-left:auto;display:flex;gap:18px}
 .cab .acc button{font-family:'Rokkitt',serif;font-size:12.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--tenue);
-  background:none;border:0;border-bottom:1px solid transparent;padding:3px 0;cursor:pointer}
-.cab .acc button:hover,.cab .acc button[aria-pressed="true"]{color:var(--oro);border-bottom-color:var(--oro)}
+  background:none;border:0;border-bottom:1px solid transparent;padding:4px 0;cursor:pointer}
+.cab .acc button:hover,.cab .acc button:focus-visible,.cab .acc button[aria-pressed="true"]{color:var(--oro);border-bottom-color:var(--oro);outline:none}
+/* en el móvil las acciones bajan a su propia regleta, de lado a lado */
+@media (max-width:620px){
+  .cab .acc{width:100%;margin:5px 0 0;padding-top:4px;border-top:1px solid var(--linea);justify-content:space-between;gap:6px}
+}
+.juegos{display:grid;grid-template-columns:repeat(4,1fr);margin:8px -14px 0;border-top:1px solid var(--linea)}
+.juegos button{font:inherit;cursor:pointer;text-align:center;color:var(--tinta);background:none;border:0;border-bottom:3px solid transparent;
+  border-radius:0;padding:6px 4px 4px;line-height:1.2}
+.juegos button + button{border-left:1px solid var(--linea)}
+.juegos button b{display:block;font-family:'Rokkitt',serif;font-size:15px;letter-spacing:1.3px;text-transform:uppercase;color:var(--oro)}
+.juegos button span{display:block;font-size:11.5px;color:var(--tenue)}
+.juegos button:hover{background:var(--brillo)}
+.juegos button[aria-pressed="true"]{border-bottom-color:var(--oro);background:var(--brillo)}
+@media (max-width:480px){ .juegos button span{display:none} .juegos button b{font-size:13.5px;letter-spacing:.6px} .juegos button{padding:8px 2px 6px} }
 
-.juegos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
-@media (max-width:560px){ .juegos{grid-template-columns:repeat(2,1fr)} }
-.juegos button{font:inherit;cursor:pointer;text-align:left;color:var(--tinta);border:1px solid var(--linea);border-radius:11px;
-  background:var(--panel);padding:8px 11px}
-.juegos button b{display:block;font-family:'Rokkitt',serif;font-size:16px;letter-spacing:1.4px;text-transform:uppercase;color:var(--oro)}
-.juegos button span{font-size:12.5px;color:var(--tenue)}
-.juegos button[aria-pressed="true"]{border-color:var(--oro);box-shadow:0 0 0 2px var(--brillo)}
-@media (max-width:480px){ .juegos button span{display:none} .juegos button b{font-size:14px;letter-spacing:.8px} }
+/* ── LOS AJUSTES, una hoja que se abre bajo la cabecera ── */
+.ajustes .aj{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 0;border-bottom:1px dashed var(--linea)}
+.ajustes .aj > .etq{min-width:130px}
+.ajustes .aj small{flex-basis:100%;color:var(--tenue);font-size:12.5px;margin-top:-2px}
+.ops{display:inline-flex;border:1px solid var(--linea);border-radius:20px;overflow:hidden;flex-wrap:wrap}
+.ops button{font-family:'Rokkitt',serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+  background:none;border:0;color:var(--tenue);padding:6px 12px;min-height:34px}
+.ops button + button{border-left:1px solid var(--linea)}
+.ops button[aria-pressed="true"]{background:var(--oro);color:var(--panel)}
 
 .panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--linea);border-radius:13px;
-  padding:13px;margin-top:11px;box-shadow:0 6px 18px var(--sombra)}
+  padding:12px 13px;margin-top:9px;box-shadow:0 6px 18px var(--sombra)}
 
 /* ── EL ENCARGO: qué hay que hacer, y por dónde se va ── */
 .encargo{display:flex;align-items:flex-start;gap:12px}
@@ -326,6 +360,35 @@ button.enlace{background:none;border:0;color:var(--tenue);text-decoration:underl
 button.enlace:hover{color:var(--oro)}
 .ayudaPiezas{margin-top:12px;padding-top:12px;border-top:1px dashed var(--linea)}
 
+/* ── PRACTICAR: la dificultad y otro ejercicio, donde van los puntos ── */
+.puntos .difs{margin-right:4px}
+.puntos .difs button{min-height:30px;padding:4px 10px;font-size:12px}
+.puntos .b.otro{margin-left:auto;min-height:34px;padding:5px 12px}
+.miut .b.otro{min-height:32px;padding:4px 12px;margin:6px 0 0 8px;vertical-align:1px}
+.propios{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--linea)}
+
+/* ── LA GUÍA: un foco sobre cada parte de la mesa y un papel que la
+   explica, como la visita del pulso de los dioses. Se enseñan solo las
+   partes que están a la vista en el juego que toca. ── */
+.guia{position:fixed;inset:0;z-index:80;cursor:pointer}
+.guia-foco{position:fixed;border-radius:13px;border:2px solid #F0C75E;pointer-events:none;
+  box-shadow:0 0 0 9999px rgba(30,16,6,.72),0 0 22px rgba(240,199,94,.55);
+  transition:top .28s ease,left .28s ease,width .28s ease,height .28s ease}
+.guia-globo{position:fixed;z-index:81;width:min(340px,calc(100vw - 32px));cursor:default;
+  background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--oro);border-radius:14px;padding:13px 15px;
+  box-shadow:0 18px 44px rgba(0,0,0,.5);transition:top .28s ease,left .28s ease}
+.guia-globo .tit{display:flex;align-items:center;gap:8px;font-family:'Rokkitt',serif;font-weight:700;font-size:15px;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--oro);margin-bottom:4px}
+.guia-globo .tit::before{content:'';width:18px;height:18px;flex:0 0 18px;background:var(--oro);
+  -webkit-mask:var(--pata) center/contain no-repeat;mask:var(--pata) center/contain no-repeat}
+.guia-globo:focus{outline:none}
+.guia-globo p{margin:0;font-size:14.5px;line-height:1.5}
+.guia-globo p b{color:var(--oro)}
+.guia-pie{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px}
+.guia-pie span{font-family:'Space Mono',monospace;font-size:11px;color:var(--tenue)}
+.guia-pie .botones{margin:0}
+.guia-pie button.b{min-height:36px;padding:5px 12px}
+
 /* ── LA AYUDA, encima ── */
 .modal{position:fixed;inset:0;background:rgba(12,8,20,.82);display:grid;place-items:center;padding:16px;z-index:60;overflow:auto}
 .modal .caja2{width:min(600px,100%);max-height:92vh;overflow:auto;border:1px solid var(--linea);border-radius:16px;padding:18px 20px;
@@ -342,7 +405,6 @@ footer a{color:var(--tenue)}
    script con el ancho y el alto que haya; los papeles de encima no se
    amplían, que se colocan con la pantalla de verdad. ── */
 body[data-aula="si"] .lienzo{zoom:var(--zAula,1);max-width:900px}
-body[data-aula="si"] .juegos button span{display:none}
 body[data-aula="si"] .panel{margin-top:8px;padding:11px}
 </style>
 </head><body>
@@ -359,26 +421,39 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
 </defs></svg>
 <div class="lienzo">
 <header class="cab">
-  <span class="sello" aria-hidden="true"></span>
-  <div><h1>Las piezas de Miut</h1><p class="sub">Factorizar · mcd · mcm · la pareja · con las patas</p></div>
-  <nav class="acc" aria-label="Acciones">
-    <button id="bAyuda">Cómo se juega</button>
-    <button id="bTema">Mesa oscura</button>
-    <button id="bAula" aria-pressed="false">Aula</button>
-  </nav>
+  <div class="rotulo">
+    <span class="sello" aria-hidden="true"></span>
+    <div><h1>Las piezas de Miut</h1><p class="sub">factorizar · mcd · mcm · con las patas</p></div>
+    <nav class="acc" aria-label="Acciones">
+      <button id="bGuia">Guía</button>
+      <button id="bPracticar" aria-pressed="false">Practicar</button>
+      <button id="bAjustes" aria-pressed="false" aria-controls="panelAjustes">Ajustes</button>
+      <button id="bAula" aria-pressed="false">Aula</button>
+    </nav>
+  </div>
+  <div class="juegos" role="tablist" aria-label="Los cuatro juegos">
+    <button id="jRomper" data-j="romper"><b>Romper</b><span>en factores primos</span></button>
+    <button id="jComun" data-j="comun"><b>Lo común</b><span>el mcd</span></button>
+    <button id="jTodo" data-j="todo"><b>Todo</b><span>el mcm</span></button>
+    <button id="jPareja" data-j="pareja"><b>La pareja</b><span>mcd · mcm = a · b</span></button>
+  </div>
 </header>
 
-<div class="juegos" role="tablist" aria-label="Los cuatro juegos">
-  <button id="jRomper" data-j="romper"><b>Romper</b><span>parte el número en piezas</span></button>
-  <button id="jComun" data-j="comun"><b>Lo común · mcd</b><span>la misma torre con los dos</span></button>
-  <button id="jTodo" data-j="todo"><b>Todo · mcm</b><span>que quepan los dos</span></button>
-  <button id="jPareja" data-j="pareja"><b>La pareja</b><span>mcd · mcm = a · b</span></button>
+<div class="panel ajustes" id="panelAjustes" hidden>
+  <div class="aj"><span class="etq">La mesa</span>
+    <span class="ops" role="group" aria-label="La mesa"><button data-aj="modo" data-v="haya">Haya, clara</button><button data-aj="modo" data-v="nogal">Nogal, oscura</button></span></div>
+  <div class="aj"><span class="etq">Antes de voltear</span>
+    <span class="ops" role="group" aria-label="Antes de voltear"><button data-aj="predice" data-v="no">Voltear sin más</button><button data-aj="predice" data-v="si">Decir antes el número</button></span>
+    <small>Con «decir antes el número», para voltear una torre o darla por buena hay que escribir primero qué número es. Más lento, y más exigente.</small></div>
+  <div class="aj"><span class="etq">Las patas</span>
+    <span class="ops" role="group" aria-label="Las patas"><button data-aj="patas" data-v="si">Se ven</button><button data-aj="patas" data-v="no">Sin animaciones</button></span></div>
+  <div class="botones"><button class="b" id="bReglas">Las reglas enteras</button><button class="b ok" id="ajCerrar">Cerrar</button></div>
 </div>
 
 <div class="panel">
   <div class="encargo">
     <div class="txt" id="encTxt"></div>
-    <div class="nivel"><button id="atras" aria-label="Reto anterior">‹</button><span id="cual"></span><button id="adelante" aria-label="Reto siguiente">›</button></div>
+    <div class="nivel" id="nivel"><button id="atras" aria-label="Reto anterior">‹</button><span id="cual"></span><button id="adelante" aria-label="Reto siguiente">›</button></div>
   </div>
   <div class="puntos" id="puntos" aria-hidden="true"></div>
 </div>
@@ -411,11 +486,20 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.5
+  · versión 0.6
 </footer>
 </div>
 
 <div class="patas" id="patas" aria-hidden="true"></div>
+<div class="guia" id="guia" hidden>
+  <div class="guia-foco" id="guiaFoco"></div>
+  <div class="guia-globo" id="guiaGlobo" role="dialog" aria-modal="true" aria-labelledby="guiaTit" tabindex="-1">
+    <div class="tit" id="guiaTit"></div>
+    <p id="guiaTxt"></p>
+    <div class="guia-pie"><span id="guiaNum"></span>
+      <span class="botones"><button class="b" id="guiaSalir">Salir</button><button class="b ok" id="guiaSig">Siguiente</button></span></div>
+  </div>
+</div>
 <div class="modal" id="mAyuda" hidden>
  <div class="caja2" role="dialog" aria-modal="true" aria-labelledby="ayTit">
   <h2 id="ayTit">Cómo se juega</h2>
@@ -432,12 +516,14 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>Hay que construir la torre <b>más pequeña</b> en la que quepan los dos números, pieza a pieza. Esa torre es el <b>mínimo común múltiplo</b>: hace falta cada pieza tantas veces como la tenga el que más.</p>
   <h3>La pareja · mcd · mcm = a · b</h3>
   <p>Las torres del mcd y del mcm, ya hechas. Se juntan y salen exactamente las piezas de los dos números: por eso <b>mcd · mcm = a · b</b>, siempre.</p>
-  <h3>Antes de mirar, decirlo</h3>
-  <p>Para voltear una torre o darla por buena hay que decir antes <b>qué número es</b>. Primero se piensa y después se comprueba. Y si algo falla, Miut dice primero <b>qué</b> está mal; solo si se vuelve a fallar dice <b>dónde</b>.</p>
+  <h3>Si algo falla</h3>
+  <p>Miut dice primero <b>qué</b> está mal; solo si se vuelve a fallar dice <b>dónde</b>. En Romper, si Miut va a golpear con un primo que no divide, un gato naranja le para la pata. En <b>Ajustes</b> se puede pedir además <b>decir antes el número</b>: para voltear una torre o darla por buena hay que escribir primero qué número es.</p>
   <h3>Las cuatro etapas</h3>
   <p>Cada juego sube en cuatro etapas de tres retos, y en cada una las piezas ayudan menos: <b>Colores</b> (color, textura y número), <b>Texturas</b> (todas de cartón), <b>Lisas</b> (solo el número; en el mcd, el mcm y la pareja, los números llegan como piedras y hay que romperlos antes) y <b>Sin piezas</b> (solo la pregunta, escrita). En la última se pueden sacar las piezas como pista, pero el reto queda <b>con ayuda</b>, marcado con un punto hueco.</p>
   <h3>En clase</h3>
-  <p>Con <b>Mesa oscura</b> la mesa pasa a ser de nogal, para aulas con poca luz. Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas. Cada juego tiene al final un reto con los números que se quieran.</p>
+  <p>En <b>Ajustes</b> se cambia a la mesa oscura, de nogal, para aulas con poca luz. Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas.</p>
+  <h3>Practicar</h3>
+  <p>Ejercicios nuevos cada vez, que no cuentan para los retos. Se elige la dificultad —<b>fácil</b>, <b>media</b>, <b>difícil</b> o <b>sin piezas</b>— y con «tus números» se ponen los que se quieran, con primos hasta el 13.</p>
   <div class="botones"><button class="b ok" id="ayCerrar">Volver a las piezas</button></div>
  </div>
 </div>
@@ -556,7 +642,7 @@ function bloque(clave, lista, opts){
      vuelta a las piezas no pregunta nada */
   const conPata = () => toca(v.getBoundingClientRect(), gira);
   const pide = () => {
-    if(P.dorso[clave] || P.visto[clave] === n) return conPata();
+    if(!predice() || P.dorso[clave] || P.visto[clave] === n) return conPata();
     pideNumero(b, '¿qué número hay detrás?', n,
       () => { P.visto[clave] = n; conPata(); setTimeout(() => dice('<b>Eso es: ' + n + '</b>' + (lista.length > 1 ? ' = ' + ordena(lista).join(' · ') + '.' : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'), 'bien'), 700); },
       g => { P.visto[clave] = n; conPata(); setTimeout(() => dice('Dijiste ' + g + ', y es <b>' + n + '</b>' + (lista.length > 1 ? ': ' + ordena(lista).join(' · ') + ' = ' + n + '.' : '.'), 'mal'), 700); });
@@ -577,7 +663,14 @@ const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) 
    pantalla. Dos, izquierda y derecha, y se usa la del lado de la pieza.
    El brazo apunta siempre al hombro, que está debajo de la pantalla: así
    la pata gira un poco según adónde llegue, como un brazo de verdad. */
-const PATA_SVG = (() => {
+/* el pelaje, en dos gatos: Miut, lila atigrada, y el gato naranja que le
+   para la pata cuando va a golpear con un primo que no divide */
+const PELO = {
+  miut:    {borde:'#45314F', pelo:['#6E5586', '#A088B5', '#BAA5CC', '#9C83B1', '#654D7D'], raya:'#634A7A'},
+  naranja: {borde:'#5A2A0C', pelo:['#9E4A12', '#D9782C', '#F0A052', '#D27328', '#8E4210'], raya:'#8A3A0A'}
+};
+const pataSVG = (quien) => {
+  const C = PELO[quien], id = quien;
   /* el brazo se ensancha hacia el codo —se ve desde arriba, en escorzo— y
      se estrecha en la muñeca; la mano es un mitón redondo con cuatro dedos
      juntos delante. Todo en un contorno: primero el trazo oscuro, encima los
@@ -603,16 +696,15 @@ const PATA_SVG = (() => {
   const rayas = [raya(150, 5, 3), raya(178, 2.5, -2, 0, .55), raya(232, 6, -3), raya(292, 4.5, 4),
     raya(318, 2, 2, .45, 1), raya(380, 6.5, -4), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4)].join('');
   return '<svg viewBox="0 0 96 1500" aria-hidden="true"><defs>'
-    + '<linearGradient id="pelo" x1="0" x2="1"><stop offset="0" stop-color="#6E5586"/><stop offset=".22" stop-color="#A088B5"/>'
-    + '<stop offset=".48" stop-color="#BAA5CC"/><stop offset=".78" stop-color="#9C83B1"/><stop offset="1" stop-color="#654D7D"/></linearGradient>'
-    + '<radialGradient id="calcetin" cx=".45" cy=".35" r=".65"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F6F1F5"/>'
+    + '<linearGradient id="pelo-' + id + '" x1="0" x2="1">' + C.pelo.map((c, k) => '<stop offset="' + [0, .22, .48, .78, 1][k] + '" stop-color="' + c + '"/>').join('') + '</linearGradient>'
+    + '<radialGradient id="calcetin-' + id + '" cx=".45" cy=".35" r=".65"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F6F1F5"/>'
     + '<stop offset="1" stop-color="#D8CCE0"/></radialGradient>'
-    + '<clipPath id="soloMano"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath></defs>'
-    + '<g fill="none" stroke="#45314F" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
-    + '<g fill="url(#pelo)">' + contorno + '</g>'
-    + '<g fill="#634A7A" opacity=".55">' + rayas + '</g>'
-    + '<g clip-path="url(#soloMano)"><path d="' + zig + '" fill="url(#calcetin)"/>'
-    + palma.replace('/>', ' fill="url(#calcetin)"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin)"/>')
+    + '<clipPath id="soloMano-' + id + '"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath></defs>'
+    + '<g fill="none" stroke="' + C.borde + '" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
+    + '<g fill="url(#pelo-' + id + ')">' + contorno + '</g>'
+    + '<g fill="' + C.raya + '" opacity=".55">' + rayas + '</g>'
+    + '<g clip-path="url(#soloMano-' + id + ')"><path d="' + zig + '" fill="url(#calcetin-' + id + ')"/>'
+    + palma.replace('/>', ' fill="url(#calcetin-' + id + ')"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin-' + id + ')"/>')
     /* la sombra de la mano sobre la muñeca: separa el mitón del brazo */
     + '<path d="M28 68 Q48 80 68 68" fill="none" stroke="#B9A9C4" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>'
     /* los surcos entre los dedos, y un mechón blanco en cada punta */
@@ -623,19 +715,21 @@ const PATA_SVG = (() => {
     /* la luz de la lámpara sobre los nudillos */
     + '<path d="M31 43 Q48 34 65 43" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".6"/>'
     + '</svg>';
-})();
+};
+const PATA_SVG = pataSVG('miut'), PATA_NARANJA = pataSVG('naranja');
 const quieto = () => document.body.dataset.movimiento === 'menos';
 let enCurso = [];                                    // lo que se está moviendo ahora
 function acabaTodo(){ enCurso.splice(0).forEach(f => f()); }
 /* la pata, colocada con la punta de los dedos en (x, y) y el brazo hacia
    su hombro, que está bajo la pantalla, a un lado o al otro */
-function postura(x, y, lado, esc){
-  const hx = innerWidth * (lado === 'izq' ? .3 : .7), hy = innerHeight + 260;
+function postura(x, y, lado, esc, arriba){
+  /* el gato de enfrente tiene el hombro al otro lado de la mesa, arriba */
+  const hx = innerWidth * (lado === 'izq' ? .3 : .7), hy = arriba ? -260 : innerHeight + 260;
   const ang = Math.atan2(-(hx - x), hy - y) * 180 / Math.PI;
   return 'translate(' + x + 'px,' + y + 'px) rotate(' + ang.toFixed(1) + 'deg) scale(' + esc + ') translate(-48px,-14px)';
 }
-function sacaPata(x){
-  const d = el('div', 'pataM', PATA_SVG);
+function sacaPata(x, svg){
+  const d = el('div', 'pataM', svg || PATA_SVG);
   $('patas').appendChild(d);
   return {d, lado: x < innerWidth / 2 ? 'izq' : 'der'};
 }
@@ -706,6 +800,117 @@ function toca(r, alTocar){
   an.finished.then(fin, fin);
   enCurso.push(fin);
 }
+/* PARAR LA PATA. Cuando Miut va a golpear con un primo que no divide, un
+   gato naranja de calcetín blanco, sentado al otro lado de la mesa, le da
+   un manotazo encima de la pata antes de que llegue: ese golpe no vale. La
+   piedra ni se toca. */
+function cancela(r, siQuieto){
+  if(quieto() || !r){ siQuieto && siQuieto(); return; }
+  acabaTodo();
+  const esc = escala(), T = 1150;
+  const a = {x: r.left + r.width / 2, y: r.bottom + 14 * esc};         // la punta de los dedos, justo antes de la piedra
+  const {d, lado} = sacaPata(a.x);
+  const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
+  const baja = {x: a.x + (lado === 'izq' ? -8 : 8), y: a.y + 44 * esc};  // adonde la empuja el manotazo
+  const anM = d.animate([
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
+    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .34, easing: 'ease-in-out'},
+    {transform: postura(a.x, a.y - 5, lado, esc), filter: AIRE, offset: .45, easing: 'ease-in'},
+    {transform: postura(baja.x, baja.y, lado, esc * .95), filter: APOYO, offset: .52, easing: 'ease-out'},
+    {transform: postura(baja.x, baja.y + 3, lado, esc * .95), filter: APOYO, offset: .68, easing: 'ease-in'},
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 1}
+  ], {duration: T, fill: 'forwards'});
+  /* el naranja entra por arriba, por el otro lado, y pone la palma sobre
+     la mano de Miut: sus dedos acaban por debajo de los de ella */
+  const o = el('div', 'pataM', PATA_NARANJA); $('patas').appendChild(o);
+  const ladoO = lado === 'izq' ? 'der' : 'izq', dx = lado === 'izq' ? 4 : -4;
+  const sobre = {x: a.x + dx, y: a.y + 68 * esc}, sobre2 = {x: baja.x + dx, y: baja.y + 68 * esc};
+  const arriba = {x: sobre.x + (ladoO === 'izq' ? -70 : 70), y: -170};
+  const anO = o.animate([
+    {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: 0},
+    {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: .24},
+    {transform: postura(sobre.x, sobre.y - 34 * esc, ladoO, esc * 1.03, true), filter: AIRE, offset: .45, easing: 'ease-in'},
+    {transform: postura(sobre2.x, sobre2.y, ladoO, esc * .97, true), filter: APOYO, offset: .52, easing: 'ease-out'},
+    {transform: postura(sobre2.x, sobre2.y + 3, ladoO, esc * .97, true), filter: APOYO, offset: .7, easing: 'ease-in'},
+    {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: 1}
+  ], {duration: T, fill: 'forwards'});
+  let hecho = false;
+  const fin = () => { if(hecho) return; hecho = true; d.remove(); o.remove(); anM.cancel(); anO.cancel(); };
+  anM.finished.then(fin, fin);
+  enCurso.push(fin);
+}
+
+/* DE PIEDRA A PIEZA. Cuando lo que queda de la piedra es un primo, ya no se
+   parte: la pata la toca, suelta unas esquirlas y la piedra entera se
+   transforma en su pieza —el contorno se deforma de roca a puzle y el gris
+   se vuelve el color del primo—. Luego la pata la lleva a la fila. Las dos
+   siluetas tienen los mismos quince tramos, en el mismo orden, para que el
+   dibujo pueda pasar de una a otra. */
+const LINEA = (x0, y0, x1, y1) => 'C' + (x0 + (x1 - x0) / 3).toFixed(2) + ' ' + (y0 + (y1 - y0) / 3).toFixed(2) + ' '
+  + (x0 + 2 * (x1 - x0) / 3).toFixed(2) + ' ' + (y0 + 2 * (y1 - y0) / 3).toFixed(2) + ' ' + x1 + ' ' + y1 + ' ';
+const PUNTO = (x, y) => 'C' + x + ' ' + y + ' ' + x + ' ' + y + ' ' + x + ' ' + y + ' ';
+const K = 3.866;                                            // la cuarta parte de un círculo de radio 7, en curva
+const FORMA_C = 'M9 5 ' + LINEA(9, 5, 49, 5) + PUNTO(49, 5) + LINEA(49, 5, 49, 20)
+  + 'C' + (49 + K) + ' 20 56 ' + (27 - K) + ' 56 27 C56 ' + (27 + K) + ' ' + (49 + K) + ' 34 49 34 '
+  + LINEA(49, 34, 49, 49) + PUNTO(49, 49) + LINEA(49, 49, 9, 49) + PUNTO(9, 49) + LINEA(9, 49, 9, 34)
+  + 'C' + (9 + K) + ' 34 16 ' + (27 + K) + ' 16 27 C16 ' + (27 - K) + ' ' + (9 + K) + ' 20 9 20 ' + LINEA(9, 20, 9, 5) + PUNTO(9, 5) + 'Z';
+function rocaC(w, h){
+  const x0 = 29 - w / 2, x1 = 29 + w / 2, y0 = 27 - h / 2, y1 = 27 + h / 2, R = 11, c = R * .45;
+  const f = v => +v.toFixed(2);
+  return 'M' + f(x0 + R) + ' ' + f(y0) + ' ' + LINEA(f(x0 + R), f(y0), f(x1 - R), f(y0))
+    + 'C' + f(x1 - c) + ' ' + f(y0) + ' ' + f(x1) + ' ' + f(y0 + c) + ' ' + f(x1) + ' ' + f(y0 + R) + ' '
+    + LINEA(f(x1), f(y0 + R), f(x1), f(27 - 6)) + LINEA(f(x1), f(27 - 6), f(x1 + 1), 27) + LINEA(f(x1 + 1), 27, f(x1), f(27 + 6))
+    + LINEA(f(x1), f(27 + 6), f(x1), f(y1 - R))
+    + 'C' + f(x1) + ' ' + f(y1 - c) + ' ' + f(x1 - c) + ' ' + f(y1) + ' ' + f(x1 - R) + ' ' + f(y1) + ' '
+    + LINEA(f(x1 - R), f(y1), f(x0 + R), f(y1))
+    + 'C' + f(x0 + c) + ' ' + f(y1) + ' ' + f(x0) + ' ' + f(y1 - c) + ' ' + f(x0) + ' ' + f(y1 - R) + ' '
+    + LINEA(f(x0), f(y1 - R), f(x0), f(27 + 6)) + LINEA(f(x0), f(27 + 6), f(x0 - 1), 27) + LINEA(f(x0 - 1), 27, f(x0), f(27 - 6))
+    + LINEA(f(x0), f(27 - 6), f(x0), f(y0 + R))
+    + 'C' + f(x0) + ' ' + f(y0 + c) + ' ' + f(x0 + c) + ' ' + f(y0) + ' ' + f(x0 + R) + ' ' + f(y0) + ' Z';
+}
+function morfea(r, p, destino){
+  if(quieto() || !r) return;
+  const z = parseFloat(getComputedStyle(document.body).getPropertyValue('--zAula')) || 1;
+  const W = 64 * z, H = 54 * z, cx = r.left + r.width / 2 + 3 * z, cy = r.top + r.height / 2;
+  const cs = getComputedStyle(document.body);
+  const gris = cs.getPropertyValue('--piedraL').trim() || '#C2B9B0', tinta = cs.getPropertyValue('--tinta').trim() || '#2E2218';
+  const carton = ['textura', 'lisa'].includes(document.body.dataset.etapa), color = carton ? '#E4D2B2' : colorDe(p);
+  const D = 620, anima = (atr, de, a) => '<animate attributeName="' + atr + '" from="' + de + '" to="' + a + '" dur="' + D + 'ms" begin="indefinite" fill="freeze"'
+    + ' calcMode="spline" keyTimes="0;1" keySplines=".5 0 .2 1"/>';
+  const roca = rocaC(r.width / z, r.height / z);
+  /* las esquirlas: cinco trocitos de piedra que saltan hacia fuera */
+  const esq = [[-26, -14], [30, -18], [-30, 16], [34, 14], [4, -30]].map(([x, y], k) =>
+    '<path class="esq" data-x="' + x + '" data-y="' + y + '" d="M' + (29 + x * .45) + ' ' + (27 + y * .45) + ' l4 -2 l2 4 l-3 3 l-4 -1 Z" fill="' + gris + '" stroke="#1A1226" stroke-width="1.2"/>').join('');
+  const ov = el('div', 'morfo', '<svg viewBox="0 0 64 54" width="' + W + '" height="' + H + '" style="overflow:visible;display:block">' + esq
+    + '<path d="' + roca + '" fill="' + gris + '" stroke="#1A1226" stroke-width="2.2" stroke-linejoin="round">'
+    + anima('d', roca, FORMA_C) + anima('fill', gris, color) + '</path>'
+    + '<text x="29" y="28" font-family="Space Mono, monospace" font-weight="700" font-size="30" fill="' + tinta + '" text-anchor="middle" dominant-baseline="central">'
+    + anima('opacity', 1, 0) + p + '</text>'
+    + '<text x="29" y="28" font-family="Rokkitt, serif" font-weight="700" font-size="25" fill="#1A1226" text-anchor="middle" dominant-baseline="central"'
+    + ' stroke="' + color + '" stroke-width="5" paint-order="stroke" opacity="0">' + anima('opacity', 0, 1) + p + '</text></svg>');
+  ov.style.cssText = 'position:fixed;left:' + (cx - W / 2) + 'px;top:' + (cy - H / 2) + 'px;width:' + W + 'px;height:' + H + 'px;z-index:39;pointer-events:none;'
+    + 'filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))';
+  document.body.appendChild(ov);
+  if(destino) destino.style.visibility = 'hidden';
+  let hecho = false, t = 0;
+  const fin = () => { if(hecho) return; hecho = true; clearTimeout(t); ov.remove(); if(destino) destino.style.visibility = ''; };
+  toca(r, () => {
+    ov.querySelectorAll('animate').forEach(a => a.beginElement());
+    ov.querySelectorAll('.esq').forEach((e, k) => e.animate([
+      {transform: 'translate(0,0) rotate(0)', opacity: 1},
+      {transform: 'translate(' + e.dataset.x + 'px,' + e.dataset.y + 'px) rotate(' + (k % 2 ? 140 : -120) + 'deg)', opacity: 0}
+    ], {duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards'}));
+    /* hecha la pieza, la pata la lleva a la fila; sin fila, se desvanece */
+    t = setTimeout(() => {
+      if(destino && destino.isConnected){
+        const q = ov.getBoundingClientRect();
+        mueve(p, {left: q.left, top: q.top, width: q.width, height: q.height}, destino);
+      }else ov.animate([{opacity: 1}, {opacity: 0, transform: 'scale(.9)'}], {duration: 300, fill: 'forwards'}).finished.then(fin, fin);
+    }, D + 80);
+  });
+  enCurso.push(fin);
+}
+
 /* dónde acaba cada pieza, después de repintar */
 const conEtiqueta = (cont, p) => cont ? [...cont.querySelectorAll('.pieza')].filter(x => x.getAttribute('aria-label').endsWith(' ' + p)) : [];
 function enTorre(clave, p, ultima){
@@ -742,14 +947,47 @@ const ETAPAS = [
   {id:'lisa',     n:'Lisas',      d:'solo el número'},
   {id:'pregunta', n:'Sin piezas', d:'solo la pregunta'}
 ];
-const escalera = (etapas) => etapas.flatMap((lista, e) => lista.map(v => ({e, v: Array.isArray(v) ? v : [v]}))).concat([{e:0, libre:true}]);
+const escalera = (etapas) => etapas.flatMap((lista, e) => lista.map(v => ({e, v: Array.isArray(v) ? v : [v]})));
 const RETOS = {
   romper: escalera([[12, 18, 30], [36, 45, 60], [84, 90, 126], [150, 132, 252]]),
   comun:  escalera([[[12, 18], [8, 12], [15, 25]], [[18, 24], [20, 30], [9, 16]], [[36, 48], [60, 84], [28, 42]], [[48, 72], [45, 75], [35, 64]]]),
   todo:   escalera([[[4, 6], [6, 8], [10, 15]], [[9, 12], [8, 9], [12, 18]], [[20, 30], [18, 24], [14, 21]], [[12, 20], [15, 18], [16, 24]]]),
   pareja: escalera([[[4, 6], [6, 10], [9, 12]], [[12, 18], [10, 15], [8, 12]], [[18, 24], [20, 30], [12, 30]], [[20, 30], [24, 36], [18, 45]]])
 };
-const LIBRE = {romper: [360], comun: [24, 36], todo: [12, 15], pareja: [12, 18]};
+/* ── PRACTICAR. Ejercicios nuevos, sin fin, que no cuentan para los retos:
+   se elige la dificultad y cada «otro ejercicio» saca números nuevos. La
+   dificultad es la misma escalera de las etapas —las piezas ayudan menos—
+   y además los números crecen y traen primos más grandes. Con «tus
+   números» se ponen los que se quieran, que es lo que antes era el reto
+   libre del final de cada juego. */
+const DIFS = [
+  {n:'Fácil',      ps:[2, 3, 5],             max:[60, 30],   f:[2, 3]},
+  {n:'Media',      ps:[2, 3, 5, 7],          max:[150, 72],  f:[3, 4]},
+  {n:'Difícil',    ps:[2, 3, 5, 7, 11],      max:[420, 150], f:[3, 5]},
+  {n:'Sin piezas', ps:[2, 3, 5, 7, 11, 13],  max:[420, 150], f:[3, 5]}
+];
+const azar = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const soloCon = (n, ps) => primos(n).every(q => ps.includes(q));
+function nuevoEjercicio(juego, d){
+  const D = DIFS[d], viejo = (PRAC[juego] || []).join();
+  for(let k = 0; k < 4000; k++){
+    if(juego === 'romper'){
+      const n = azar(4, D.max[0]), f = primos(n);
+      if(soloCon(n, D.ps) && f.length >= D.f[0] && f.length <= D.f[1] && String(n) !== viejo) return [n];
+    }else{
+      const a = azar(4, D.max[1]), b = azar(4, D.max[1]);
+      if(a === b || !soloCon(a, D.ps) || !soloCon(b, D.ps) || primos(a).length < 2 || primos(b).length < 2) continue;
+      /* casi siempre comparten algo, y casi nunca uno es múltiplo del otro */
+      const g = mcd(a, b);
+      if(g === 1 && Math.random() < .85) continue;
+      if((a % b === 0 || b % a === 0) && Math.random() < .8) continue;
+      if([a, b].join() === viejo) continue;
+      return a < b ? [a, b] : [b, a];
+    }
+  }
+  return juego === 'romper' ? [60] : [12, 18];
+}
+const PRAC = {};
 const INTRO = {
   romper: n => 'Rompe la piedra del <b>' + n + '</b> en piezas: golpéala con un primo que caiga justo, y sigue hasta que quede <b>1</b>.',
   comun: (a, b) => 'Con las piezas del <b>' + a + '</b> y con las del <b>' + b + '</b>, construye <b>la misma torre</b>, la más grande posible.',
@@ -763,23 +1001,28 @@ const PREGUNTA = {
   pareja: (a, b) => 'El mcd del ' + a + ' y el ' + b + ' es <b>' + mcd(a, b) + '</b> y su producto, <b>' + a + ' · ' + b + ' = ' + a * b + '</b>. ¿Cuánto vale el <b>mcm</b>?'
 };
 
-const est = {juego:'romper', nivel:{romper:0, comun:0, todo:0, pareja:0}, hechos:{romper:[], comun:[], todo:[], pareja:[]}, ayuda:{romper:[], comun:[], todo:[], pareja:[]}};
+const est = {juego:'romper', practica:false, dif:0, nivel:{romper:0, comun:0, todo:0, pareja:0}, hechos:{romper:[], comun:[], todo:[], pareja:[]}, ayuda:{romper:[], comun:[], todo:[], pareja:[]}};
 const GUARDA = 'miut.piezas.v2';          /* v2: los retos van por etapas */
 try{ const g = JSON.parse(localStorage.getItem(GUARDA) || 'null');
-  if(g && g.nivel && g.hechos){ ['nivel', 'hechos', 'ayuda'].forEach(k => Object.assign(est[k], g[k] || {})); if(RETOS[g.juego]) est.juego = g.juego; } }catch(e){}
+  if(g && g.nivel && g.hechos){ ['nivel', 'hechos', 'ayuda'].forEach(k => Object.assign(est[k], g[k] || {})); if(RETOS[g.juego]) est.juego = g.juego;
+    if(DIFS[g.dif]) est.dif = g.dif; est.practica = !!g.practica; } }catch(e){}
+/* el reto libre del final ya no está en la escalera: quien lo tuviera
+   guardado vuelve al último reto */
+Object.keys(est.nivel).forEach(j => { est.nivel[j] = Math.max(0, Math.min(RETOS[j].length - 1, est.nivel[j] | 0)); });
 const guarda = () => { try{ localStorage.setItem(GUARDA, JSON.stringify(est)); }catch(e){} };
 
 /* el estado de la partida en curso */
 let P = {};
-const reto = () => RETOS[est.juego][est.nivel[est.juego]];
-const esLibre = () => !!reto().libre;
+const esPractica = () => est.practica;
+const reto = () => esPractica() ? {e: est.dif, v: PRAC[est.juego] || (PRAC[est.juego] = nuevoEjercicio(est.juego, est.dif))}
+  : RETOS[est.juego][est.nivel[est.juego]];
 const etapa = () => ETAPAS[reto().e];
-const numerosDelReto = () => esLibre() ? LIBRE[est.juego] : reto().v;
+const numerosDelReto = () => reto().v;
 const enPregunta = () => etapa().id === 'pregunta';
 
 function empieza(){
   const [a, b] = numerosDelReto();
-  const cadena = etapa().id === 'lisa' && est.juego !== 'romper' && !esLibre();
+  const cadena = etapa().id === 'lisa' && est.juego !== 'romper';
   P = {a, b, fallos:0, dorso:{}, visto:{}};
   if(est.juego === 'romper') P.romp = {n:a, resto:a, piezas:[]};
   else{
@@ -811,7 +1054,7 @@ function golpe(p){
   const piedra = document.querySelector('.piedra'), rp = piedra && piedra.getBoundingClientRect();
   if(R.resto % p){
     /* la pata da un golpecito y la piedra tiembla: no se rompe */
-    toca(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
+    cancela(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
     dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(R.resto, p) + '. Prueba con otro.', 'mal');
     return;
   }
@@ -829,6 +1072,7 @@ function golpe(p){
         + {comun: 'construye la misma torre con las de los dos.', todo: 'construye la torre más pequeña donde quepan los dos.', pareja: 'aquí están las torres del mcd y del mcm.'}[est.juego], 'bien');
     }
     pinta();
+    morfea(rp, p, null);
     return;
   }
   if(R.resto === 1){ gana('Roto del todo: <b>' + R.n + ' = ' + ordena(R.piezas).join(' · ') + ' = ' + enPotencias(R.n) + '</b>. '
@@ -837,7 +1081,8 @@ function golpe(p){
   else dice('Se desprende un <b>' + p + '</b> y queda una piedra de <b>' + R.resto + '</b>. Sigue golpeando.');
   pinta();
   /* la pata arranca la pieza de la piedra y la lleva a la fila */
-  if(rp) mueve(p, {left: rp.left + rp.width / 2 - 32, top: rp.top + rp.height / 2 - 27, width: 64, height: 54}, enTorre('rotas', p, true));
+  if(rp && R.resto === 1) morfea(rp, p, enTorre('rotas', p, true));
+  else if(rp) mueve(p, {left: rp.left + rp.width / 2 - 32, top: rp.top + rp.height / 2 - 27, width: 64, height: 54}, enTorre('rotas', p, true));
 }
 function pintaRomper(t){
   const R = P.romp;
@@ -943,7 +1188,7 @@ function compruebaComun(t){
     + (g === 1 ? 'No comparten ninguna pieza: su mcd es <b>1</b>, y se dice que son <b>primos entre sí</b>.'
       : g + ' <b>divide</b> al ' + P.a + ' y al ' + P.b + ', y ninguno mayor lo hace: es el <b>máximo común divisor</b>, mcd(' + P.a + ', ' + P.b + ') = ' + g
         + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b) + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b>, tantas veces como las tenga <b>el que menos</b>.'));
-  if(g === 1 || P.visto.a === g || P.visto.b === g) return fin();
+  if(!predice() || g === 1 || P.visto.a === g || P.visto.b === g) return fin();
   dice('Las torres están bien. <b>Antes de voltearlas</b>: ¿qué número es esa torre?');
   pideNumero(t, '¿qué número es la torre?', g, fin,
     v => dice('No es ' + v + ': cuenta las piezas de la torre, ' + ordena(G).join(' · ') + '. Voltéala si quieres mirarlo, y vuelve a comprobar.', 'mal'));
@@ -1014,7 +1259,7 @@ function compruebaTodo(t){
     + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b) + ' → ' + enPotencias(m)
     + ': todas las piezas, <b>comunes y no comunes</b>, tantas veces como las tenga <b>el que más</b>.'
     + (m === P.a * P.b ? ' No comparten nada, así que el mcm es el producto.' : ' Menos que ' + P.a + ' · ' + P.b + ' = ' + P.a * P.b + ', porque comparten piezas.'));
-  if(P.visto.torre === m) return fin();
+  if(!predice() || P.visto.torre === m) return fin();
   dice('La torre está bien. <b>Antes de voltearla</b>: ¿qué número es?');
   pideNumero(t, '¿qué número es la torre?', m, fin,
     v => dice('No es ' + v + ': cuenta las piezas, ' + M.join(' · ') + '. Voltéala si quieres mirarlo, y vuelve a comprobar.', 'mal'));
@@ -1112,20 +1357,24 @@ function corrigePregunta(J, a, b, v){
 
 /* ── ACERTAR ── */
 function gana(txt){
+  if(esPractica()){
+    dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span> <button class="b otro" onclick="otroEjercicio()">Otro ejercicio ›</button>', 'bien');
+    return;
+  }
   const J = est.juego, h = est.hechos[J], i = est.nivel[J];
   if(!h.includes(i)) h.push(i);
   const ay = est.ayuda[J];
   if(P.ayuda){ if(!ay.includes(i)) ay.push(i); } else if(ay.includes(i)) ay.splice(ay.indexOf(i), 1);
   guarda();
-  dice(txt + '<br><span class="sellazo">' + (esLibre() ? 'Reto libre hecho' : P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>', 'bien');
+  dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>', 'bien');
   pintaCabecera();
 }
 
-/* ── EL RETO LIBRE: los números que se quieran, con primos hasta el 13 ── */
+/* ── TUS NÚMEROS, en Practicar: los que se quieran, con primos hasta el 13 ── */
 function pintaLibre(t){
-  const c = el('div', 'botones'); c.style.marginTop = '0';
+  const c = el('div', 'botones propios'); c.style.marginTop = '0';
   c.appendChild(el('span', 'etq', est.juego === 'romper' ? 'tu número' : 'tus números'));
-  const ins = LIBRE[est.juego].map(v => { const i = el('input', 'num'); i.type = 'text'; i.inputMode = 'numeric'; i.value = v; i.setAttribute('aria-label', 'número'); c.appendChild(i); return i; });
+  const ins = PRAC[est.juego].map(v => { const i = el('input', 'num'); i.type = 'text'; i.inputMode = 'numeric'; i.value = v; i.setAttribute('aria-label', 'número'); c.appendChild(i); return i; });
   const va = el('button', 'b', 'Empezar'); c.appendChild(va);
   const lee = () => {
     const ns = ins.map(i => parseInt(i.value.replace(/\D/g, ''), 10));
@@ -1133,7 +1382,7 @@ function pintaLibre(t){
     /* las piezas son del 2 al 13, y una torre de más de diez no cabe en la mesa */
     const malo = ns.find(n => primos(n).some(p => p > 13) || primos(n).length > 10);
     if(malo) return dice('El <b>' + malo + '</b> lleva ' + (primos(malo).some(p => p > 13) ? 'un primo mayor que 13 (' + primos(malo).filter(p => p > 13).join(', ') + '), y en la mesa solo hay piezas hasta el 13' : 'más de diez piezas, y no cabe en la mesa') + '. Prueba con otro.', 'mal');
-    LIBRE[est.juego] = ns; empieza();
+    PRAC[est.juego] = ns; P.propios = false; empieza();
   };
   va.addEventListener('click', lee);
   ins.forEach(i => i.addEventListener('keydown', e => { if(e.key === 'Enter') lee(); }));
@@ -1143,14 +1392,28 @@ function pintaLibre(t){
 /* ── PINTAR ── */
 function pintaCabecera(){
   document.querySelectorAll('.juegos button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.j === est.juego)));
+  $('bPracticar').setAttribute('aria-pressed', String(esPractica()));
+  $('bPracticar').textContent = esPractica() ? 'Volver a los retos' : 'Practicar';
+  $('nivel').hidden = esPractica();
+  if(esPractica()){
+    /* en Practicar, en vez de los puntos: la dificultad y otro ejercicio */
+    $('puntos').innerHTML = '<span class="ops difs" role="group" aria-label="Dificultad">'
+      + DIFS.map((d, k) => '<button data-dif="' + k + '" aria-pressed="' + (k === est.dif) + '">' + d.n + '</button>').join('') + '</span>'
+      + '<button class="enlace" id="bPropios">' + (P.propios ? 'esconder tus números' : 'tus números') + '</button>'
+      + '<button class="b otro" id="bOtro">Otro ejercicio ›</button>';
+    $('puntos').querySelectorAll('[data-dif]').forEach(x => x.addEventListener('click', () => { est.dif = +x.dataset.dif; guarda(); otroEjercicio(); }));
+    $('bOtro').addEventListener('click', otroEjercicio);
+    $('bPropios').addEventListener('click', () => { P.propios = !P.propios; pinta(); if(P.propios) document.querySelector('.propios input').focus(); });
+    return;
+  }
   const lista = RETOS[est.juego], i = est.nivel[est.juego];
-  $('cual').textContent = esLibre() ? 'libre' : (i + 1) + ' de ' + (lista.length - 1);
+  $('cual').textContent = (i + 1) + ' de ' + lista.length;
   $('atras').disabled = i === 0; $('adelante').disabled = i === lista.length - 1;
   /* los puntos, agrupados por etapa; el hecho con ayuda, en hueco */
   let h = '', e0 = -1;
   lista.forEach((r, k) => {
-    const e = r.libre ? 'libre' : r.e;
-    if(e !== e0){ if(e0 !== -1) h += '</span>'; h += '<span class="grupo" title="' + (r.libre ? 'libre' : ETAPAS[r.e].n) + '">'; e0 = e; }
+    const e = r.e;
+    if(e !== e0){ if(e0 !== -1) h += '</span>'; h += '<span class="grupo" title="' + ETAPAS[r.e].n + '">'; e0 = e; }
     const cls = (est.hechos[est.juego].includes(k) ? (est.ayuda[est.juego].includes(k) ? 'ayuda' : 'hecho') : '') + (k === i ? ' aqui' : '');
     h += '<i class="' + cls + '"></i>';
   });
@@ -1162,10 +1425,10 @@ function pinta(nuevo){
   /* la etapa manda en cómo se ven las piezas; con la pista abierta en una
      pregunta, se ven lisas */
   document.body.dataset.etapa = E.id === 'pregunta' ? (P.verPiezas ? 'lisa' : 'pregunta') : E.id;
-  $('encTxt').innerHTML = '<span class="chipEtapa">' + (esLibre() ? 'Reto libre' : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
+  $('encTxt').innerHTML = '<span class="chipEtapa">' + (esPractica() ? 'Practicar · ' + DIFS[est.dif].n : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
     + (enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Rompe primero las dos piedras, el <b>' + a + '</b> y el <b>' + b + '</b>. Luego: ' + INTRO[est.juego](a, b).replace(/^./, c => c.toLowerCase()) : INTRO[est.juego](a, b));
   const t = $('tablero'); t.innerHTML = '';
-  if(esLibre()) pintaLibre(t);
+  if(esPractica() && P.propios) pintaLibre(t);
   if(enPregunta()) pintaPregunta(t);
   else if(est.juego === 'romper' || P.cadena) pintaRomper(t);
   else if(est.juego === 'comun') pintaComun(t);
@@ -1177,9 +1440,15 @@ function pinta(nuevo){
     romper: 'Las herramientas son primos. Si uno cae justo, se lleva una pieza de la piedra.',
     comun: 'Toca una pieza de cada caja y mira las dos torres. Solo encajan si son <b>iguales</b>.',
     todo: 'Toca las piezas del almacén para construir. Arriba ves si ya caben el ' + a + ' y el ' + b + '.',
-    pareja: 'Antes de voltear, di qué número crees que hay detrás. Y antes de juntar, piensa qué va a salir.'
+    pareja: 'Antes de juntar las torres, piensa qué va a salir. Voltéalas para ver qué número es cada una.'
   }[est.juego]);
 }
+function otroEjercicio(){
+  est.practica = true;
+  PRAC[est.juego] = nuevoEjercicio(est.juego, est.dif);
+  guarda(); empieza();
+}
+$('bPracticar').addEventListener('click', () => { est.practica = !est.practica; guarda(); empieza(); });
 function vaA(juego, nivel){
   est.juego = juego;
   if(nivel !== undefined) est.nivel[juego] = Math.max(0, Math.min(RETOS[juego].length - 1, nivel));
@@ -1193,24 +1462,113 @@ addEventListener('keydown', e => {
   if(e.target.closest && e.target.closest('input, textarea')) return;
   const sig = e.key === 'PageDown' || e.key === 'ArrowRight', ant = e.key === 'PageUp' || e.key === 'ArrowLeft';
   if(!sig && !ant) return;
-  e.preventDefault(); vaA(est.juego, est.nivel[est.juego] + (sig ? 1 : -1));
+  e.preventDefault();
+  if(esPractica()){ if(sig) otroEjercicio(); return; }
+  vaA(est.juego, est.nivel[est.juego] + (sig ? 1 : -1));
 });
 
 /* ── LA AYUDA, el tema y el aula ── */
-$('bAyuda').addEventListener('click', () => { $('mAyuda').hidden = false; $('ayCerrar').focus(); });
-const cierraAyuda = () => { $('mAyuda').hidden = true; $('bAyuda').focus(); };
+const abreReglas = () => { $('mAyuda').hidden = false; $('ayCerrar').focus(); };
+$('bReglas').addEventListener('click', abreReglas);
+const cierraAyuda = () => { $('mAyuda').hidden = true; $('bReglas').focus(); };
 $('ayCerrar').addEventListener('click', cierraAyuda);
 $('mAyuda').addEventListener('click', e => { if(e.target.id === 'mAyuda') cierraAyuda(); });
 addEventListener('keydown', e => { if(e.key === 'Escape' && !$('mAyuda').hidden) cierraAyuda(); });
 
+/* ── LA GUÍA ────────────────────────────────────────────────────────────
+   Una visita por la mesa: un foco y un papel en cada parte. Cada parada
+   dice qué se toca y qué pasa, y solo salen las que se ven en el juego que
+   está abierto —la piedra en Romper, las cajas en el mcd…—; las demás ni se
+   cuentan. Se abre sola la primera vez. */
+const GUIA = [
+  {sel:'.juegos', c:'Los cuatro juegos',
+   t:'<b>Romper</b> un número en factores primos, construir la torre <b>común</b> más grande —el mcd—, la más pequeña donde caben <b>todos</b> —el mcm— y ver por qué <b>mcd · mcm = a · b</b>. Todos se juegan igual: tocando piezas.'},
+  {sel:'#encTxt', c:'El encargo',
+   t:'Aquí está lo que hay que hacer en cada reto. Las flechas <b>‹ ›</b> pasan de reto, y en el aula también las del teclado o el mando de diapositivas.'},
+  {sel:'#puntos', c:'Las etapas',
+   t:'Cada juego tiene <b>cuatro etapas</b> de tres retos, y en cada una las piezas ayudan menos: primero con <b>colores</b>, luego de cartón con <b>texturas</b>, luego <b>lisas</b> y al final <b>sin piezas</b>, solo la pregunta.'},
+  {sel:'.piedra', c:'La piedra',
+   t:'El número es una <b>piedra</b>. Cada golpe con un primo que cae justo le arranca una pieza, y la piedra se hace más pequeña. Cuando queda un primo, la piedra entera <b>se convierte en pieza</b>.'},
+  {sel:'.herr', c:'Las herramientas',
+   t:'Toca un primo y Miut golpea con él. Si <b>no divide</b> a la piedra, otro gato le para la pata —y Miut dice por qué no cae justo, con el criterio de divisibilidad—.'},
+  {sel:'[data-caja="a"]', c:'Las cajas',
+   t:'Las piezas de cada número. <b>Toca una</b> y la pata de Miut la lleva a la torre de ese número; tócala en la torre y la devuelve.'},
+  {sel:'[data-alm]', c:'El almacén',
+   t:'Piezas sin fin de los primos que hacen falta. Toca las que quieras para construir la torre; arriba ves si ya <b>caben</b> los dos números.'},
+  {sel:'.obra', c:'La obra',
+   t:'Aquí se construye. Las piezas unidas se leen como un solo bloque: <b>la torre es el producto</b> de sus piezas.'},
+  {sel:'.voltear', c:'Voltear',
+   t:'Da la vuelta a las piezas unidas. Por detrás está el <b>número que forman</b>, y cada número tiene su color: dos torres volteadas del mismo color son <b>el mismo número</b>.'},
+  {sel:'.botones .b.ok', c:'Comprobar',
+   t:'Cuando creas que está, compruébalo. Si falla, Miut dice primero <b>qué</b> está mal; si vuelve a fallar, también <b>dónde</b>.'},
+  {sel:'.mision', c:'Sin piezas',
+   t:'La última etapa: solo la pregunta, y se contesta escribiendo. Las piezas se pueden sacar como pista, pero el reto queda <b>con ayuda</b>.'},
+  {sel:'#miut', c:'Miut',
+   t:'Miut te va diciendo qué pasa, con las palabras del libro: <b>divide</b>, <b>múltiplo</b>, <b>comunes y no comunes</b>…'},
+  {sel:'#bPracticar', c:'Practicar',
+   t:'Ejercicios <b>nuevos cada vez</b>, que no cuentan para los retos. Se elige la dificultad —fácil, media, difícil o sin piezas— y también se pueden poner <b>tus números</b>.'},
+  {sel:'#bAjustes', c:'Ajustes',
+   t:'La mesa clara u oscura, <b>decir antes el número</b> para voltear —más exigente—, las patas sin animación y las reglas enteras.'},
+  {sel:'#bAula', c:'El aula',
+   t:'Todo más grande y en una sola pantalla, para la pizarra digital. <b>A jugar.</b>'}
+];
+let guiaI = -1, guiaParadas = [], guiaRetoque = 0;
+const seVe = e => !!(e && e.offsetParent !== null && e.getBoundingClientRect().height > 0);
+function cierraGuia(){
+  $('guia').hidden = true; guiaI = -1; clearTimeout(guiaRetoque);
+  try{ localStorage.setItem('miut.piezas.guia', 'vista'); }catch(e){}
+  $('bGuia').focus();
+}
+function vaGuia(i){
+  if(i >= guiaParadas.length) return cierraGuia();
+  guiaI = i;
+  const g = guiaParadas[i], e = document.querySelector(g.sel);
+  if(!seVe(e)) return vaGuia(i + 1);
+  $('guiaTit').textContent = g.c; $('guiaTxt').innerHTML = g.t;
+  $('guiaNum').textContent = (i + 1) + ' de ' + guiaParadas.length;
+  $('guiaSig').textContent = i === guiaParadas.length - 1 ? 'A jugar' : 'Siguiente';
+  $('guia').hidden = false;
+  e.scrollIntoView({block:'center', behavior:'instant'});
+  colocaGuia();
+  requestAnimationFrame(() => requestAnimationFrame(colocaGuia));
+  clearTimeout(guiaRetoque); guiaRetoque = setTimeout(colocaGuia, 180);
+}
+function colocaGuia(){
+  const g = guiaParadas[guiaI]; if(!g || $('guia').hidden) return;
+  const e = document.querySelector(g.sel); if(!seVe(e)) return;
+  const r = e.getBoundingClientRect(), m = 7, f = $('guiaFoco'), gl = $('guiaGlobo');
+  f.style.top = (r.top - m) + 'px'; f.style.left = (r.left - m) + 'px';
+  f.style.width = (r.width + 2 * m) + 'px'; f.style.height = (r.height + 2 * m) + 'px';
+  const alto = gl.offsetHeight || 180, ancho = gl.offsetWidth || 320;
+  const abajo = r.bottom + m + 12, arriba = r.top - m - 12 - alto;
+  gl.style.top = (abajo + alto < innerHeight - 8 ? abajo : arriba > 8 ? arriba : Math.max(8, innerHeight - alto - 8)) + 'px';
+  gl.style.left = Math.min(Math.max(12, r.left + r.width / 2 - ancho / 2), innerWidth - ancho - 12) + 'px';
+}
+function abreGuia(){
+  abreAjustes(false);
+  guiaParadas = GUIA.filter(g => seVe(document.querySelector(g.sel)));
+  vaGuia(0); $('guiaGlobo').focus();
+}
+$('bGuia').addEventListener('click', abreGuia);
+$('guiaSig').addEventListener('click', e => { e.stopPropagation(); vaGuia(guiaI + 1); });
+$('guiaSalir').addEventListener('click', e => { e.stopPropagation(); cierraGuia(); });
+$('guiaGlobo').addEventListener('click', e => e.stopPropagation());
+$('guia').addEventListener('click', () => vaGuia(guiaI + 1));
+addEventListener('keydown', e => { if($('guia').hidden) return;
+  e.stopPropagation();
+  if(e.key === 'Escape') cierraGuia(); else if(e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); vaGuia(guiaI + 1); } }, true);
+addEventListener('scroll', colocaGuia, {passive:true});
+addEventListener('resize', colocaGuia);
+
 const AJ = 'miut.piezas.ajustes.v2';        /* v2: ya no hay noche ni papiro, sino dos maderas */
-let aj = {modo:'haya', aula:'no'};
+let aj = {modo:'haya', aula:'no', predice:'no', patas:'si'};
 try{ Object.assign(aj, JSON.parse(localStorage.getItem(AJ) || '{}')); }catch(e){}
+const predice = () => aj.predice === 'si';
 function pintaAjustes(){
   const b = document.body;
   b.dataset.modo = aj.modo; b.dataset.aula = aj.aula;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) b.dataset.movimiento = 'menos';
-  $('bTema').textContent = aj.modo === 'nogal' ? 'Mesa clara' : 'Mesa oscura';
+  b.dataset.movimiento = aj.patas === 'no' || matchMedia('(prefers-reduced-motion: reduce)').matches ? 'menos' : '';
+  document.querySelectorAll('[data-aj]').forEach(x => x.setAttribute('aria-pressed', String(aj[x.dataset.aj] === x.dataset.v)));
   $('bAula').textContent = aj.aula === 'si' ? 'Salir del aula' : 'Aula';
   $('bAula').setAttribute('aria-pressed', String(aj.aula === 'si'));
   /* el zoom del aula: el tablero está pensado para unos 920 × 640 puntos */
@@ -1218,11 +1576,19 @@ function pintaAjustes(){
   b.style.setProperty('--zAula', z.toFixed(3));
   try{ localStorage.setItem(AJ, JSON.stringify(aj)); }catch(e){}
 }
-$('bTema').addEventListener('click', () => { aj.modo = aj.modo === 'nogal' ? 'haya' : 'nogal'; pintaAjustes(); });
+document.querySelectorAll('[data-aj]').forEach(x => x.addEventListener('click', () => {
+  const antes = aj.predice;
+  aj[x.dataset.aj] = x.dataset.v; pintaAjustes();
+  if(antes !== aj.predice){ document.querySelectorAll('.pide').forEach(f => f.remove()); }
+}));
+const abreAjustes = si => { $('panelAjustes').hidden = !si; $('bAjustes').setAttribute('aria-pressed', String(si)); };
+$('bAjustes').addEventListener('click', () => abreAjustes($('panelAjustes').hidden));
+$('ajCerrar').addEventListener('click', () => { abreAjustes(false); $('bAjustes').focus(); });
 $('bAula').addEventListener('click', () => { aj.aula = aj.aula === 'si' ? 'no' : 'si'; pintaAjustes(); });
 addEventListener('resize', pintaAjustes);
 
 pintaAjustes();
 empieza();
+try{ if(!localStorage.getItem('miut.piezas.guia')) setTimeout(abreGuia, 500); }catch(e){}
 </script>
 </body></html>
