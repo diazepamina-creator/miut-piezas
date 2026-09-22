@@ -275,9 +275,9 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
    hasta su sitio y se retira. Van por encima de todo, pero no se pueden
    tocar: son la mano, no el objeto. Con «menos movimiento» no salen. ── */
 .patas{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
-.pataM{position:absolute;left:0;top:0;width:80px;height:1500px;transform-origin:0 0;will-change:transform;
-  filter:drop-shadow(7px 12px 9px rgba(40,20,5,.35))}
-.pataM svg{width:80px;height:1500px;display:block}
+.pataM{position:absolute;left:0;top:0;width:96px;height:1500px;transform-origin:0 0;will-change:transform,filter;
+  filter:drop-shadow(10px 16px 10px rgba(40,20,5,.30))}
+.pataM svg{width:96px;height:1500px;display:block}
 .fantasma.pieza{position:fixed;left:0;top:0;z-index:39;pointer-events:none;will-change:transform;line-height:0;transition:none;
   filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
 .fantasma svg{width:100%;height:100%;overflow:visible}
@@ -501,23 +501,58 @@ const deFrente = clave => { if(P.dorso) P.dorso[clave] = false; };
 const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className = cls; if(html !== undefined) e.innerHTML = html; return e; };
 
 /* ── LAS PATAS ──────────────────────────────────────────────────────────
-   Una pata delantera de Miut vista desde arriba: la mano con sus cuatro
-   dedos delante y el brazo, largo, que sale por el borde de abajo de la
+   Una pata delantera de Miut vista desde arriba: un mitón blanco con sus
+   cuatro dedos, los surcos y un mechón en cada punta, y el brazo lila
+   atigrado, con volumen —oscuro en los bordes y claro en el centro—, que
+   se ensancha hacia el codo y sale por el borde de abajo de la
    pantalla. Dos, izquierda y derecha, y se usa la del lado de la pieza.
    El brazo apunta siempre al hombro, que está debajo de la pantalla: así
    la pata gira un poco según adónde llegue, como un brazo de verdad. */
 const PATA_SVG = (() => {
-  const mano = 'M11 60 C6 36 14 12 26 9 C31 3 49 3 54 9 C66 12 74 36 69 60 Z';
-  const dedos = '<circle cx="19" cy="20" r="9"/><circle cx="32" cy="12" r="9.5"/><circle cx="48" cy="12" r="9.5"/><circle cx="61" cy="20" r="9"/>';
-  const brazo = 'M14 56 C13 300 16 900 18 1500 L62 1500 C64 900 67 300 66 56 Z';
-  const forma = '<path d="' + brazo + '"/><path d="' + mano + '"/>' + dedos;
-  const rayas = [120, 190, 262, 340].map((y, i) => '<path d="M' + (15 + i % 2) + ' ' + y + ' Q40 ' + (y - 12) + ' ' + (65 - i % 2) + ' ' + y + '"/>').join('');
-  return '<svg viewBox="0 0 80 1500" aria-hidden="true">'
-    + '<g fill="none" stroke="#3B2A4A" stroke-width="4" stroke-linejoin="round">' + forma + '</g>'
-    + '<g fill="#A48AB8">' + forma + '</g>'
-    + '<g fill="none" stroke="#7F6596" stroke-width="5" stroke-linecap="round" opacity=".75">' + rayas + '</g>'
-    + '<g fill="none" stroke="#3B2A4A" stroke-width="1.6" stroke-linecap="round"><path d="M25.5 23 Q26 29 28 33"/><path d="M40 20 V30"/><path d="M54.5 23 Q54 29 52 33"/></g>'
-    + '<path d="M20 44 Q40 36 60 44" fill="none" stroke="#C3AED3" stroke-width="3" stroke-linecap="round" opacity=".6"/>'
+  /* el brazo se ensancha hacia el codo —se ve desde arriba, en escorzo— y
+     se estrecha en la muñeca; la mano es un mitón redondo con cuatro dedos
+     juntos delante. Todo en un contorno: primero el trazo oscuro, encima los
+     rellenos, y no quedan costuras por dentro. */
+  const brazo = 'M26 44 C25 120 24 400 20 760 C17 1000 15 1250 13 1500 L83 1500 C81 1250 79 1000 76 760 C72 400 71 120 70 44 Z';
+  const palma = '<ellipse cx="48" cy="50" rx="25" ry="23"/>';
+  const dedos = '<circle cx="27.5" cy="35" r="9.2"/><circle cx="40" cy="24.5" r="10.2"/><circle cx="56" cy="24.5" r="10.2"/><circle cx="68.5" cy="35" r="9.2"/>';
+  const contorno = '<path d="' + brazo + '"/>' + palma + dedos;
+  /* el calcetín blanco: hasta pasada la muñeca, con el borde de pelo en
+     zigzag irregular */
+  const picos = [4, 9, 3, 8, 5, 10, 4, 7, 3, 9, 5];
+  let zig = 'M20 40 L20 94';
+  picos.forEach((h, k) => { const x = 24 + k * 5; zig += ' L' + x + ' ' + (98 + h) + ' L' + (x + 2.5) + ' ' + (96 + (k % 3)); });
+  zig += ' L78 94 L78 40 Z';
+  /* las rayas atigradas: medias lunas que abrazan el brazo, inclinadas y
+     de grosor distinto; algunas no llegan de lado a lado */
+  const ancho = y => 22 + Math.min(1, (y - 44) / 1450) * 13;           // medio ancho del brazo a esa altura
+  const raya = (y, g, t, de, a) => {
+    const w = ancho(y), xa = 48 - w + (de || 0) * 2 * w, xb = 48 - w + (a || 1) * 2 * w, mx = (xa + xb) / 2;
+    return '<path d="M' + xa.toFixed(1) + ' ' + (y + t) + ' Q' + mx.toFixed(1) + ' ' + (y - 13) + ' ' + xb.toFixed(1) + ' ' + (y - t)
+      + ' Q' + mx.toFixed(1) + ' ' + (y - 13 + 2 * g) + ' ' + xa.toFixed(1) + ' ' + (y + t) + ' Z"/>';
+  };
+  const rayas = [raya(150, 5, 3), raya(178, 2.5, -2, 0, .55), raya(232, 6, -3), raya(292, 4.5, 4),
+    raya(318, 2, 2, .45, 1), raya(380, 6.5, -4), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4)].join('');
+  return '<svg viewBox="0 0 96 1500" aria-hidden="true"><defs>'
+    + '<linearGradient id="pelo" x1="0" x2="1"><stop offset="0" stop-color="#6E5586"/><stop offset=".22" stop-color="#A088B5"/>'
+    + '<stop offset=".48" stop-color="#BAA5CC"/><stop offset=".78" stop-color="#9C83B1"/><stop offset="1" stop-color="#654D7D"/></linearGradient>'
+    + '<radialGradient id="calcetin" cx=".45" cy=".35" r=".65"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F6F1F5"/>'
+    + '<stop offset="1" stop-color="#D8CCE0"/></radialGradient>'
+    + '<clipPath id="soloMano"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath></defs>'
+    + '<g fill="none" stroke="#45314F" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
+    + '<g fill="url(#pelo)">' + contorno + '</g>'
+    + '<g fill="#634A7A" opacity=".55">' + rayas + '</g>'
+    + '<g clip-path="url(#soloMano)"><path d="' + zig + '" fill="url(#calcetin)"/>'
+    + palma.replace('/>', ' fill="url(#calcetin)"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin)"/>')
+    /* la sombra de la mano sobre la muñeca: separa el mitón del brazo */
+    + '<path d="M28 68 Q48 80 68 68" fill="none" stroke="#B9A9C4" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>'
+    /* los surcos entre los dedos, y un mechón blanco en cada punta */
+    + '<g fill="none" stroke="#9A89A6" stroke-width="1.7" stroke-linecap="round">'
+    + '<path d="M33.5 29 Q34.5 35 36.5 40"/><path d="M48 18 Q48 26 48 33"/><path d="M62.5 29 Q61.5 35 59.5 40"/></g>'
+    + '<g fill="none" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round" opacity=".95">'
+    + '<path d="M38 15 l-1 -3 M47 14.5 l-.5 -3 M49.5 14.5 l1 -3 M58 15 l1 -3 M20 30 l-2.5 -1.5 M76 30 l2.5 -1.5"/></g>'
+    /* la luz de la lámpara sobre los nudillos */
+    + '<path d="M31 43 Q48 34 65 43" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".6"/>'
     + '</svg>';
 })();
 const quieto = () => document.body.dataset.movimiento === 'menos';
@@ -528,7 +563,7 @@ function acabaTodo(){ enCurso.splice(0).forEach(f => f()); }
 function postura(x, y, lado, esc){
   const hx = innerWidth * (lado === 'izq' ? .3 : .7), hy = innerHeight + 260;
   const ang = Math.atan2(-(hx - x), hy - y) * 180 / Math.PI;
-  return 'translate(' + x + 'px,' + y + 'px) rotate(' + ang.toFixed(1) + 'deg) scale(' + esc + ') translate(-40px,-10px)';
+  return 'translate(' + x + 'px,' + y + 'px) rotate(' + ang.toFixed(1) + 'deg) scale(' + esc + ') translate(-48px,-14px)';
 }
 function sacaPata(x){
   const d = el('div', 'pataM', PATA_SVG);
@@ -536,8 +571,13 @@ function sacaPata(x){
   return {d, lado: x < innerWidth / 2 ? 'izq' : 'der'};
 }
 const escala = () => Math.max(.8, Math.min(1.6, parseFloat(getComputedStyle(document.body).getPropertyValue('--zAula')) || 1));
-/* el punto donde se posa la pata sobre una caja: el centro, un poco abajo */
-const punto = r => ({x: r.left + r.width / 2, y: r.top + r.height * .55});
+/* el punto donde se posa la pata: para tocar, el centro; para arrastrar
+   una pieza, el borde de abajo —así los dedos la agarran sin taparle el
+   número mientras la lleva— */
+const punto = (r, borde) => ({x: r.left + r.width / 2, y: r.top + r.height * (borde ? .86 : .55)});
+/* la sombra dice si la pata toca la mesa: por el aire, amplia y suave;
+   apoyada, corta y marcada */
+const AIRE = 'drop-shadow(10px 16px 10px rgba(40,20,5,.30))', APOYO = 'drop-shadow(3px 5px 3px rgba(40,20,5,.45))';
 /* MOVER UNA PIEZA: la pata llega a la pieza, se posa, la arrastra hasta
    su sitio nuevo y se va. La pieza de destino ya está pintada, pero
    escondida hasta que la pata suelta la que arrastra. */
@@ -549,16 +589,16 @@ function mueve(p, r0, destino, desaparece){
   const g = el('div', 'fantasma pieza', piezaSVG(p));      /* «pieza»: los mismos contornos y texturas */
   g.style.width = r1.width + 'px'; g.style.height = r1.height + 'px';
   document.body.appendChild(g);
-  const a = punto(r0), b = punto(r1), esc = escala();
+  const a = punto(r0, true), b = punto(r1, true), esc = escala();
   const {d, lado} = sacaPata(a.x);
   const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
   const T = 860;
   const anP = d.animate([
-    {transform: postura(fuera.x, fuera.y, lado, esc), offset: 0},
-    {transform: postura(a.x, a.y, lado, esc), offset: .26, easing: 'ease-in-out'},
-    {transform: postura(a.x, a.y + 3, lado, esc), offset: .32, easing: 'ease-in-out'},
-    {transform: postura(b.x, b.y, lado, esc), offset: .72, easing: 'ease-out'},
-    {transform: postura(b.x, innerHeight + 140, lado, esc), offset: 1}
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
+    {transform: postura(a.x, a.y, lado, esc), filter: APOYO, offset: .26, easing: 'ease-in-out'},
+    {transform: postura(a.x, a.y + 3, lado, esc), filter: APOYO, offset: .32, easing: 'ease-in-out'},
+    {transform: postura(b.x, b.y, lado, esc), filter: APOYO, offset: .72, easing: 'ease-out'},
+    {transform: postura(b.x, innerHeight + 140, lado, esc), filter: AIRE, offset: 1}
   ], {duration: T, fill: 'forwards'});
   const x0 = r0.left + (r0.width - r1.width) / 2, y0 = r0.top + (r0.height - r1.height) / 2;
   const anG = g.animate([
@@ -584,11 +624,11 @@ function toca(r, alTocar){
   const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
   const T = 620;
   const an = d.animate([
-    {transform: postura(fuera.x, fuera.y, lado, esc), offset: 0},
-    {transform: postura(a.x, a.y, lado, esc), offset: .4, easing: 'ease-in'},
-    {transform: postura(a.x, a.y + 6, lado, esc * .97), offset: .5},
-    {transform: postura(a.x, a.y, lado, esc), offset: .58, easing: 'ease-in'},
-    {transform: postura(fuera.x, fuera.y, lado, esc), offset: 1}
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
+    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .4, easing: 'ease-in'},
+    {transform: postura(a.x, a.y + 6, lado, esc * .97), filter: APOYO, offset: .5},
+    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .58, easing: 'ease-in'},
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 1}
   ], {duration: T, easing: 'ease-in-out', fill: 'forwards'});
   let hecho = false, tocado = false;
   const toque = () => { if(tocado) return; tocado = true; alTocar && alTocar(); };
