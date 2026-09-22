@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.3
+  Manipulativo para 1.º y 2.º de ESO · versión 0.4
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -44,6 +44,18 @@
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
 
+  VERSIÓN 0.4 · FUERA DEL TEMPLO, EN LA MESA DE MIUT
+  · LA MESA. Ya no hay templo ni morados: Miut trabaja sobre una mesa de
+    madera vista desde arriba —haya clara, o nogal para aulas con poca
+    luz—, y el encargo, las cajas y la obra son hojas y bandejas encima.
+  · LAS PATAS. La app es un manipulativo en primera persona: lo que se ve
+    es lo que ve Miut. Al tocar una pieza, una de sus patas delanteras
+    entra por el borde de abajo, se posa sobre la pieza, la arrastra a su
+    sitio y se retira; golpea la piedra en Romper y voltea las torres. El
+    brazo apunta siempre a su hombro, bajo la pantalla. Con «menos
+    movimiento» las patas no salen y todo pasa al instante.
+  · MIUT, sin diadema ni kohl: la misma gata lila de ojos verdes.
+
   VERSIÓN 0.3
   · EL VOLTEO, COMO DE VERDAD. Por detrás las piezas conservan su forma
     —la misma silueta, en espejo—, y el reverso es de un solo color: el
@@ -53,28 +65,39 @@
 <title>Las piezas de Miut</title>
 <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@500;700&family=Space+Mono:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* La paleta de la casa: morados de amatista, arenisca y oro. En papel se
-   aclara con las mismas variables. */
+/* LA MESA. Fuera del templo: Miut trabaja sobre una mesa de madera, vista
+   desde arriba, como la ve ella. Los papeles —el encargo, las cajas, la
+   obra— son hojas y bandejas encima de la mesa. Dos maderas: la clara, de
+   haya, que es la de siempre y la que mejor se ve en el proyector; y la
+   oscura, de nogal, para pantallas en un aula con poca luz. */
 :root{
-  --noche:#1A1226; --panel:#241A33; --panel2:#2E2240; --linea:#43335C;
-  --tinta:#F3ECDF; --tenue:#A897BC;
-  --morado:#A98BBC; --oro:#E0B24A; --rojo:#C4553F; --verde:#7FA35C;
-  --arena:#C9A87C; --arenaO:#A8875C; --sombra:rgba(0,0,0,.5);
-  --piedra:#5A4E6A; --piedraL:#7A6C8C;
+  --mesa1:#D6AE78; --mesa2:#C49560; --veta:rgba(92,52,18,.20);
+  --noche:#F4EBD9; --panel:#FFFBF2; --panel2:#FBF3E3; --linea:#D8C3A0;
+  --tinta:#2E2218; --tenue:#7D6650;
+  --morado:#8A6A9E; --oro:#A8661B; --rojo:#B0442C; --verde:#4F7A2E;
+  --arena:#E6D3B4; --arenaO:#C0A57F; --sombra:rgba(60,35,10,.28);
+  --piedra:#9A9088; --piedraL:#C2B9B0; --brillo:rgba(214,150,50,.18);
   --pata:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><ellipse cx='7' cy='9.6' rx='4.4' ry='3.6'/><ellipse cx='2.4' cy='5.6' rx='1.7' ry='2'/><ellipse cx='5.6' cy='3' rx='1.8' ry='2.1'/><ellipse cx='9' cy='3.2' rx='1.8' ry='2.1'/><ellipse cx='11.9' cy='6' rx='1.6' ry='1.9'/></svg>");
 }
-[data-modo="papel"]{
-  --noche:#FBF7EF; --panel:#FFFFFF; --panel2:#F5EFE2; --linea:#C9BBA6;
-  --tinta:#2E2436; --tenue:#6E6076;
-  --morado:#8A6A9E; --oro:#B08430; --rojo:#A8442F; --verde:#4F7A2E;
-  --arena:#E6D3B4; --arenaO:#C0A57F; --sombra:rgba(0,0,0,.12);
-  --piedra:#B9AEC6; --piedraL:#D4CBDD;
+[data-modo="nogal"]{
+  --mesa1:#5A3A24; --mesa2:#472A19; --veta:rgba(0,0,0,.28);
+  --noche:#1F1610; --panel:#2E2119; --panel2:#37281E; --linea:#5E4632;
+  --tinta:#F6EBDC; --tenue:#C8B094;
+  --morado:#B79CCB; --oro:#E6A84A; --rojo:#D2644B; --verde:#8DB36A;
+  --sombra:rgba(0,0,0,.45); --piedra:#6E655E; --piedraL:#8E857D; --brillo:rgba(230,168,74,.16);
 }
 *{box-sizing:border-box}
 [hidden]{display:none !important}
-html{background:var(--noche)}
+html{background:var(--mesa2)}
+/* la madera: tablas a lo largo, con su veta —ruido estirado, como el de
+   verdad— y la luz de una lámpara que cae desde arriba */
 body{margin:0;color:var(--tinta);font-family:'Atkinson Hyperlegible',system-ui,sans-serif;font-size:15px;line-height:1.5;
-  background:radial-gradient(ellipse 120% 60% at 50% -10%, rgba(224,178,74,.10), transparent 60%), var(--noche);
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(255,244,220,.28), transparent 70%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><filter id='v'><feTurbulence type='fractalNoise' baseFrequency='0.012 0.34' numOctaves='3' seed='7'/><feColorMatrix values='0 0 0 0 0.36  0 0 0 0 0.2  0 0 0 0 0.07  0 0 0 1.35 -0.5'/></filter><rect width='600' height='600' filter='url(%23v)'/></svg>"),
+    repeating-linear-gradient(90deg, transparent 0 178px, var(--veta) 178px 180px),
+    linear-gradient(90deg, var(--mesa1), var(--mesa2) 45%, var(--mesa1) 70%, var(--mesa2));
+  background-size:auto, 600px 600px, auto, auto;
   background-attachment:fixed;-webkit-text-size-adjust:100%}
 .lienzo{max-width:760px;margin:0 auto;padding:12px 12px 36px}
 body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-duration:.001ms !important}
@@ -96,7 +119,7 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
   background:var(--panel);padding:8px 11px}
 .juegos button b{display:block;font-family:'Rokkitt',serif;font-size:16px;letter-spacing:1.4px;text-transform:uppercase;color:var(--oro)}
 .juegos button span{font-size:12.5px;color:var(--tenue)}
-.juegos button[aria-pressed="true"]{border-color:var(--oro);box-shadow:0 0 0 2px rgba(224,178,74,.35)}
+.juegos button[aria-pressed="true"]{border-color:var(--oro);box-shadow:0 0 0 2px var(--brillo)}
 @media (max-width:480px){ .juegos button span{display:none} .juegos button b{font-size:14px;letter-spacing:.8px} }
 
 .panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--linea);border-radius:13px;
@@ -157,10 +180,10 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 
 /* la obra: donde se construye. Un marco con la luz de arriba */
 .obra{margin-top:10px;border:1px solid var(--linea);border-radius:12px;padding:10px;
-  background:radial-gradient(ellipse 72% 62% at 50% 0%, rgba(224,178,74,.13), transparent 72%), var(--panel2)}
+  background:radial-gradient(ellipse 72% 62% at 50% 0%, var(--brillo), transparent 72%), var(--panel2)}
 .obra .rot{font-family:'Rokkitt',serif;font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin:2px 0 4px}
 .obra .torre{padding:4px 0}
-.obra.encaja{border-color:var(--oro);box-shadow:0 0 0 2px rgba(224,178,74,.35) inset}
+.obra.encaja{border-color:var(--oro);box-shadow:0 0 0 2px var(--brillo) inset}
 .igual{font-family:'Rokkitt',serif;font-weight:700;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;text-align:center;
   margin:4px 0;color:var(--tenue)}
 .igual.si{color:var(--oro)}
@@ -203,7 +226,7 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
   paint-order:stroke;stroke:#1A1226;stroke-width:4px;stroke-linejoin:round}
 .voltear{font-family:'Rokkitt',serif;font-weight:700;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;
   min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--oro);background:none;color:var(--oro);cursor:pointer}
-.voltear:hover{background:rgba(224,178,74,.12)}
+.voltear:hover{background:var(--brillo)}
 .voltear:disabled{opacity:.3;cursor:default}
 /* una torre larga no se parte en dos líneas: se desliza de lado */
 .obra .torre{overflow-x:auto;overflow-y:visible;padding:6px 0}
@@ -227,7 +250,7 @@ button.b{font-family:'Rokkitt',serif;font-weight:700;font-size:14px;letter-spaci
   background:linear-gradient(180deg,var(--panel2),var(--panel));color:var(--tinta);box-shadow:0 2px 0 rgba(0,0,0,.28)}
 button.b:hover{border-color:var(--morado)}
 button.b:active{transform:translateY(2px);box-shadow:none}
-button.b.ok{background:linear-gradient(180deg,#F0C765,var(--oro));color:#2A1D06;border-color:#B08430;box-shadow:0 2px 0 #8A6520}
+button.b.ok{background:linear-gradient(180deg,#F4CB72,#DDA23A);color:#2A1D06;border-color:#A8661B;box-shadow:0 2px 0 #7E4C12}
 button.b:disabled{opacity:.4;cursor:default}
 .etq{font-family:'Rokkitt',serif;font-weight:700;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--tenue)}
 input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7px 9px;border-radius:9px;border:1px solid var(--linea);
@@ -245,6 +268,19 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
 @keyframes brilla{50%{box-shadow:0 0 0 3px rgba(240,199,94,.35)}}
 .sellazo{display:inline-block;font-family:'Rokkitt',serif;font-weight:700;font-size:15px;letter-spacing:2.5px;color:var(--oro);
   border:2px solid var(--oro);border-radius:5px;padding:2px 9px;transform:rotate(-3deg);margin-top:6px}
+
+/* ── LAS PATAS DE MIUT. Lo que se ve es lo que ve ella: sus propias patas
+   delanteras, desde arriba, entrando por el borde de abajo de la pantalla.
+   Cuando se toca una pieza, una pata llega, se posa encima, la arrastra
+   hasta su sitio y se retira. Van por encima de todo, pero no se pueden
+   tocar: son la mano, no el objeto. Con «menos movimiento» no salen. ── */
+.patas{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+.pataM{position:absolute;left:0;top:0;width:96px;height:1500px;transform-origin:0 0;will-change:transform,filter;
+  filter:drop-shadow(10px 16px 10px rgba(40,20,5,.30))}
+.pataM svg{width:96px;height:1500px;display:block}
+.fantasma.pieza{position:fixed;left:0;top:0;z-index:39;pointer-events:none;will-change:transform;line-height:0;transition:none;
+  filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
+.fantasma svg{width:100%;height:100%;overflow:visible}
 
 /* ── LA AYUDA, encima ── */
 .modal{position:fixed;inset:0;background:rgba(12,8,20,.82);display:grid;place-items:center;padding:16px;z-index:60;overflow:auto}
@@ -280,10 +316,10 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
 <div class="lienzo">
 <header class="cab">
   <span class="sello" aria-hidden="true"></span>
-  <div><h1>Las piezas de Miut</h1><p class="sub">Factorizar · mcd · mcm · con las manos</p></div>
+  <div><h1>Las piezas de Miut</h1><p class="sub">Factorizar · mcd · mcm · con las patas</p></div>
   <nav class="acc" aria-label="Acciones">
     <button id="bAyuda">Cómo se juega</button>
-    <button id="bTema">Papiro</button>
+    <button id="bTema">Mesa oscura</button>
     <button id="bAula" aria-pressed="false">Aula</button>
   </nav>
 </header>
@@ -305,15 +341,19 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
 <div class="panel" id="tablero"></div>
 
 <div class="miut" id="miut" aria-live="polite">
-  <svg class="cara" viewBox="0 0 46 34" aria-hidden="true">
-    <!-- Miut, la cabeza: orejas largas, ojos verdes con el kohl hacia fuera -->
-    <path d="M9 14 L6 1 L17 8 Z M37 14 L40 1 L29 8 Z" fill="#8A6A9E" stroke="#241C36" stroke-width="1.4" stroke-linejoin="round"/>
-    <path d="M23 5 Q34 5 35 14 Q35 24 23 31 Q11 24 11 14 Q12 5 23 5 Z" fill="#8A6A9E" stroke="#241C36" stroke-width="1.4"/>
-    <path d="M12 12 Q23 6 34 12 L33.6 14 Q23 9 12.4 14 Z" fill="#E0B24A" stroke="#241C36" stroke-width="1"/>
-    <path d="M21 17 Q17.6 13.4 14.6 16 Q17.6 20 21 17 Z M25 17 Q28.4 13.4 31.4 16 Q28.4 20 25 17 Z" fill="#4E9B46" stroke="#241C36" stroke-width="1"/>
-    <path d="M17.8 14 V19 M28.2 14 V19" stroke="#241C36" stroke-width="1.6"/>
-    <path d="M14.6 16 L11.6 14.6 M31.4 16 L34.4 14.6" stroke="#241C36" stroke-width="1.2" stroke-linecap="round"/>
-    <path d="M20.6 22.4 Q23 21.4 25.4 22.4 Q24.6 24.4 23 24.8 Q21.4 24.4 20.6 22.4 Z" fill="#E58AA6" stroke="#241C36" stroke-width=".9"/>
+  <svg class="cara" viewBox="0 0 46 38" aria-hidden="true">
+    <!-- Miut, fuera del templo: la misma gata lila de ojos verdes, sin la
+         diadema ni el kohl. Es la dueña de las patas que mueven las piezas. -->
+    <path d="M9 16 L7 2 L19 9 Z M37 16 L39 2 L27 9 Z" fill="#A48AB8" stroke="#3B2A4A" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M11 13 L10 6 L16 10 Z M35 13 L36 6 L30 10 Z" fill="#E7A9BE"/>
+    <ellipse cx="23" cy="21" rx="14" ry="12.5" fill="#A48AB8" stroke="#3B2A4A" stroke-width="1.4"/>
+    <path d="M18 10 Q19 13 18 15 M23 9 V13 M28 10 Q27 13 28 15" stroke="#7F6596" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="17.5" cy="20" rx="3" ry="3.4" fill="#6FBF5C" stroke="#3B2A4A" stroke-width="1"/>
+    <ellipse cx="28.5" cy="20" rx="3" ry="3.4" fill="#6FBF5C" stroke="#3B2A4A" stroke-width="1"/>
+    <ellipse cx="17.5" cy="20" rx="1" ry="2.6" fill="#1E1A24"/><ellipse cx="28.5" cy="20" rx="1" ry="2.6" fill="#1E1A24"/>
+    <path d="M21.2 25 H24.8 L23 27 Z" fill="#E58AA6" stroke="#3B2A4A" stroke-width=".8" stroke-linejoin="round"/>
+    <path d="M23 27 Q21.5 29.4 19.6 28.4 M23 27 Q24.5 29.4 26.4 28.4" stroke="#3B2A4A" stroke-width=".9" fill="none" stroke-linecap="round"/>
+    <path d="M13 25 L6 24 M13 27 L6.5 28.5 M33 25 L40 24 M33 27 L39.5 28.5" stroke="#F4EEF8" stroke-width=".8" stroke-linecap="round"/>
   </svg>
   <div><div class="quien">Miut</div><p id="miutTxt"></p></div>
 </div>
@@ -322,15 +362,16 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/">El templo de Miut</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.3
+  · versión 0.4
 </footer>
 </div>
 
+<div class="patas" id="patas" aria-hidden="true"></div>
 <div class="modal" id="mAyuda" hidden>
  <div class="caja2" role="dialog" aria-modal="true" aria-labelledby="ayTit">
   <h2 id="ayTit">Cómo se juega</h2>
   <p>Cada número es una <b>bolsa de piezas</b>. Cada pieza es un número primo y lleva su color: el 2 azul, el 3 verde, el 5 violeta, el 7 coral, el 11 turquesa y el 13 rosa. El 12 son las piezas 2, 2 y 3, porque 2 · 2 · 3 = 12, y no hay otra bolsa que dé 12.</p>
-  <p>Todo se hace <b>tocando</b>: la pieza que se toca salta a su sitio, y si se vuelve a tocar, vuelve.</p>
+  <p>Lo que ves es lo que ve Miut: su mesa, desde arriba, y sus <b>patas</b>. Todo se hace <b>tocando</b>: tocas una pieza y una pata de Miut llega, se la lleva a su sitio y se retira. Si la vuelves a tocar, la devuelve.</p>
   <p>Cada primo tiene además su <b>textura</b> —rayas el 2, puntos el 3, cuadros el 5, rayas tumbadas el 7, zigzag el 11 y cruces el 13—, para distinguirlos aunque los colores se vean mal.</p>
   <h3>Voltear</h3>
   <p>Las piezas unidas se pueden <b>voltear</b> con «↻ voltear»: el bloque se da la vuelta entero, como en una mesa, y por detrás conserva su forma. El reverso es de un solo color y lleva escrito el número que forman, que es el producto de todas: delante los factores, detrás el número. <b>Cada número tiene su color por detrás</b>: si dos torres volteadas son del mismo color, son el mismo número.</p>
@@ -341,7 +382,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <h3>Todo · el mcm</h3>
   <p>Hay que construir la torre <b>más pequeña</b> en la que quepan los dos números, pieza a pieza. Esa torre es el <b>mínimo común múltiplo</b>: hace falta cada pieza tantas veces como la tenga el que más.</p>
   <h3>En clase</h3>
-  <p>Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas. Cada juego tiene al final un reto con los números que se quieran.</p>
+  <p>Con <b>Mesa oscura</b> la mesa pasa a ser de nogal, para aulas con poca luz. Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas. Cada juego tiene al final un reto con los números que se quieran.</p>
   <div class="botones"><button class="b ok" id="ayCerrar">Volver a las piezas</button></div>
  </div>
 </div>
@@ -390,13 +431,13 @@ function pieza(p, opts){
   b.innerHTML = piezaSVG(p);
   b.setAttribute('aria-label', (opts.etq || 'pieza') + ' ' + p);
   if(opts.usada){ b.disabled = true; b.classList.add('usada'); }
-  if(opts.al) b.addEventListener('click', opts.al);
+  if(opts.al) b.addEventListener('click', () => opts.al(b));
   return b;
 }
 function fila(lista, opts){
   const f = document.createElement('div'); f.className = 'fila' + (opts && opts.chica ? ' chica' : '') + (opts && opts.suelta ? ' suelta' : '');
   if(!lista.length){ const v = document.createElement('span'); v.className = 'vacio'; v.textContent = (opts && opts.vacio) || 'vacía'; f.appendChild(v); }
-  lista.forEach((p, i) => f.appendChild(pieza(p, {cls: (opts && opts.clase ? opts.clase(p, i) : ''), etq: opts && opts.etq, al: opts && opts.al ? () => opts.al(p, i) : null,
+  lista.forEach((p, i) => f.appendChild(pieza(p, {cls: (opts && opts.clase ? opts.clase(p, i) : ''), etq: opts && opts.etq, al: opts && opts.al ? btn => opts.al(p, i, btn) : null,
     usada: opts && opts.usada ? opts.usada(p, i) : false})));
   return f;
 }
@@ -425,7 +466,7 @@ function dorsoSVG(lista){
    repinta nada, solo cambia la clase, y por eso se ve la animación.
    Cualquier cambio en la torre la vuelve a poner de frente. */
 function bloque(clave, lista, opts){
-  const b = el('div', 'bloque');
+  const b = el('div', 'bloque'); b.dataset.torre = clave;
   const v = el('div', 'volteo' + (P.dorso && P.dorso[clave] && lista.length ? ' dorso' : ''));
   const g = el('div', 'gira');
   const frente = fila(lista, opts); frente.classList.add('frente');
@@ -449,13 +490,162 @@ function bloque(clave, lista, opts){
         : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'));
   };
   if(P.dorso && P.dorso[clave] && lista.length) bt.textContent = '↻ ver las piezas';
-  bt.addEventListener('click', gira);
-  detras.addEventListener('click', gira);
+  /* la pata llega a la torre y la voltea: primero el gesto, luego el giro */
+  const conPata = () => toca(v.getBoundingClientRect(), gira);
+  bt.addEventListener('click', conPata);
+  detras.addEventListener('click', conPata);
   b.appendChild(bt);
   return b;
 }
 const deFrente = clave => { if(P.dorso) P.dorso[clave] = false; };
 const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className = cls; if(html !== undefined) e.innerHTML = html; return e; };
+
+/* ── LAS PATAS ──────────────────────────────────────────────────────────
+   Una pata delantera de Miut vista desde arriba: un mitón blanco con sus
+   cuatro dedos, los surcos y un mechón en cada punta, y el brazo lila
+   atigrado, con volumen —oscuro en los bordes y claro en el centro—, que
+   se ensancha hacia el codo y sale por el borde de abajo de la
+   pantalla. Dos, izquierda y derecha, y se usa la del lado de la pieza.
+   El brazo apunta siempre al hombro, que está debajo de la pantalla: así
+   la pata gira un poco según adónde llegue, como un brazo de verdad. */
+const PATA_SVG = (() => {
+  /* el brazo se ensancha hacia el codo —se ve desde arriba, en escorzo— y
+     se estrecha en la muñeca; la mano es un mitón redondo con cuatro dedos
+     juntos delante. Todo en un contorno: primero el trazo oscuro, encima los
+     rellenos, y no quedan costuras por dentro. */
+  const brazo = 'M26 44 C25 120 24 400 20 760 C17 1000 15 1250 13 1500 L83 1500 C81 1250 79 1000 76 760 C72 400 71 120 70 44 Z';
+  const palma = '<ellipse cx="48" cy="50" rx="25" ry="23"/>';
+  const dedos = '<circle cx="27.5" cy="35" r="9.2"/><circle cx="40" cy="24.5" r="10.2"/><circle cx="56" cy="24.5" r="10.2"/><circle cx="68.5" cy="35" r="9.2"/>';
+  const contorno = '<path d="' + brazo + '"/>' + palma + dedos;
+  /* el calcetín blanco: hasta pasada la muñeca, con el borde de pelo en
+     zigzag irregular */
+  const picos = [4, 9, 3, 8, 5, 10, 4, 7, 3, 9, 5];
+  let zig = 'M20 40 L20 94';
+  picos.forEach((h, k) => { const x = 24 + k * 5; zig += ' L' + x + ' ' + (98 + h) + ' L' + (x + 2.5) + ' ' + (96 + (k % 3)); });
+  zig += ' L78 94 L78 40 Z';
+  /* las rayas atigradas: medias lunas que abrazan el brazo, inclinadas y
+     de grosor distinto; algunas no llegan de lado a lado */
+  const ancho = y => 22 + Math.min(1, (y - 44) / 1450) * 13;           // medio ancho del brazo a esa altura
+  const raya = (y, g, t, de, a) => {
+    const w = ancho(y), xa = 48 - w + (de || 0) * 2 * w, xb = 48 - w + (a || 1) * 2 * w, mx = (xa + xb) / 2;
+    return '<path d="M' + xa.toFixed(1) + ' ' + (y + t) + ' Q' + mx.toFixed(1) + ' ' + (y - 13) + ' ' + xb.toFixed(1) + ' ' + (y - t)
+      + ' Q' + mx.toFixed(1) + ' ' + (y - 13 + 2 * g) + ' ' + xa.toFixed(1) + ' ' + (y + t) + ' Z"/>';
+  };
+  const rayas = [raya(150, 5, 3), raya(178, 2.5, -2, 0, .55), raya(232, 6, -3), raya(292, 4.5, 4),
+    raya(318, 2, 2, .45, 1), raya(380, 6.5, -4), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4)].join('');
+  return '<svg viewBox="0 0 96 1500" aria-hidden="true"><defs>'
+    + '<linearGradient id="pelo" x1="0" x2="1"><stop offset="0" stop-color="#6E5586"/><stop offset=".22" stop-color="#A088B5"/>'
+    + '<stop offset=".48" stop-color="#BAA5CC"/><stop offset=".78" stop-color="#9C83B1"/><stop offset="1" stop-color="#654D7D"/></linearGradient>'
+    + '<radialGradient id="calcetin" cx=".45" cy=".35" r=".65"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F6F1F5"/>'
+    + '<stop offset="1" stop-color="#D8CCE0"/></radialGradient>'
+    + '<clipPath id="soloMano"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath></defs>'
+    + '<g fill="none" stroke="#45314F" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
+    + '<g fill="url(#pelo)">' + contorno + '</g>'
+    + '<g fill="#634A7A" opacity=".55">' + rayas + '</g>'
+    + '<g clip-path="url(#soloMano)"><path d="' + zig + '" fill="url(#calcetin)"/>'
+    + palma.replace('/>', ' fill="url(#calcetin)"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin)"/>')
+    /* la sombra de la mano sobre la muñeca: separa el mitón del brazo */
+    + '<path d="M28 68 Q48 80 68 68" fill="none" stroke="#B9A9C4" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>'
+    /* los surcos entre los dedos, y un mechón blanco en cada punta */
+    + '<g fill="none" stroke="#9A89A6" stroke-width="1.7" stroke-linecap="round">'
+    + '<path d="M33.5 29 Q34.5 35 36.5 40"/><path d="M48 18 Q48 26 48 33"/><path d="M62.5 29 Q61.5 35 59.5 40"/></g>'
+    + '<g fill="none" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round" opacity=".95">'
+    + '<path d="M38 15 l-1 -3 M47 14.5 l-.5 -3 M49.5 14.5 l1 -3 M58 15 l1 -3 M20 30 l-2.5 -1.5 M76 30 l2.5 -1.5"/></g>'
+    /* la luz de la lámpara sobre los nudillos */
+    + '<path d="M31 43 Q48 34 65 43" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".6"/>'
+    + '</svg>';
+})();
+const quieto = () => document.body.dataset.movimiento === 'menos';
+let enCurso = [];                                    // lo que se está moviendo ahora
+function acabaTodo(){ enCurso.splice(0).forEach(f => f()); }
+/* la pata, colocada con la punta de los dedos en (x, y) y el brazo hacia
+   su hombro, que está bajo la pantalla, a un lado o al otro */
+function postura(x, y, lado, esc){
+  const hx = innerWidth * (lado === 'izq' ? .3 : .7), hy = innerHeight + 260;
+  const ang = Math.atan2(-(hx - x), hy - y) * 180 / Math.PI;
+  return 'translate(' + x + 'px,' + y + 'px) rotate(' + ang.toFixed(1) + 'deg) scale(' + esc + ') translate(-48px,-14px)';
+}
+function sacaPata(x){
+  const d = el('div', 'pataM', PATA_SVG);
+  $('patas').appendChild(d);
+  return {d, lado: x < innerWidth / 2 ? 'izq' : 'der'};
+}
+const escala = () => Math.max(.8, Math.min(1.6, parseFloat(getComputedStyle(document.body).getPropertyValue('--zAula')) || 1));
+/* el punto donde se posa la pata: para tocar, el centro; para arrastrar
+   una pieza, el borde de abajo —así los dedos la agarran sin taparle el
+   número mientras la lleva— */
+const punto = (r, borde) => ({x: r.left + r.width / 2, y: r.top + r.height * (borde ? .86 : .55)});
+/* la sombra dice si la pata toca la mesa: por el aire, amplia y suave;
+   apoyada, corta y marcada */
+const AIRE = 'drop-shadow(10px 16px 10px rgba(40,20,5,.30))', APOYO = 'drop-shadow(3px 5px 3px rgba(40,20,5,.45))';
+/* MOVER UNA PIEZA: la pata llega a la pieza, se posa, la arrastra hasta
+   su sitio nuevo y se va. La pieza de destino ya está pintada, pero
+   escondida hasta que la pata suelta la que arrastra. */
+function mueve(p, r0, destino, desaparece){
+  if(quieto() || !destino || !r0) return;
+  acabaTodo();
+  const r1 = destino.getBoundingClientRect();
+  destino.style.visibility = 'hidden';
+  const g = el('div', 'fantasma pieza', piezaSVG(p));      /* «pieza»: los mismos contornos y texturas */
+  g.style.width = r1.width + 'px'; g.style.height = r1.height + 'px';
+  document.body.appendChild(g);
+  const a = punto(r0, true), b = punto(r1, true), esc = escala();
+  const {d, lado} = sacaPata(a.x);
+  const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
+  const T = 860;
+  const anP = d.animate([
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
+    {transform: postura(a.x, a.y, lado, esc), filter: APOYO, offset: .26, easing: 'ease-in-out'},
+    {transform: postura(a.x, a.y + 3, lado, esc), filter: APOYO, offset: .32, easing: 'ease-in-out'},
+    {transform: postura(b.x, b.y, lado, esc), filter: APOYO, offset: .72, easing: 'ease-out'},
+    {transform: postura(b.x, innerHeight + 140, lado, esc), filter: AIRE, offset: 1}
+  ], {duration: T, fill: 'forwards'});
+  const x0 = r0.left + (r0.width - r1.width) / 2, y0 = r0.top + (r0.height - r1.height) / 2;
+  const anG = g.animate([
+    {transform: 'translate(' + x0 + 'px,' + y0 + 'px)', opacity: 1, offset: 0},
+    {transform: 'translate(' + x0 + 'px,' + y0 + 'px)', opacity: 1, offset: .32, easing: 'ease-in-out'},
+    {transform: 'translate(' + r1.left + 'px,' + r1.top + 'px)', opacity: desaparece ? .35 : 1, offset: .72},
+    {transform: 'translate(' + r1.left + 'px,' + r1.top + 'px)', opacity: desaparece ? 0 : 1, offset: 1}
+  ], {duration: T, fill: 'forwards'});
+  let hecho = false;
+  const fin = () => { if(hecho) return; hecho = true; clearTimeout(suelta); destino.style.visibility = ''; g.remove(); d.remove(); anP.cancel(); anG.cancel(); };
+  /* la pieza de destino aparece cuando la pata la suelta, no al final */
+  const suelta = setTimeout(() => { destino.style.visibility = ''; if(!desaparece) g.style.visibility = 'hidden'; }, T * .72);
+  anP.finished.then(fin, fin);
+  enCurso.push(fin);
+}
+/* TOCAR: la pata llega, da un toque y se va; lo que tenga que pasar
+   (voltear, que tiemble la piedra) pasa en el momento del toque */
+function toca(r, alTocar){
+  if(quieto() || !r){ alTocar && alTocar(); return; }
+  acabaTodo();
+  const a = punto(r), esc = escala();
+  const {d, lado} = sacaPata(a.x);
+  const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
+  const T = 620;
+  const an = d.animate([
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
+    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .4, easing: 'ease-in'},
+    {transform: postura(a.x, a.y + 6, lado, esc * .97), filter: APOYO, offset: .5},
+    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .58, easing: 'ease-in'},
+    {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 1}
+  ], {duration: T, easing: 'ease-in-out', fill: 'forwards'});
+  let hecho = false, tocado = false;
+  const toque = () => { if(tocado) return; tocado = true; alTocar && alTocar(); };
+  const t = setTimeout(toque, T * .45);
+  const fin = () => { if(hecho) return; hecho = true; clearTimeout(t); toque(); d.remove(); an.cancel(); };
+  an.finished.then(fin, fin);
+  enCurso.push(fin);
+}
+/* dónde acaba cada pieza, después de repintar */
+const conEtiqueta = (cont, p) => cont ? [...cont.querySelectorAll('.pieza')].filter(x => x.getAttribute('aria-label').endsWith(' ' + p)) : [];
+function enTorre(clave, p, ultima){
+  if(ultima){ const todas = document.querySelectorAll('[data-torre="' + clave + '"] .frente .pieza'); return todas[todas.length - 1]; }
+  const fs = conEtiqueta(document.querySelector('[data-torre="' + clave + '"] .frente'), p);
+  return fs[fs.length - 1];
+}
+const enCaja = (lado, p) => conEtiqueta(document.querySelector('[data-caja="' + lado + '"]'), p).find(x => !x.classList.contains('usada'));
+const enAlmacen = p => conEtiqueta(document.querySelector('[data-alm]'), p)[0];
 
 /* ── LO QUE DICE MIUT ── */
 function dice(txt, como){
@@ -515,8 +705,10 @@ function porQueNo(n, p){
 }
 function golpe(p){
   if(P.resto === 1) return;
+  const piedra = document.querySelector('.piedra'), rp = piedra && piedra.getBoundingClientRect();
   if(P.resto % p){
-    const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); }
+    /* la pata da un golpecito y la piedra tiembla: no se rompe */
+    toca(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
     dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(P.resto, p) + '. Prueba con otro.', 'mal');
     return;
   }
@@ -526,10 +718,12 @@ function golpe(p){
     + ' <b>Voltea las piezas</b>: por detrás está la piedra entera.'); }
   else dice('Se desprende un <b>' + p + '</b> y queda una piedra de <b>' + P.resto + '</b>. Sigue golpeando.');
   pinta();
+  /* la pata arranca la pieza de la piedra y la lleva a la fila */
+  if(rp) mueve(p, {left: rp.left + rp.width / 2 - 32, top: rp.top + rp.height / 2 - 27, width: 64, height: 54}, enTorre('rotas', p, true));
 }
 function pintaRomper(t){
   const r = el('div', 'romper');
-  r.appendChild(bloque('rotas', P.piezas, {vacio:'aún ninguna pieza', clase: (p, i) => i === P.piezas.length - 1 && !(P.dorso && P.dorso.rotas) ? 'entra' : ''}));
+  r.appendChild(bloque('rotas', P.piezas, {vacio:'aún ninguna pieza'}));
   if(P.resto > 1) r.appendChild(el('div', 'piedra', String(P.resto)));
   t.appendChild(r);
   t.appendChild(el('div', 'cuenta', P.piezas.length
@@ -548,11 +742,13 @@ function pintaComun(){
   const t = $('tablero');
   const usadasA = bolsa(P.ta), usadasB = bolsa(P.tb);
   const caja = (n, f, torre, lado) => {
-    const c = el('div', 'caja'); const cont = {};
+    const c = el('div', 'caja'); const cont = {}; c.dataset.caja = lado;
     c.appendChild(el('div', 'rot', '<span>las piezas del</span><b>' + n + '</b>'));
     const usadas = bolsa(torre);
     c.appendChild(fila(f, {etq:'coger', usada: p => { cont[p] = (cont[p] || 0) + 1; return cont[p] <= (usadas[p] || 0); },
-      al: p => { (lado === 'a' ? P.ta : P.tb).push(p); deFrente(lado); dice(''); pinta(); }}));
+      al: (p, i, btn) => { const r = btn.getBoundingClientRect();
+        (lado === 'a' ? P.ta : P.tb).push(p); deFrente(lado); dice(''); pinta();
+        mueve(p, r, enTorre(lado, p)); }}));
     c.appendChild(el('div', 'cuenta', n + ' = ' + (f.length > 1 ? f.join(' · ') : f[0] + (f.length === 1 ? ', primo' : ''))));
     return c;
   };
@@ -565,7 +761,9 @@ function pintaComun(){
     obra.appendChild(el('div', 'rot', 'torre con las piezas del ' + n));
     /* sin la cuenta debajo: el número de la torre se descubre volteándola */
     const f = bloque(lado, ordena(lista), {etq:'devolver', vacio:'toca una pieza de arriba',
-      al: p => { if(lado === 'a') P.ta = quitaUna(P.ta, p); else P.tb = quitaUna(P.tb, p); deFrente(lado); dice(''); pinta(); }});
+      al: (p, i, btn) => { const r = btn.getBoundingClientRect();
+        if(lado === 'a') P.ta = quitaUna(P.ta, p); else P.tb = quitaUna(P.tb, p); deFrente(lado); dice(''); pinta();
+        mueve(p, r, enCaja(lado, p)); }});
     f.classList.add('torre'); obra.appendChild(f);
   };
   torre(P.a, P.ta, 'a');
@@ -622,14 +820,16 @@ function pintaTodo(){
     return c;
   };
   const dos = el('div', 'dosCajas'); dos.appendChild(plano(P.a, P.fa)); dos.appendChild(plano(P.b, P.fb)); t.appendChild(dos);
-  const alm = el('div', 'caja'); alm.style.marginTop = '10px';
+  const alm = el('div', 'caja'); alm.style.marginTop = '10px'; alm.dataset.alm = '1';
   alm.appendChild(el('div', 'rot', '<span>el almacén · piezas sin fin</span><span></span>'));
   const tipos = [...new Set([...P.fa, ...P.fb])].sort((x, y) => x - y);
-  alm.appendChild(fila(tipos, {etq:'poner', suelta:true, al: p => { P.torre.push(p); deFrente('torre'); dice(''); pinta(); }}));
+  alm.appendChild(fila(tipos, {etq:'poner', suelta:true, al: (p, i, btn) => { const r = btn.getBoundingClientRect();
+    P.torre.push(p); deFrente('torre'); dice(''); pinta(); mueve(p, r, enTorre('torre', p)); }}));
   t.appendChild(alm);
   const obra = el('div', 'obra' + (cabe(P.fa, P.torre) && cabe(P.fb, P.torre) ? ' encaja' : ''));
   obra.appendChild(el('div', 'rot', 'la torre'));
-  const f = bloque('torre', ordena(P.torre), {etq:'quitar', vacio:'toca una pieza del almacén', al: p => { P.torre = quitaUna(P.torre, p); deFrente('torre'); dice(''); pinta(); }});
+  const f = bloque('torre', ordena(P.torre), {etq:'quitar', vacio:'toca una pieza del almacén', al: (p, i, btn) => { const r = btn.getBoundingClientRect();
+    P.torre = quitaUna(P.torre, p); deFrente('torre'); dice(''); pinta(); mueve(p, r, enAlmacen(p), true); }});
   f.classList.add('torre'); obra.appendChild(f);
   t.appendChild(obra);
   const bt = el('div', 'botones');
@@ -732,14 +932,14 @@ $('ayCerrar').addEventListener('click', cierraAyuda);
 $('mAyuda').addEventListener('click', e => { if(e.target.id === 'mAyuda') cierraAyuda(); });
 addEventListener('keydown', e => { if(e.key === 'Escape' && !$('mAyuda').hidden) cierraAyuda(); });
 
-const AJ = 'miut.piezas.ajustes';
-let aj = {modo:'pantalla', aula:'no'};
+const AJ = 'miut.piezas.ajustes.v2';        /* v2: ya no hay noche ni papiro, sino dos maderas */
+let aj = {modo:'haya', aula:'no'};
 try{ Object.assign(aj, JSON.parse(localStorage.getItem(AJ) || '{}')); }catch(e){}
 function pintaAjustes(){
   const b = document.body;
   b.dataset.modo = aj.modo; b.dataset.aula = aj.aula;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) b.dataset.movimiento = 'menos';
-  $('bTema').textContent = aj.modo === 'papel' ? 'Noche' : 'Papiro';
+  $('bTema').textContent = aj.modo === 'nogal' ? 'Mesa clara' : 'Mesa oscura';
   $('bAula').textContent = aj.aula === 'si' ? 'Salir del aula' : 'Aula';
   $('bAula').setAttribute('aria-pressed', String(aj.aula === 'si'));
   /* el zoom del aula: el tablero está pensado para unos 920 × 640 puntos */
@@ -747,7 +947,7 @@ function pintaAjustes(){
   b.style.setProperty('--zAula', z.toFixed(3));
   try{ localStorage.setItem(AJ, JSON.stringify(aj)); }catch(e){}
 }
-$('bTema').addEventListener('click', () => { aj.modo = aj.modo === 'papel' ? 'pantalla' : 'papel'; pintaAjustes(); });
+$('bTema').addEventListener('click', () => { aj.modo = aj.modo === 'nogal' ? 'haya' : 'nogal'; pintaAjustes(); });
 $('bAula').addEventListener('click', () => { aj.aula = aj.aula === 'si' ? 'no' : 'si'; pintaAjustes(); });
 addEventListener('resize', pintaAjustes);
 
