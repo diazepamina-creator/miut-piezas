@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.2
+  Manipulativo para 1.º y 2.º de ESO · versión 0.3
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -39,10 +39,16 @@
     quien no distingue bien los colores y para el proyector que los lava.
   · AL RAS. Cada pieza se monta sobre la anterior justo lo que mide la
     lengüeta, y la torre se lee como un bloque, sin rendijas.
-  · EL VOLTEO. Las piezas unidas giran enteras, como una carta, y por
-    detrás está la piedra con el número que forman. Delante los factores,
-    detrás el producto: la torre ES el número. Por eso la cuenta ya no se
-    escribe debajo de las torres: se descubre volteándolas.
+  · EL VOLTEO. Las piezas unidas giran enteras y por detrás está el
+    número que forman. Delante los factores, detrás el producto: la torre
+    ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
+    se descubre volteándolas.
+
+  VERSIÓN 0.3
+  · EL VOLTEO, COMO DE VERDAD. Por detrás las piezas conservan su forma
+    —la misma silueta, en espejo—, y el reverso es de un solo color: el
+    del número que forman. Mismo número, mismo color; números distintos,
+    colores distintos. Dos torres volteadas se comparan sin leer.
 -->
 <title>Las piezas de Miut</title>
 <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@500;700&family=Space+Mono:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
@@ -173,27 +179,36 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 .herr button:disabled{opacity:.35;cursor:default}
 .herr .etq{width:100%;text-align:center}
 
-/* ── EL VOLTEO. La torre tiene dos caras: delante las piezas, detrás la
-   piedra con el número que forman entre todas. Gira entera, como una
-   carta, y por detrás se lee el producto. Con «menos movimiento», cambia
-   de cara sin girar. ── */
+/* ── EL VOLTEO, COMO DE VERDAD. Las piezas unidas se dan la vuelta enteras
+   y por detrás conservan su forma: la misma silueta de puzle, vista en
+   espejo, como cuando se voltea una tira de piezas encima de la mesa. El
+   reverso es de UN SOLO COLOR para todo el bloque, y ese color es el del
+   número que forman: el mismo número da siempre el mismo color, y números
+   distintos, colores distintos. Así dos torres volteadas se comparan de un
+   vistazo, sin leer. Al girar, el bloque se levanta un poco de la mesa. ── */
 .bloque{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.volteo{perspective:900px;display:inline-block;position:relative;max-width:100%}
-.volteo .gira{position:relative;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.45,.05,.3,1)}
+.volteo{perspective:900px;display:inline-block;position:relative}
+.volteo .gira{position:relative;transform-style:preserve-3d}
 .volteo.dorso .gira{transform:rotateY(180deg)}
+.volteo.ida .gira{animation:volteaIda .7s cubic-bezier(.45,.05,.3,1) both}
+.volteo.vuelta .gira{animation:volteaVuelta .7s cubic-bezier(.45,.05,.3,1) both}
+@keyframes volteaIda{0%{transform:rotateY(0)}50%{transform:translateZ(46px) rotateY(90deg)}100%{transform:rotateY(180deg)}}
+@keyframes volteaVuelta{0%{transform:rotateY(180deg)}50%{transform:translateZ(46px) rotateY(90deg)}100%{transform:rotateY(0)}}
 .volteo .frente,.volteo .detras{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.volteo .frente{flex-wrap:nowrap;min-height:54px}
 .volteo.dorso .frente{pointer-events:none}
-.volteo .detras{position:absolute;inset:4px 8px 4px 0;transform:rotateY(180deg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;border-radius:11px;border:2.2px solid #1A1226;cursor:pointer;
-  background:linear-gradient(180deg,var(--piedraL),var(--piedra));box-shadow:0 4px 0 rgba(0,0,0,.3);min-width:52px}
-.volteo .detras b{font-family:'Space Mono',monospace;font-size:30px;line-height:1;color:var(--tinta)}
-.volteo .detras small{font-family:'Space Mono',monospace;font-size:12px;color:var(--tinta);opacity:.8;margin-top:2px}
+.volteo .detras{position:absolute;left:0;top:50%;margin-top:-27px;height:54px;transform:rotateY(180deg);cursor:pointer;line-height:0}
+.volteo .detras svg{display:block;overflow:visible}
+.volteo .detras text{font-family:'Rokkitt',serif;font-weight:700;font-size:27px;fill:#FBF6EC;text-anchor:middle;dominant-baseline:central;
+  paint-order:stroke;stroke:#1A1226;stroke-width:4px;stroke-linejoin:round}
 .voltear{font-family:'Rokkitt',serif;font-weight:700;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;
   min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--oro);background:none;color:var(--oro);cursor:pointer}
 .voltear:hover{background:rgba(224,178,74,.12)}
 .voltear:disabled{opacity:.3;cursor:default}
-body[data-movimiento="menos"] .volteo .gira{transition:none}
-@media (prefers-reduced-motion:reduce){ .volteo .gira{transition:none} }
+/* una torre larga no se parte en dos líneas: se desliza de lado */
+.obra .torre{overflow-x:auto;overflow-y:visible;padding:6px 0}
+body[data-movimiento="menos"] .volteo .gira{animation:none !important}
+@media (prefers-reduced-motion:reduce){ .volteo .gira{animation:none !important} }
 
 /* los planos del mcm: lo que tiene que caber */
 .plano{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -307,7 +322,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/">El templo de Miut</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.2
+  · versión 0.3
 </footer>
 </div>
 
@@ -318,7 +333,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>Todo se hace <b>tocando</b>: la pieza que se toca salta a su sitio, y si se vuelve a tocar, vuelve.</p>
   <p>Cada primo tiene además su <b>textura</b> —rayas el 2, puntos el 3, cuadros el 5, rayas tumbadas el 7, zigzag el 11 y cruces el 13—, para distinguirlos aunque los colores se vean mal.</p>
   <h3>Voltear</h3>
-  <p>Las piezas unidas se pueden <b>voltear</b> con «↻ voltear»: la torre gira entera y por detrás se lee el número que forman, que es el producto de todas. Delante los factores; detrás, el número. Se vuelve a voltear para ver las piezas.</p>
+  <p>Las piezas unidas se pueden <b>voltear</b> con «↻ voltear»: el bloque se da la vuelta entero, como en una mesa, y por detrás conserva su forma. El reverso es de un solo color y lleva escrito el número que forman, que es el producto de todas: delante los factores, detrás el número. <b>Cada número tiene su color por detrás</b>: si dos torres volteadas son del mismo color, son el mismo número.</p>
   <h3>Romper</h3>
   <p>El número es una piedra. Se golpea con una herramienta —el 2, el 3, el 5…— y, si cae justo, se desprende una pieza y queda una piedra más pequeña. Cuando la piedra se queda en 1, ya está roto del todo: eso es <b>descomponer en factores primos</b>.</p>
   <h3>Lo común · el mcd</h3>
@@ -385,17 +400,37 @@ function fila(lista, opts){
     usada: opts && opts.usada ? opts.usada(p, i) : false})));
   return f;
 }
-/* EL BLOQUE QUE SE VOLTEA: la fila de piezas por delante y, por detrás, la
-   piedra con su producto. El estado de cada cara se guarda por nombre en
-   P.dorso; girar no repinta nada, solo cambia la clase, y por eso se ve la
-   animación. Cualquier cambio en la torre la vuelve a poner de frente. */
+/* EL COLOR DEL REVERSO, sacado del propio número: el tono avanza por el
+   ángulo de oro (137,5°) —así números cercanos caen lejos en la rueda de
+   color— y la luz alterna en tres escalones. Es un color de reverso: más
+   apagado y oscuro que los de las piezas, para que no se confunda con un
+   primo. El mismo número, siempre el mismo color. */
+const colorNumero = n => 'hsl(' + Math.round((n * 137.508) % 360) + ' 40% ' + (30 + (n % 3) * 7) + '%)';
+/* EL REVERSO, en SVG: las mismas siluetas de las piezas, en espejo, del
+   color del número. Primero todos los contornos gruesos y encima todos los
+   rellenos: así se tapan las juntas de dentro y solo queda el borde de
+   fuera, y el bloque se lee como una sola pieza. */
+function dorsoSVG(lista){
+  const k = lista.length, W = 64 + 40 * (k - 1), n = producto(lista), col = colorNumero(n);
+  const trozos = lista.map((_, i) => '<path d="' + FORMA + '" transform="translate(' + 40 * i + ' 0)"/>').join('');
+  const brillo = '<path d="M12 8 H' + (46 + 40 * (k - 1)) + ' V12 H12 Z" fill="#fff" opacity=".13"/>';
+  return '<svg viewBox="0 0 ' + W + ' 54" width="' + W + '" height="54" aria-hidden="true">'
+    + '<g transform="translate(' + W + ' 0) scale(-1 1)">'
+    + '<g fill="none" stroke="#1A1226" stroke-width="4.4" stroke-linejoin="round">' + trozos + '</g>'
+    + '<g fill="' + col + '">' + trozos + '</g>' + brillo + '</g>'
+    + '<text x="' + (35 + 20 * (k - 1)) + '" y="28">' + n + '</text></svg>';
+}
+/* EL BLOQUE QUE SE VOLTEA: la fila de piezas por delante y su reverso por
+   detrás. El estado de cada cara se guarda por nombre en P.dorso; girar no
+   repinta nada, solo cambia la clase, y por eso se ve la animación.
+   Cualquier cambio en la torre la vuelve a poner de frente. */
 function bloque(clave, lista, opts){
   const b = el('div', 'bloque');
   const v = el('div', 'volteo' + (P.dorso && P.dorso[clave] && lista.length ? ' dorso' : ''));
   const g = el('div', 'gira');
   const frente = fila(lista, opts); frente.classList.add('frente');
   const n = producto(lista);
-  const detras = el('div', 'detras', '<b>' + n + '</b>' + (lista.length > 1 ? '<small>' + enPotencias(n) + '</small>' : ''));
+  const detras = el('div', 'detras', lista.length ? dorsoSVG(lista) : '');
   detras.setAttribute('aria-hidden', 'true');
   g.appendChild(frente); g.appendChild(detras); v.appendChild(g); b.appendChild(v);
   const bt = el('button', 'voltear', '↻ voltear');
@@ -404,11 +439,14 @@ function bloque(clave, lista, opts){
   const gira = () => {
     P.dorso = P.dorso || {};
     P.dorso[clave] = !P.dorso[clave];
+    v.classList.remove('ida', 'vuelta'); void v.offsetWidth;
     v.classList.toggle('dorso', P.dorso[clave]);
+    v.classList.add(P.dorso[clave] ? 'ida' : 'vuelta');
     bt.textContent = P.dorso[clave] ? '↻ ver las piezas' : '↻ voltear';
     detras.setAttribute('aria-hidden', String(!P.dorso[clave]));
     if(P.dorso[clave]) dice('Por detrás, todas esas piezas juntas son el <b>' + n + '</b>'
-      + (lista.length > 1 ? ': ' + ordena(lista).join(' · ') + ' = ' + n + '.' : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'));
+      + (lista.length > 1 ? ': ' + ordena(lista).join(' · ') + ' = ' + n + '. Cada número tiene su color por detrás: si dos torres volteadas son del mismo color, son el mismo número.'
+        : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'));
   };
   if(P.dorso && P.dorso[clave] && lista.length) bt.textContent = '↻ ver las piezas';
   bt.addEventListener('click', gira);
