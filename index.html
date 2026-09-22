@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.1
+  Manipulativo para 1.º y 2.º de ESO · versión 0.2
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -30,6 +30,19 @@
   Todo se hace TOCANDO, sin arrastrar: en una pizarra digital y en un
   móvil arrastrar falla, y tocar no. La pieza tocada salta a su sitio, y
   tocada otra vez vuelve.
+
+  VERSIÓN 0.2
+  · LA MISMA FORMA PARA TODAS. En multiplicar cualquier factor va con
+    cualquier otro y en cualquier orden: formas distintas harían creer que
+    hay piezas que no casan. Lo que las distingue es el número escrito, el
+    color y, ahora, una TEXTURA por primo, que es la segunda pista para
+    quien no distingue bien los colores y para el proyector que los lava.
+  · AL RAS. Cada pieza se monta sobre la anterior justo lo que mide la
+    lengüeta, y la torre se lee como un bloque, sin rendijas.
+  · EL VOLTEO. Las piezas unidas giran enteras, como una carta, y por
+    detrás está la piedra con el número que forman. Delante los factores,
+    detrás el producto: la torre ES el número. Por eso la cuenta ya no se
+    escribe debajo de las torres: se descubre volteándolas.
 -->
 <title>Las piezas de Miut</title>
 <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@500;700&family=Space+Mono:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
@@ -106,7 +119,11 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 .pieza svg{width:100%;height:100%;overflow:visible}
 .pieza .cuerpo{stroke:#1A1226;stroke-width:2.2;stroke-linejoin:round}
 .pieza .brillo{fill:#fff;opacity:.22}
-.pieza text{font-family:'Rokkitt',serif;font-weight:700;font-size:25px;fill:#1A1226;text-anchor:middle;dominant-baseline:central}
+.pieza text{font-family:'Rokkitt',serif;font-weight:700;font-size:25px;fill:#1A1226;text-anchor:middle;dominant-baseline:central;
+  paint-order:stroke;stroke-width:5px;stroke-linejoin:round}
+/* la textura va encima del color y debajo del número: es la segunda pista,
+   para quien no distingue bien los colores y para el proyector que los lava */
+.pieza .textura{opacity:.3;pointer-events:none}
 .pieza:hover{transform:translateY(-3px)}
 .pieza:focus-visible{outline:2px solid var(--oro);outline-offset:3px;border-radius:8px}
 .pieza.usada{opacity:.22;cursor:default;transform:none}
@@ -114,9 +131,12 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 @keyframes entra{from{transform:translateY(-14px) scale(.8);opacity:0}}
 .pieza.sobra .cuerpo{stroke:var(--rojo);stroke-width:3.4}
 @media (prefers-reduced-motion:reduce){ .pieza,.pieza.entra{animation:none;transition:none} }
-/* en fila, cada lengüeta entra en el hueco de la siguiente */
+/* en fila, cada lengüeta entra en el hueco de la siguiente AL RAS: el
+   cuerpo mide 40 de los 64 puntos de la pieza, así que cada una se monta 24
+   sobre la anterior y el canto derecho de una es el izquierdo de la otra.
+   La torre se lee como un solo bloque, sin rendijas. */
 .fila{display:flex;align-items:center;flex-wrap:wrap;row-gap:6px;min-height:58px}
-.fila .pieza + .pieza{margin-left:-11px}
+.fila .pieza + .pieza{margin-left:-24px}
 .fila .vacio{font-family:'Rokkitt',serif;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue);
   border:2px dashed var(--linea);border-radius:10px;padding:14px 16px;line-height:1}
 
@@ -153,12 +173,37 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 .herr button:disabled{opacity:.35;cursor:default}
 .herr .etq{width:100%;text-align:center}
 
+/* ── EL VOLTEO. La torre tiene dos caras: delante las piezas, detrás la
+   piedra con el número que forman entre todas. Gira entera, como una
+   carta, y por detrás se lee el producto. Con «menos movimiento», cambia
+   de cara sin girar. ── */
+.bloque{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.volteo{perspective:900px;display:inline-block;position:relative;max-width:100%}
+.volteo .gira{position:relative;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.45,.05,.3,1)}
+.volteo.dorso .gira{transform:rotateY(180deg)}
+.volteo .frente,.volteo .detras{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.volteo.dorso .frente{pointer-events:none}
+.volteo .detras{position:absolute;inset:4px 8px 4px 0;transform:rotateY(180deg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;border-radius:11px;border:2.2px solid #1A1226;cursor:pointer;
+  background:linear-gradient(180deg,var(--piedraL),var(--piedra));box-shadow:0 4px 0 rgba(0,0,0,.3);min-width:52px}
+.volteo .detras b{font-family:'Space Mono',monospace;font-size:30px;line-height:1;color:var(--tinta)}
+.volteo .detras small{font-family:'Space Mono',monospace;font-size:12px;color:var(--tinta);opacity:.8;margin-top:2px}
+.voltear{font-family:'Rokkitt',serif;font-weight:700;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;
+  min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--oro);background:none;color:var(--oro);cursor:pointer}
+.voltear:hover{background:rgba(224,178,74,.12)}
+.voltear:disabled{opacity:.3;cursor:default}
+body[data-movimiento="menos"] .volteo .gira{transition:none}
+@media (prefers-reduced-motion:reduce){ .volteo .gira{transition:none} }
+
 /* los planos del mcm: lo que tiene que caber */
 .plano{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .plano .ok{font-family:'Rokkitt',serif;font-weight:700;font-size:14px;letter-spacing:1.2px;text-transform:uppercase}
 .plano .ok.si{color:var(--verde)} .plano .ok.no{color:var(--rojo)}
 .fila.chica .pieza{width:44px;height:37px}
-.fila.chica .pieza + .pieza{margin-left:-8px}
+.fila.chica .pieza + .pieza{margin-left:-16.5px}
+/* en el almacén las piezas están SUELTAS: con aire entre ellas, para que no
+   se lean como una torre (un 2 y un 3 pegados parecerían un 6) */
+.fila.suelta .pieza + .pieza{margin-left:-6px}
 
 /* ── LOS BOTONES ── */
 .botones{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;align-items:center}
@@ -206,6 +251,17 @@ body[data-aula="si"] .juegos button span{display:none}
 body[data-aula="si"] .panel{margin-top:8px;padding:11px}
 </style>
 </head><body>
+<!-- LAS TEXTURAS, una por primo, dibujadas una vez: el 2 con rayas, el 3
+     con puntos, el 5 con cuadros, el 7 con rayas tumbadas, el 11 con zigzag
+     y el 13 con cruces. Cada pieza las usa por su nombre. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <pattern id="tx2" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M-2 10 L10 -2 M-2 2 L2 -2 M6 10 L10 6" stroke="#1A1226" stroke-width="1.8"/></pattern>
+  <pattern id="tx3" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.5" fill="#1A1226"/></pattern>
+  <pattern id="tx5" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 .5 H8 M.5 0 V8" stroke="#1A1226" stroke-width="1.3"/></pattern>
+  <pattern id="tx7" width="8" height="6" patternUnits="userSpaceOnUse"><path d="M0 3 H8" stroke="#1A1226" stroke-width="1.8"/></pattern>
+  <pattern id="tx11" width="10" height="7" patternUnits="userSpaceOnUse"><path d="M0 5 L2.5 2 L5 5 L7.5 2 L10 5" fill="none" stroke="#1A1226" stroke-width="1.4"/></pattern>
+  <pattern id="tx13" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M4.5 2 V7 M2 4.5 H7" stroke="#1A1226" stroke-width="1.5"/></pattern>
+</defs></svg>
 <div class="lienzo">
 <header class="cab">
   <span class="sello" aria-hidden="true"></span>
@@ -251,7 +307,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/">El templo de Miut</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.1
+  · versión 0.2
 </footer>
 </div>
 
@@ -260,6 +316,9 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <h2 id="ayTit">Cómo se juega</h2>
   <p>Cada número es una <b>bolsa de piezas</b>. Cada pieza es un número primo y lleva su color: el 2 azul, el 3 verde, el 5 violeta, el 7 coral, el 11 turquesa y el 13 rosa. El 12 son las piezas 2, 2 y 3, porque 2 · 2 · 3 = 12, y no hay otra bolsa que dé 12.</p>
   <p>Todo se hace <b>tocando</b>: la pieza que se toca salta a su sitio, y si se vuelve a tocar, vuelve.</p>
+  <p>Cada primo tiene además su <b>textura</b> —rayas el 2, puntos el 3, cuadros el 5, rayas tumbadas el 7, zigzag el 11 y cruces el 13—, para distinguirlos aunque los colores se vean mal.</p>
+  <h3>Voltear</h3>
+  <p>Las piezas unidas se pueden <b>voltear</b> con «↻ voltear»: la torre gira entera y por detrás se lee el número que forman, que es el producto de todas. Delante los factores; detrás, el número. Se vuelve a voltear para ver las piezas.</p>
   <h3>Romper</h3>
   <p>El número es una piedra. Se golpea con una herramienta —el 2, el 3, el 5…— y, si cae justo, se desprende una pieza y queda una piedra más pequeña. Cuando la piedra se queda en 1, ya está roto del todo: eso es <b>descomponer en factores primos</b>.</p>
   <h3>Lo común · el mcd</h3>
@@ -299,11 +358,15 @@ const colorDe = p => COLORP[p] || '#E8DCC8';
 
 /* LA PIEZA, en SVG. El hueco a la izquierda y la lengüeta a la derecha, a
    la misma altura: puestas en fila, cada una encaja en la siguiente. */
+const FORMA = 'M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z';
+const TEXTURAS = [2, 3, 5, 7, 11, 13];
 function piezaSVG(p){
   return '<svg viewBox="0 0 64 54" aria-hidden="true">'
-    + '<path class="cuerpo" fill="' + colorDe(p) + '" d="M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z"/>'
+    + '<path class="cuerpo" fill="' + colorDe(p) + '" d="' + FORMA + '"/>'
+    + (TEXTURAS.includes(p) ? '<path class="textura" fill="url(#tx' + p + ')" d="' + FORMA + '"/>' : '')
+    + '<path class="cuerpo" fill="none" d="' + FORMA + '"/>'
     + '<path class="brillo" d="M12 8 H46 V13 H12 Z"/>'
-    + '<text x="29" y="28">' + p + '</text></svg>';
+    + '<text x="29" y="28" style="stroke:' + colorDe(p) + '">' + p + '</text></svg>';
 }
 function pieza(p, opts){
   opts = opts || {};
@@ -316,13 +379,44 @@ function pieza(p, opts){
   return b;
 }
 function fila(lista, opts){
-  const f = document.createElement('div'); f.className = 'fila' + (opts && opts.chica ? ' chica' : '');
+  const f = document.createElement('div'); f.className = 'fila' + (opts && opts.chica ? ' chica' : '') + (opts && opts.suelta ? ' suelta' : '');
   if(!lista.length){ const v = document.createElement('span'); v.className = 'vacio'; v.textContent = (opts && opts.vacio) || 'vacía'; f.appendChild(v); }
   lista.forEach((p, i) => f.appendChild(pieza(p, {cls: (opts && opts.clase ? opts.clase(p, i) : ''), etq: opts && opts.etq, al: opts && opts.al ? () => opts.al(p, i) : null,
     usada: opts && opts.usada ? opts.usada(p, i) : false})));
   return f;
 }
-const cuentaDe = lista => lista.length ? (lista.length > 1 ? ordena(lista).join(' · ') + ' = ' : '') + '<b>' + producto(lista) + '</b>' : '<b>1</b> (nada)';
+/* EL BLOQUE QUE SE VOLTEA: la fila de piezas por delante y, por detrás, la
+   piedra con su producto. El estado de cada cara se guarda por nombre en
+   P.dorso; girar no repinta nada, solo cambia la clase, y por eso se ve la
+   animación. Cualquier cambio en la torre la vuelve a poner de frente. */
+function bloque(clave, lista, opts){
+  const b = el('div', 'bloque');
+  const v = el('div', 'volteo' + (P.dorso && P.dorso[clave] && lista.length ? ' dorso' : ''));
+  const g = el('div', 'gira');
+  const frente = fila(lista, opts); frente.classList.add('frente');
+  const n = producto(lista);
+  const detras = el('div', 'detras', '<b>' + n + '</b>' + (lista.length > 1 ? '<small>' + enPotencias(n) + '</small>' : ''));
+  detras.setAttribute('aria-hidden', 'true');
+  g.appendChild(frente); g.appendChild(detras); v.appendChild(g); b.appendChild(v);
+  const bt = el('button', 'voltear', '↻ voltear');
+  bt.disabled = !lista.length;
+  bt.setAttribute('aria-label', 'Voltear para ver el número');
+  const gira = () => {
+    P.dorso = P.dorso || {};
+    P.dorso[clave] = !P.dorso[clave];
+    v.classList.toggle('dorso', P.dorso[clave]);
+    bt.textContent = P.dorso[clave] ? '↻ ver las piezas' : '↻ voltear';
+    detras.setAttribute('aria-hidden', String(!P.dorso[clave]));
+    if(P.dorso[clave]) dice('Por detrás, todas esas piezas juntas son el <b>' + n + '</b>'
+      + (lista.length > 1 ? ': ' + ordena(lista).join(' · ') + ' = ' + n + '.' : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'));
+  };
+  if(P.dorso && P.dorso[clave] && lista.length) bt.textContent = '↻ ver las piezas';
+  bt.addEventListener('click', gira);
+  detras.addEventListener('click', gira);
+  b.appendChild(bt);
+  return b;
+}
+const deFrente = clave => { if(P.dorso) P.dorso[clave] = false; };
 const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className = cls; if(html !== undefined) e.innerHTML = html; return e; };
 
 /* ── LO QUE DICE MIUT ── */
@@ -388,16 +482,16 @@ function golpe(p){
     dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(P.resto, p) + '. Prueba con otro.', 'mal');
     return;
   }
-  P.piezas.push(p); P.resto /= p;
+  P.piezas.push(p); P.resto /= p; deFrente('rotas');
   if(P.resto === 1){ gana('Roto del todo: <b>' + P.n + ' = ' + ordena(P.piezas).join(' · ') + ' = ' + enPotencias(P.n) + '</b>. '
-    + (P.piezas.length === 1 ? 'Una sola pieza: <b>' + P.n + ' es primo</b>.' : 'Esas piezas y ninguna otra: cada número tiene una sola bolsa.')); }
+    + (P.piezas.length === 1 ? 'Una sola pieza: <b>' + P.n + ' es primo</b>.' : 'Esas piezas y ninguna otra: cada número tiene una sola bolsa.')
+    + ' <b>Voltea las piezas</b>: por detrás está la piedra entera.'); }
   else dice('Se desprende un <b>' + p + '</b> y queda una piedra de <b>' + P.resto + '</b>. Sigue golpeando.');
   pinta();
 }
 function pintaRomper(t){
   const r = el('div', 'romper');
-  const piezas = fila(P.piezas, {vacio:'aún ninguna pieza', clase: (p, i) => i === P.piezas.length - 1 ? 'entra' : ''});
-  r.appendChild(piezas);
+  r.appendChild(bloque('rotas', P.piezas, {vacio:'aún ninguna pieza', clase: (p, i) => i === P.piezas.length - 1 && !(P.dorso && P.dorso.rotas) ? 'entra' : ''}));
   if(P.resto > 1) r.appendChild(el('div', 'piedra', String(P.resto)));
   t.appendChild(r);
   t.appendChild(el('div', 'cuenta', P.piezas.length
@@ -420,7 +514,7 @@ function pintaComun(){
     c.appendChild(el('div', 'rot', '<span>las piezas del</span><b>' + n + '</b>'));
     const usadas = bolsa(torre);
     c.appendChild(fila(f, {etq:'coger', usada: p => { cont[p] = (cont[p] || 0) + 1; return cont[p] <= (usadas[p] || 0); },
-      al: p => { (lado === 'a' ? P.ta : P.tb).push(p); dice(''); pinta(); }}));
+      al: p => { (lado === 'a' ? P.ta : P.tb).push(p); deFrente(lado); dice(''); pinta(); }}));
     c.appendChild(el('div', 'cuenta', n + ' = ' + (f.length > 1 ? f.join(' · ') : f[0] + (f.length === 1 ? ', primo' : ''))));
     return c;
   };
@@ -431,10 +525,10 @@ function pintaComun(){
   const obra = el('div', 'obra' + (enc && P.ta.length ? ' encaja' : ''));
   const torre = (n, lista, lado) => {
     obra.appendChild(el('div', 'rot', 'torre con las piezas del ' + n));
-    const f = fila(ordena(lista), {etq:'devolver', vacio:'toca una pieza de arriba',
-      al: p => { if(lado === 'a') P.ta = quitaUna(P.ta, p); else P.tb = quitaUna(P.tb, p); dice(''); pinta(); }});
+    /* sin la cuenta debajo: el número de la torre se descubre volteándola */
+    const f = bloque(lado, ordena(lista), {etq:'devolver', vacio:'toca una pieza de arriba',
+      al: p => { if(lado === 'a') P.ta = quitaUna(P.ta, p); else P.tb = quitaUna(P.tb, p); deFrente(lado); dice(''); pinta(); }});
     f.classList.add('torre'); obra.appendChild(f);
-    obra.appendChild(el('div', 'cuenta', cuentaDe(lista)));
   };
   torre(P.a, P.ta, 'a');
   obra.appendChild(el('div', 'igual' + (enc ? ' si' : ''), enc ? (P.ta.length ? '= las dos torres son iguales' : 'las dos torres están vacías') : '≠ las torres no son iguales'));
@@ -442,7 +536,7 @@ function pintaComun(){
   t.appendChild(obra);
   const bt = el('div', 'botones');
   const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', compruebaComun); bt.appendChild(ok);
-  const vac = el('button', 'b', 'Vaciar las torres'); vac.addEventListener('click', () => { P.ta = []; P.tb = []; dice(''); pinta(); }); bt.appendChild(vac);
+  const vac = el('button', 'b', 'Vaciar las torres'); vac.addEventListener('click', () => { P.ta = []; P.tb = []; P.dorso = {}; dice(''); pinta(); }); bt.appendChild(vac);
   t.appendChild(bt);
 }
 function compruebaComun(){
@@ -464,7 +558,7 @@ function compruebaComun(){
   gana('La torre más grande que se construye igual con los dos: <b>' + (G.length ? G.join(' · ') + ' = ' : '') + g + '</b>. '
     + (g === 1 ? 'No comparten ninguna pieza: su mcd es <b>1</b>, y se dice que son <b>primos entre sí</b>.'
       : 'Es el <b>máximo común divisor</b>: mcd(' + P.a + ', ' + P.b + ') = ' + g + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b)
-        + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b>, tantas veces como las tenga <b>el que menos</b>.'));
+        + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b>, tantas veces como las tenga <b>el que menos</b>. Voltea las dos torres: las dos dicen ' + g + '.'));
 }
 
 /* ── TODO · el mcm ──────────────────────────────────────────────────────
@@ -479,8 +573,13 @@ function pintaTodo(){
     c.appendChild(el('div', 'rot', '<span>tiene que caber el</span><b>' + n + '</b>'));
     const pl = el('div', 'plano'); pl.appendChild(fila(f, {chica:true, etq:'plano'}));
     const bt = bolsa(P.torre), bf = bolsa(f);
-    const falta = Object.keys(bf).filter(p => (bt[p] || 0) < bf[p]).map(p => (bf[p] - (bt[p] || 0)) + ' × ' + p);
-    pl.appendChild(el('span', 'ok ' + (ok ? 'si' : 'no'), ok ? '✓ cabe' : 'falta ' + falta.join(', ')));
+    /* «falta un 2, dos 3», con palabras: «2 × 2» se leería como 4 */
+    const NOMBRES = {2:'doses', 3:'treses', 5:'cincos', 7:'sietes', 11:'onces', 13:'treces'};
+    const CUANTOS = ['', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis'];
+    const falta = Object.keys(bf).filter(p => (bt[p] || 0) < bf[p]).map(p => { const k = bf[p] - (bt[p] || 0);
+      return k === 1 ? 'un ' + p : (CUANTOS[k] || k) + ' ' + (NOMBRES[p] || 'piezas de ' + p); });
+    const cuantas = Object.keys(bf).reduce((x, p) => x + Math.max(0, bf[p] - (bt[p] || 0)), 0);
+    pl.appendChild(el('span', 'ok ' + (ok ? 'si' : 'no'), ok ? '✓ cabe' : (cuantas > 1 ? 'faltan ' : 'falta ') + falta.join(' y ')));
     c.appendChild(pl);
     return c;
   };
@@ -488,18 +587,17 @@ function pintaTodo(){
   const alm = el('div', 'caja'); alm.style.marginTop = '10px';
   alm.appendChild(el('div', 'rot', '<span>el almacén · piezas sin fin</span><span></span>'));
   const tipos = [...new Set([...P.fa, ...P.fb])].sort((x, y) => x - y);
-  alm.appendChild(fila(tipos, {etq:'poner', al: p => { P.torre.push(p); dice(''); pinta(); }}));
+  alm.appendChild(fila(tipos, {etq:'poner', suelta:true, al: p => { P.torre.push(p); deFrente('torre'); dice(''); pinta(); }}));
   t.appendChild(alm);
   const obra = el('div', 'obra' + (cabe(P.fa, P.torre) && cabe(P.fb, P.torre) ? ' encaja' : ''));
   obra.appendChild(el('div', 'rot', 'la torre'));
-  const f = fila(ordena(P.torre), {etq:'quitar', vacio:'toca una pieza del almacén', al: p => { P.torre = quitaUna(P.torre, p); dice(''); pinta(); }});
+  const f = bloque('torre', ordena(P.torre), {etq:'quitar', vacio:'toca una pieza del almacén', al: p => { P.torre = quitaUna(P.torre, p); deFrente('torre'); dice(''); pinta(); }});
   f.classList.add('torre'); obra.appendChild(f);
-  obra.appendChild(el('div', 'cuenta', cuentaDe(P.torre)));
   t.appendChild(obra);
   const bt = el('div', 'botones');
   const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', compruebaTodo); bt.appendChild(ok);
-  const emp = el('button', 'b', 'Empezar con las del ' + P.a); emp.addEventListener('click', () => { P.torre = P.fa.slice(); dice('Ya cabe el <b>' + P.a + '</b>. ¿Qué le falta para que quepa también el ' + P.b + '?'); pinta(); }); bt.appendChild(emp);
-  const vac = el('button', 'b', 'Vaciar'); vac.addEventListener('click', () => { P.torre = []; dice(''); pinta(); }); bt.appendChild(vac);
+  const emp = el('button', 'b', 'Empezar con las del ' + P.a); emp.addEventListener('click', () => { P.torre = P.fa.slice(); deFrente('torre'); dice('Ya cabe el <b>' + P.a + '</b>. ¿Qué le falta para que quepa también el ' + P.b + '?'); pinta(); }); bt.appendChild(emp);
+  const vac = el('button', 'b', 'Vaciar'); vac.addEventListener('click', () => { P.torre = []; deFrente('torre'); dice(''); pinta(); }); bt.appendChild(vac);
   t.appendChild(bt);
 }
 function compruebaTodo(){
@@ -520,7 +618,8 @@ function compruebaTodo(){
   gana('La torre más pequeña donde caben los dos: <b>' + M.join(' · ') + ' = ' + m + '</b>. Es el <b>mínimo común múltiplo</b>: mcm(' + P.a + ', ' + P.b + ') = ' + m
     + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b) + ' → ' + enPotencias(m)
     + ': todas las piezas, <b>comunes y no comunes</b>, tantas veces como las tenga <b>el que más</b>.'
-    + (m === P.a * P.b ? ' No comparten nada, así que el mcm es el producto.' : ' Menos que ' + P.a + ' · ' + P.b + ' = ' + P.a * P.b + ', porque comparten piezas.'));
+    + (m === P.a * P.b ? ' No comparten nada, así que el mcm es el producto.' : ' Menos que ' + P.a + ' · ' + P.b + ' = ' + P.a * P.b + ', porque comparten piezas.')
+    + ' Voltea la torre: por detrás dice ' + m + '.');
 }
 
 /* ── ACERTAR ── */
