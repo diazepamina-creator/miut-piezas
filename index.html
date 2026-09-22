@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.4
+  Manipulativo para 1.º y 2.º de ESO · versión 0.5
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,25 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.5 · EL ANDAMIAJE, COMO EN LA TERMINAL
+  · CUATRO ETAPAS POR JUEGO, de tres retos cada una, y en cada una las
+    piezas ayudan menos: colores, texturas (todas de cartón), lisas (solo
+    el número) y sin piezas (la pregunta, escrita). En la última, las
+    piezas se pueden sacar como pista y el reto queda «con ayuda».
+  · ANTES DE MIRAR, DECIRLO. Para voltear una torre o darla por buena hay
+    que decir antes qué número es. Y las pistas van por escalones: el
+    primer fallo dice qué está mal; a partir del segundo, dónde. Así no se
+    gana tocando al azar y siguiendo a Miut.
+  · LA CADENA. En la etapa lisa del mcd, el mcm y la pareja, los números
+    llegan como piedras y hay que romperlos antes, como en el examen.
+  · LA PAREJA, un cuarto juego: las torres del mcd y del mcm, juntas, son
+    las piezas de los dos números. mcd · mcm = a · b, a la vista.
+  · LAS PALABRAS DEL LIBRO. Las torres iguales «dividen a los dos»; donde
+    cabe un número, la torre «es múltiplo suyo»; el reverso dice el número
+    y sus potencias.
+  · EL RETO LIBRE solo admite primos hasta el 13 y diez piezas, que es lo
+    que cabe en la mesa.
 
   VERSIÓN 0.4 · FUERA DEL TEMPLO, EN LA MESA DE MIUT
   · LA MESA. Ya no hay templo ni morados: Miut trabaja sobre una mesa de
@@ -114,7 +133,8 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
   background:none;border:0;border-bottom:1px solid transparent;padding:3px 0;cursor:pointer}
 .cab .acc button:hover,.cab .acc button[aria-pressed="true"]{color:var(--oro);border-bottom-color:var(--oro)}
 
-.juegos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.juegos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+@media (max-width:560px){ .juegos{grid-template-columns:repeat(2,1fr)} }
 .juegos button{font:inherit;cursor:pointer;text-align:left;color:var(--tinta);border:1px solid var(--linea);border-radius:11px;
   background:var(--panel);padding:8px 11px}
 .juegos button b{display:block;font-family:'Rokkitt',serif;font-size:16px;letter-spacing:1.4px;text-transform:uppercase;color:var(--oro)}
@@ -282,6 +302,30 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
   filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
 .fantasma svg{width:100%;height:100%;overflow:visible}
 
+/* ── LAS ETAPAS. Según se sube, las piezas dicen menos: en la de texturas
+   son todas de cartón; en la lisa, además, sin textura. El reverso no
+   cambia: su color es el del número, no el del primo. ── */
+body[data-etapa="textura"] .pieza .relleno,body[data-etapa="lisa"] .pieza .relleno{fill:#E4D2B2}
+body[data-etapa="textura"] .pieza text,body[data-etapa="lisa"] .pieza text{stroke:#E4D2B2 !important}
+body[data-etapa="lisa"] .pieza .textura{display:none}
+body[data-etapa="textura"] .herr button,body[data-etapa="lisa"] .herr button{background:#E4D2B2 !important}
+.volteo .detras text.pot{font-family:'Space Mono',monospace;font-weight:700;font-size:12px;stroke-width:3px}
+.chipEtapa{display:inline-block;font-family:'Rokkitt',serif;font-weight:700;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--oro);border:1px solid var(--oro);border-radius:20px;padding:1px 9px;margin-right:4px;vertical-align:2px}
+.puntos .grupo{display:inline-flex;gap:5px;padding:2px 5px;border-radius:10px;background:var(--noche);margin-right:4px}
+.puntos i.ayuda{background:none;box-shadow:inset 0 0 0 2px var(--oro)}
+.puntos i.ayuda.aqui{box-shadow:inset 0 0 0 2px var(--oro),0 0 0 2px var(--oro)}
+/* lo que se pregunta antes de mirar */
+.pide{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px 10px;border:1px dashed var(--oro);border-radius:10px;
+  background:var(--noche);animation:entra .25s ease both}
+/* la misión sin piezas */
+.mision .enunciado{font-size:20px;line-height:1.4;margin:2px 0 4px}
+.mision .enunciado b{color:var(--oro)}
+input.num.largo{width:170px}
+button.enlace{background:none;border:0;color:var(--tenue);text-decoration:underline;font:inherit;font-size:13.5px;cursor:pointer;padding:6px 4px}
+button.enlace:hover{color:var(--oro)}
+.ayudaPiezas{margin-top:12px;padding-top:12px;border-top:1px dashed var(--linea)}
+
 /* ── LA AYUDA, encima ── */
 .modal{position:fixed;inset:0;background:rgba(12,8,20,.82);display:grid;place-items:center;padding:16px;z-index:60;overflow:auto}
 .modal .caja2{width:min(600px,100%);max-height:92vh;overflow:auto;border:1px solid var(--linea);border-radius:16px;padding:18px 20px;
@@ -316,7 +360,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
 <div class="lienzo">
 <header class="cab">
   <span class="sello" aria-hidden="true"></span>
-  <div><h1>Las piezas de Miut</h1><p class="sub">Factorizar · mcd · mcm · con las patas</p></div>
+  <div><h1>Las piezas de Miut</h1><p class="sub">Factorizar · mcd · mcm · la pareja · con las patas</p></div>
   <nav class="acc" aria-label="Acciones">
     <button id="bAyuda">Cómo se juega</button>
     <button id="bTema">Mesa oscura</button>
@@ -324,10 +368,11 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   </nav>
 </header>
 
-<div class="juegos" role="tablist" aria-label="Los tres juegos">
+<div class="juegos" role="tablist" aria-label="Los cuatro juegos">
   <button id="jRomper" data-j="romper"><b>Romper</b><span>parte el número en piezas</span></button>
   <button id="jComun" data-j="comun"><b>Lo común · mcd</b><span>la misma torre con los dos</span></button>
   <button id="jTodo" data-j="todo"><b>Todo · mcm</b><span>que quepan los dos</span></button>
+  <button id="jPareja" data-j="pareja"><b>La pareja</b><span>mcd · mcm = a · b</span></button>
 </div>
 
 <div class="panel">
@@ -362,7 +407,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/">El templo de Miut</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.4
+  · versión 0.5
 </footer>
 </div>
 
@@ -381,6 +426,12 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>Arriba están las piezas de los dos números. Con las del primero se construye una torre y con las del segundo, otra. Las dos torres tienen que ser <b>iguales</b>, y lo más grandes posible. Esa torre es el <b>máximo común divisor</b>: solo sirven las piezas que tienen los dos, tantas veces como las tenga el que menos.</p>
   <h3>Todo · el mcm</h3>
   <p>Hay que construir la torre <b>más pequeña</b> en la que quepan los dos números, pieza a pieza. Esa torre es el <b>mínimo común múltiplo</b>: hace falta cada pieza tantas veces como la tenga el que más.</p>
+  <h3>La pareja · mcd · mcm = a · b</h3>
+  <p>Las torres del mcd y del mcm, ya hechas. Se juntan y salen exactamente las piezas de los dos números: por eso <b>mcd · mcm = a · b</b>, siempre.</p>
+  <h3>Antes de mirar, decirlo</h3>
+  <p>Para voltear una torre o darla por buena hay que decir antes <b>qué número es</b>. Primero se piensa y después se comprueba. Y si algo falla, Miut dice primero <b>qué</b> está mal; solo si se vuelve a fallar dice <b>dónde</b>.</p>
+  <h3>Las cuatro etapas</h3>
+  <p>Cada juego sube en cuatro etapas de tres retos, y en cada una las piezas ayudan menos: <b>Colores</b> (color, textura y número), <b>Texturas</b> (todas de cartón), <b>Lisas</b> (solo el número; en el mcd, el mcm y la pareja, los números llegan como piedras y hay que romperlos antes) y <b>Sin piezas</b> (solo la pregunta, escrita). En la última se pueden sacar las piezas como pista, pero el reto queda <b>con ayuda</b>, marcado con un punto hueco.</p>
   <h3>En clase</h3>
   <p>Con <b>Mesa oscura</b> la mesa pasa a ser de nogal, para aulas con poca luz. Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas. Cada juego tiene al final un reto con los números que se quieran.</p>
   <div class="botones"><button class="b ok" id="ayCerrar">Volver a las piezas</button></div>
@@ -398,6 +449,14 @@ function enPotencias(n){
   if(n === 1) return '1';
   const r = []; primos(n).forEach(p => { const u = r[r.length - 1]; if(u && u[0] === p) u[1]++; else r.push([p, 1]); });
   return r.map(([p, e]) => p + expo(e)).join(' · ');
+}
+/* lo que se teclea: «2^3·3», «2³·3», «2**3 * 3»… todo a una lista de factores */
+function leeFactores(v){
+  const xs = [];
+  String(v).replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, m => '^' + [...m].map(c => ALTOS.indexOf(c)).join(''))
+    .replace(/(\d+)\s*(?:\^|\*\*)\s*(\d+)/g, (_, b, e) => { for(let k = 0; k < Math.min(+e, 40); k++) xs.push(+b); return ' '; })
+    .split(/[^\d]+/).filter(Boolean).forEach(x => xs.push(+x));
+  return xs.sort((a, b) => a - b);
 }
 /* cuántas piezas de cada primo: {2:2, 3:1} para el 12 */
 const bolsa = lista => lista.reduce((o, p) => (o[p] = (o[p] || 0) + 1, o), {});
@@ -418,7 +477,7 @@ const FORMA = 'M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z';
 const TEXTURAS = [2, 3, 5, 7, 11, 13];
 function piezaSVG(p){
   return '<svg viewBox="0 0 64 54" aria-hidden="true">'
-    + '<path class="cuerpo" fill="' + colorDe(p) + '" d="' + FORMA + '"/>'
+    + '<path class="cuerpo relleno" fill="' + colorDe(p) + '" d="' + FORMA + '"/>'
     + (TEXTURAS.includes(p) ? '<path class="textura" fill="url(#tx' + p + ')" d="' + FORMA + '"/>' : '')
     + '<path class="cuerpo" fill="none" d="' + FORMA + '"/>'
     + '<path class="brillo" d="M12 8 H46 V13 H12 Z"/>'
@@ -459,7 +518,8 @@ function dorsoSVG(lista){
     + '<g transform="translate(' + W + ' 0) scale(-1 1)">'
     + '<g fill="none" stroke="#1A1226" stroke-width="4.4" stroke-linejoin="round">' + trozos + '</g>'
     + '<g fill="' + col + '">' + trozos + '</g>' + brillo + '</g>'
-    + '<text x="' + (35 + 20 * (k - 1)) + '" y="28">' + n + '</text></svg>';
+    + (k > 1 ? '<text x="' + (35 + 20 * (k - 1)) + '" y="23">' + n + '</text><text class="pot" x="' + (35 + 20 * (k - 1)) + '" y="41">' + enPotencias(n) + '</text>'
+             : '<text x="35" y="28">' + n + '</text>') + '</svg>';
 }
 /* EL BLOQUE QUE SE VOLTEA: la fila de piezas por delante y su reverso por
    detrás. El estado de cada cara se guarda por nombre en P.dorso; girar no
@@ -485,19 +545,24 @@ function bloque(clave, lista, opts){
     v.classList.add(P.dorso[clave] ? 'ida' : 'vuelta');
     bt.textContent = P.dorso[clave] ? '↻ ver las piezas' : '↻ voltear';
     detras.setAttribute('aria-hidden', String(!P.dorso[clave]));
-    if(P.dorso[clave]) dice('Por detrás, todas esas piezas juntas son el <b>' + n + '</b>'
-      + (lista.length > 1 ? ': ' + ordena(lista).join(' · ') + ' = ' + n + '. Cada número tiene su color por detrás: si dos torres volteadas son del mismo color, son el mismo número.'
-        : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'));
   };
   if(P.dorso && P.dorso[clave] && lista.length) bt.textContent = '↻ ver las piezas';
-  /* la pata llega a la torre y la voltea: primero el gesto, luego el giro */
+  /* la pata llega a la torre y la voltea: primero el gesto, luego el giro.
+     Pero antes de verlo por detrás, hay que decir qué número se espera; la
+     vuelta a las piezas no pregunta nada */
   const conPata = () => toca(v.getBoundingClientRect(), gira);
-  bt.addEventListener('click', conPata);
-  detras.addEventListener('click', conPata);
+  const pide = () => {
+    if(P.dorso[clave] || P.visto[clave] === n) return conPata();
+    pideNumero(b, '¿qué número hay detrás?', n,
+      () => { P.visto[clave] = n; conPata(); setTimeout(() => dice('<b>Eso es: ' + n + '</b>' + (lista.length > 1 ? ' = ' + ordena(lista).join(' · ') + '.' : '. Una sola pieza, y por detrás dice lo mismo: eso es ser <b>primo</b>.'), 'bien'), 700); },
+      g => { P.visto[clave] = n; conPata(); setTimeout(() => dice('Dijiste ' + g + ', y es <b>' + n + '</b>' + (lista.length > 1 ? ': ' + ordena(lista).join(' · ') + ' = ' + n + '.' : '.'), 'mal'), 700); });
+  };
+  bt.addEventListener('click', pide);
+  detras.addEventListener('click', pide);
   b.appendChild(bt);
   return b;
 }
-const deFrente = clave => { if(P.dorso) P.dorso[clave] = false; };
+const deFrente = clave => { if(P.dorso) P.dorso[clave] = false; if(P.visto) delete P.visto[clave]; };
 const el = (tag, cls, html) => { const e = document.createElement(tag); if(cls) e.className = cls; if(html !== undefined) e.innerHTML = html; return e; };
 
 /* ── LAS PATAS ──────────────────────────────────────────────────────────
@@ -654,47 +719,80 @@ function dice(txt, como){
   $('miutTxt').innerHTML = txt;
 }
 
-/* ── LOS RETOS. Cada juego, una escalera de números que va de lo fácil a lo
-   que pide pensar; y al final, uno libre con los números que se quieran.
-   Los pares del mcd y el mcm son los del templo, para que se reconozcan. */
+/* ── EL ANDAMIAJE. Como en la terminal J&L, las ayudas se retiran según se
+   sube: cada juego tiene cuatro etapas de tres retos, y en cada una las
+   piezas dicen menos.
+     1 · COLORES ... color, textura y número: el primo se reconoce de lejos.
+     2 · TEXTURAS .. todas de cartón, del mismo color: solo la textura y el
+                     número las distinguen.
+     3 · LISAS ..... solo el número. Y en el mcd, el mcm y la pareja los
+                     números llegan como piedras: hay que romperlos antes.
+     4 · SIN PIEZAS  solo la pregunta, escrita, como en la terminal. Las
+                     piezas se pueden sacar como pista, pero el reto queda
+                     «con ayuda».
+   El reverso de las torres sigue siendo del color de su número en todas
+   las etapas: ese color no es del primo, es del número. */
+const ETAPAS = [
+  {id:'color',    n:'Colores',    d:'color, textura y número'},
+  {id:'textura',  n:'Texturas',   d:'piezas de cartón: textura y número'},
+  {id:'lisa',     n:'Lisas',      d:'solo el número'},
+  {id:'pregunta', n:'Sin piezas', d:'solo la pregunta'}
+];
+const escalera = (etapas) => etapas.flatMap((lista, e) => lista.map(v => ({e, v: Array.isArray(v) ? v : [v]}))).concat([{e:0, libre:true}]);
 const RETOS = {
-  romper: [12, 18, 30, 45, 36, 60, 84, 90, 210, 'libre'],
-  comun:  [[12, 18], [8, 12], [15, 25], [18, 24], [20, 30], [9, 16], [36, 48], [60, 84], 'libre'],
-  todo:   [[4, 6], [6, 8], [10, 15], [9, 12], [8, 9], [12, 18], [20, 30], [18, 24], 'libre']
+  romper: escalera([[12, 18, 30], [36, 45, 60], [84, 90, 126], [150, 132, 252]]),
+  comun:  escalera([[[12, 18], [8, 12], [15, 25]], [[18, 24], [20, 30], [9, 16]], [[36, 48], [60, 84], [28, 42]], [[48, 72], [45, 75], [35, 64]]]),
+  todo:   escalera([[[4, 6], [6, 8], [10, 15]], [[9, 12], [8, 9], [12, 18]], [[20, 30], [18, 24], [14, 21]], [[12, 20], [15, 18], [16, 24]]]),
+  pareja: escalera([[[4, 6], [6, 10], [9, 12]], [[12, 18], [10, 15], [8, 12]], [[18, 24], [20, 30], [12, 30]], [[20, 30], [24, 36], [18, 45]]])
 };
+const LIBRE = {romper: [360], comun: [24, 36], todo: [12, 15], pareja: [12, 18]};
 const INTRO = {
   romper: n => 'Rompe la piedra del <b>' + n + '</b> en piezas: golpéala con un primo que caiga justo, y sigue hasta que quede <b>1</b>.',
   comun: (a, b) => 'Con las piezas del <b>' + a + '</b> y con las del <b>' + b + '</b>, construye <b>la misma torre</b>, la más grande posible.',
-  todo: (a, b) => 'Construye la torre <b>más pequeña</b> en la que quepan el <b>' + a + '</b> y el <b>' + b + '</b>.'
+  todo: (a, b) => 'Construye la torre <b>más pequeña</b> en la que quepan el <b>' + a + '</b> y el <b>' + b + '</b>.',
+  pareja: (a, b) => 'Aquí están las torres del <b>mcd</b> y del <b>mcm</b> del <b>' + a + '</b> y el <b>' + b + '</b>. ¿Cuánto dan <b>multiplicadas</b>? Júntalas y compáralas con las piezas de los dos.'
 };
-const LIBRE = {romper: [360], comun: [24, 36], todo: [12, 15]};
+const PREGUNTA = {
+  romper: n => 'Escribe <b>' + n + '</b> en factores primos, en potencias (por ejemplo «2^3·3»).',
+  comun: (a, b) => '¿Cuánto vale el <b>mcd(' + a + ', ' + b + ')</b>?',
+  todo: (a, b) => '¿Cuánto vale el <b>mcm(' + a + ', ' + b + ')</b>?',
+  pareja: (a, b) => 'El mcd del ' + a + ' y el ' + b + ' es <b>' + mcd(a, b) + '</b> y su producto, <b>' + a + ' · ' + b + ' = ' + a * b + '</b>. ¿Cuánto vale el <b>mcm</b>?'
+};
 
-const est = {juego:'romper', nivel:{romper:0, comun:0, todo:0}, hechos:{romper:[], comun:[], todo:[]}};
-const GUARDA = 'miut.piezas.v1';
-try{ const g = JSON.parse(localStorage.getItem(GUARDA) || 'null'); if(g && g.nivel && g.hechos){ Object.assign(est.nivel, g.nivel); Object.assign(est.hechos, g.hechos); if(RETOS[g.juego]) est.juego = g.juego; } }catch(e){}
+const est = {juego:'romper', nivel:{romper:0, comun:0, todo:0, pareja:0}, hechos:{romper:[], comun:[], todo:[], pareja:[]}, ayuda:{romper:[], comun:[], todo:[], pareja:[]}};
+const GUARDA = 'miut.piezas.v2';          /* v2: los retos van por etapas */
+try{ const g = JSON.parse(localStorage.getItem(GUARDA) || 'null');
+  if(g && g.nivel && g.hechos){ ['nivel', 'hechos', 'ayuda'].forEach(k => Object.assign(est[k], g[k] || {})); if(RETOS[g.juego]) est.juego = g.juego; } }catch(e){}
 const guarda = () => { try{ localStorage.setItem(GUARDA, JSON.stringify(est)); }catch(e){} };
 
 /* el estado de la partida en curso */
 let P = {};
 const reto = () => RETOS[est.juego][est.nivel[est.juego]];
-const esLibre = () => reto() === 'libre';
-function numerosDelReto(){
-  const r = reto();
-  if(r === 'libre') return LIBRE[est.juego];
-  return Array.isArray(r) ? r : [r];
-}
+const esLibre = () => !!reto().libre;
+const etapa = () => ETAPAS[reto().e];
+const numerosDelReto = () => esLibre() ? LIBRE[est.juego] : reto().v;
+const enPregunta = () => etapa().id === 'pregunta';
 
 function empieza(){
   const [a, b] = numerosDelReto();
-  if(est.juego === 'romper') P = {n:a, resto:a, piezas:[]};
-  if(est.juego === 'comun') P = {a, b, fa:primos(a), fb:primos(b), ta:[], tb:[]};
-  if(est.juego === 'todo') P = {a, b, fa:primos(a), fb:primos(b), torre:[]};
+  const cadena = etapa().id === 'lisa' && est.juego !== 'romper' && !esLibre();
+  P = {a, b, fallos:0, dorso:{}, visto:{}};
+  if(est.juego === 'romper') P.romp = {n:a, resto:a, piezas:[]};
+  else{
+    P.fa = primos(a); P.fb = primos(b);
+    if(est.juego === 'comun'){ P.ta = []; P.tb = []; }
+    if(est.juego === 'todo') P.torre = [];
+    /* LA CADENA: en la etapa lisa los números llegan como piedras. Se
+       rompen uno detrás de otro, y con sus piezas empieza el juego */
+    if(cadena){ P.cadena = [a, b]; P.rotos = []; P.romp = {n:a, resto:a, piezas:[]}; }
+  }
   pinta(true);
 }
 
 /* ── ROMPER ─────────────────────────────────────────────────────────────
    La piedra y las herramientas. Si el primo no cae justo, la piedra
-   tiembla y Miut dice por qué, con el criterio cuando lo hay. */
+   tiembla y Miut dice por qué, con el criterio cuando lo hay. Sirve para
+   el juego de romper y para las piedras de la cadena. */
 const HERR = [2, 3, 5, 7, 11, 13];
 function porQueNo(n, p){
   const u = n % 10, s = String(n).split('').reduce((x, y) => x + +y, 0);
@@ -704,43 +802,82 @@ function porQueNo(n, p){
   return n + ' = ' + p + ' · ' + Math.floor(n / p) + ' + ' + (n % p) + ': sobran ' + (n % p);
 }
 function golpe(p){
-  if(P.resto === 1) return;
+  const R = P.romp;
+  if(!R || R.resto === 1) return;
   const piedra = document.querySelector('.piedra'), rp = piedra && piedra.getBoundingClientRect();
-  if(P.resto % p){
+  if(R.resto % p){
     /* la pata da un golpecito y la piedra tiembla: no se rompe */
     toca(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
-    dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(P.resto, p) + '. Prueba con otro.', 'mal');
+    dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(R.resto, p) + '. Prueba con otro.', 'mal');
     return;
   }
-  P.piezas.push(p); P.resto /= p; deFrente('rotas');
-  if(P.resto === 1){ gana('Roto del todo: <b>' + P.n + ' = ' + ordena(P.piezas).join(' · ') + ' = ' + enPotencias(P.n) + '</b>. '
-    + (P.piezas.length === 1 ? 'Una sola pieza: <b>' + P.n + ' es primo</b>.' : 'Esas piezas y ninguna otra: cada número tiene una sola bolsa.')
+  R.piezas.push(p); R.resto /= p; deFrente('rotas');
+  if(R.resto === 1 && P.cadena){
+    /* una piedra de la cadena, rota: se guardan sus piezas y viene la otra */
+    P.rotos.push(R.piezas.slice());
+    if(P.rotos.length < P.cadena.length){
+      const n = P.cadena[P.rotos.length];
+      dice('El <b>' + R.n + ' = ' + enPotencias(R.n) + '</b>. Ahora la piedra del <b>' + n + '</b>.', 'bien');
+      P.romp = {n, resto:n, piezas:[]}; P.dorso = {}; P.visto = {};
+    }else{
+      P.cadena = null; P.romp = null; P.dorso = {}; P.visto = {};
+      dice('Las dos piedras, rotas: <b>' + P.a + ' = ' + enPotencias(P.a) + '</b> y <b>' + P.b + ' = ' + enPotencias(P.b) + '</b>. Ya tienes las piezas: '
+        + {comun: 'construye la misma torre con las de los dos.', todo: 'construye la torre más pequeña donde quepan los dos.', pareja: 'aquí están las torres del mcd y del mcm.'}[est.juego], 'bien');
+    }
+    pinta();
+    return;
+  }
+  if(R.resto === 1){ gana('Roto del todo: <b>' + R.n + ' = ' + ordena(R.piezas).join(' · ') + ' = ' + enPotencias(R.n) + '</b>. '
+    + (R.piezas.length === 1 ? 'Una sola pieza: <b>' + R.n + ' es primo</b>.' : 'Esas piezas y ninguna otra: cada número tiene una sola bolsa.')
     + ' <b>Voltea las piezas</b>: por detrás está la piedra entera.'); }
-  else dice('Se desprende un <b>' + p + '</b> y queda una piedra de <b>' + P.resto + '</b>. Sigue golpeando.');
+  else dice('Se desprende un <b>' + p + '</b> y queda una piedra de <b>' + R.resto + '</b>. Sigue golpeando.');
   pinta();
   /* la pata arranca la pieza de la piedra y la lleva a la fila */
   if(rp) mueve(p, {left: rp.left + rp.width / 2 - 32, top: rp.top + rp.height / 2 - 27, width: 64, height: 54}, enTorre('rotas', p, true));
 }
 function pintaRomper(t){
+  const R = P.romp;
+  if(P.cadena) t.appendChild(el('div', 'rot', 'Primero, las piedras · ' + (P.rotos.length + 1) + ' de ' + P.cadena.length));
   const r = el('div', 'romper');
-  r.appendChild(bloque('rotas', P.piezas, {vacio:'aún ninguna pieza'}));
-  if(P.resto > 1) r.appendChild(el('div', 'piedra', String(P.resto)));
+  r.appendChild(bloque('rotas', R.piezas, {vacio:'aún ninguna pieza'}));
+  if(R.resto > 1) r.appendChild(el('div', 'piedra', String(R.resto)));
   t.appendChild(r);
-  t.appendChild(el('div', 'cuenta', P.piezas.length
-    ? P.n + ' = ' + P.piezas.join(' · ') + (P.resto > 1 ? ' · <b>' + P.resto + '</b>' : ' = <b>' + enPotencias(P.n) + '</b>') : P.n + ' = ?'));
+  t.appendChild(el('div', 'cuenta', R.piezas.length
+    ? R.n + ' = ' + R.piezas.join(' · ') + (R.resto > 1 ? ' · <b>' + R.resto + '</b>' : ' = <b>' + enPotencias(R.n) + '</b>') : R.n + ' = ?'));
   const h = el('div', 'herr'); h.appendChild(el('span', 'etq', 'golpear con'));
-  HERR.forEach(p => { const b = el('button', '', String(p)); b.style.background = colorDe(p); b.disabled = P.resto === 1;
+  HERR.forEach(p => { const b = el('button', '', String(p)); b.style.background = colorDe(p); b.disabled = R.resto === 1;
     b.setAttribute('aria-label', 'golpear con el ' + p); b.addEventListener('click', () => golpe(p)); h.appendChild(b); });
   t.appendChild(h);
+}
+
+/* ── ANTES DE MIRAR, DECIRLO. Una torre no se voltea ni se da por buena
+   sin que el alumno diga antes qué número es: primero se piensa, después
+   se comprueba. Se pregunta aquí, en una línea debajo de los botones. */
+function pideNumero(t, texto, esperado, siAcierta, siFalla){
+  const f = el('div', 'pide');
+  f.appendChild(el('span', 'etq', texto));
+  const i = el('input', 'num'); i.type = 'text'; i.inputMode = 'numeric'; i.setAttribute('aria-label', texto);
+  const ok = el('button', 'b ok', 'Es este');
+  f.appendChild(i); f.appendChild(ok);
+  const va = () => {
+    const v = parseInt(String(i.value).replace(/\D/g, ''), 10);
+    if(!(v > 0)){ i.focus(); return; }
+    f.remove();
+    if(v === esperado) siAcierta(v); else siFalla(v);
+  };
+  ok.addEventListener('click', va);
+  i.addEventListener('keydown', e => { if(e.key === 'Enter') va(); });
+  const viejo = document.querySelector('.pide'); if(viejo) viejo.remove();
+  if(t.classList.contains('bloque')) t.after(f); else t.appendChild(f);
+  i.focus();
+  return f;
 }
 
 /* ── LO COMÚN · el mcd ──────────────────────────────────────────────────
    Dos cajas de piezas y dos torres. Cada pieza de una caja solo puede ir a
    la torre de su número. Cuando las dos torres son iguales, encajan; y si
    no se puede añadir nada más a las dos a la vez, esa torre es el mcd. */
-function pintaComun(){
-  const t = $('tablero');
-  const usadasA = bolsa(P.ta), usadasB = bolsa(P.tb);
+function pintaComun(t){
   const caja = (n, f, torre, lado) => {
     const c = el('div', 'caja'); const cont = {}; c.dataset.caja = lado;
     c.appendChild(el('div', 'rot', '<span>las piezas del</span><b>' + n + '</b>'));
@@ -759,7 +896,6 @@ function pintaComun(){
   const obra = el('div', 'obra' + (enc && P.ta.length ? ' encaja' : ''));
   const torre = (n, lista, lado) => {
     obra.appendChild(el('div', 'rot', 'torre con las piezas del ' + n));
-    /* sin la cuenta debajo: el número de la torre se descubre volteándola */
     const f = bloque(lado, ordena(lista), {etq:'devolver', vacio:'toca una pieza de arriba',
       al: (p, i, btn) => { const r = btn.getBoundingClientRect();
         if(lado === 'a') P.ta = quitaUna(P.ta, p); else P.tb = quitaUna(P.tb, p); deFrente(lado); dice(''); pinta();
@@ -767,17 +903,24 @@ function pintaComun(){
     f.classList.add('torre'); obra.appendChild(f);
   };
   torre(P.a, P.ta, 'a');
-  obra.appendChild(el('div', 'igual' + (enc ? ' si' : ''), enc ? (P.ta.length ? '= las dos torres son iguales' : 'las dos torres están vacías') : '≠ las torres no son iguales'));
+  /* sin decir el número: «divide a los dos» es lo que se ve, el cuánto se
+     dice al voltear */
+  obra.appendChild(el('div', 'igual' + (enc ? ' si' : ''), enc ? (P.ta.length ? '= iguales: esa torre divide al ' + P.a + ' y al ' + P.b : 'las dos torres están vacías') : '≠ las torres no son iguales'));
   torre(P.b, P.tb, 'b');
   t.appendChild(obra);
   const bt = el('div', 'botones');
-  const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', compruebaComun); bt.appendChild(ok);
-  const vac = el('button', 'b', 'Vaciar las torres'); vac.addEventListener('click', () => { P.ta = []; P.tb = []; P.dorso = {}; dice(''); pinta(); }); bt.appendChild(vac);
+  const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', () => compruebaComun(t)); bt.appendChild(ok);
+  const vac = el('button', 'b', 'Vaciar las torres'); vac.addEventListener('click', () => { P.ta = []; P.tb = []; P.dorso = {}; P.visto = {}; dice(''); pinta(); }); bt.appendChild(vac);
   t.appendChild(bt);
 }
-function compruebaComun(){
+/* LAS PISTAS, POR ESCALONES: el primer fallo solo dice QUÉ está mal; a
+   partir del segundo, también DÓNDE. Así no se gana tocando al azar y
+   siguiendo las instrucciones de Miut. */
+const detalla = () => ++P.fallos >= 2;
+function compruebaComun(t){
   const g = mcd(P.a, P.b), G = primos(g);
   if(!iguales(P.ta, P.tb)){
+    if(!detalla()) return dice('Aún no: las dos torres tienen que ser <b>iguales</b>. Míralas pieza a pieza.', 'mal');
     const ba = bolsa(P.ta), bb = bolsa(P.tb);
     const p = [...new Set([...P.ta, ...P.tb])].find(q => (ba[q] || 0) !== (bb[q] || 0));
     const mas = (ba[p] || 0) > (bb[p] || 0) ? P.a : P.b, menos = mas === P.a ? P.b : P.a;
@@ -787,22 +930,28 @@ function compruebaComun(){
         : 'El ' + menos + ' no tiene más piezas de ' + p + ': quítalo de la del ' + mas + '.'), 'mal');
   }
   if(!iguales(P.ta, G)){
+    if(!detalla()) return dice('Las dos torres son iguales, así que esa torre es un <b>divisor común</b> del ' + P.a + ' y del ' + P.b
+      + '. Pero <b>no es la más grande</b>: ¿queda alguna pieza que tengan los dos?', 'mal');
     const falta = ordena(G).find(q => (bolsa(G)[q] || 0) > (bolsa(P.ta)[q] || 0));
-    return dice('Las dos torres son iguales, y eso ya es un <b>divisor común</b>: ' + producto(P.ta) + ' divide al ' + P.a + ' y al ' + P.b
-      + '. Pero aún puede crecer: <b>los dos tienen otro ' + falta + '</b> que no has usado.', 'mal');
+    return dice('Las dos torres son iguales, y eso ya es un <b>divisor común</b>. Pero aún puede crecer: <b>los dos tienen otro ' + falta + '</b> que no has usado.', 'mal');
   }
-  gana('La torre más grande que se construye igual con los dos: <b>' + (G.length ? G.join(' · ') + ' = ' : '') + g + '</b>. '
+  const fin = () => gana('La torre más grande que se construye igual con los dos: <b>' + (G.length ? G.join(' · ') + ' = ' : '') + g + '</b>. '
     + (g === 1 ? 'No comparten ninguna pieza: su mcd es <b>1</b>, y se dice que son <b>primos entre sí</b>.'
-      : 'Es el <b>máximo común divisor</b>: mcd(' + P.a + ', ' + P.b + ') = ' + g + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b)
-        + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b>, tantas veces como las tenga <b>el que menos</b>. Voltea las dos torres: las dos dicen ' + g + '.'));
+      : g + ' <b>divide</b> al ' + P.a + ' y al ' + P.b + ', y ninguno mayor lo hace: es el <b>máximo común divisor</b>, mcd(' + P.a + ', ' + P.b + ') = ' + g
+        + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b) + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b>, tantas veces como las tenga <b>el que menos</b>.'));
+  if(g === 1 || P.visto.a === g || P.visto.b === g) return fin();
+  dice('Las torres están bien. <b>Antes de voltearlas</b>: ¿qué número es esa torre?');
+  pideNumero(t, '¿qué número es la torre?', g, fin,
+    v => dice('No es ' + v + ': cuenta las piezas de la torre, ' + ordena(G).join(' · ') + '. Voltéala si quieres mirarlo, y vuelve a comprobar.', 'mal'));
 }
 
 /* ── TODO · el mcm ──────────────────────────────────────────────────────
    Un almacén con piezas sin fin de los primos que hacen falta, y una torre.
    Arriba, los planos de los dos números: cada uno dice si ya cabe en la
-   torre o qué le falta. La torre más pequeña donde caben los dos es el mcm. */
-function pintaTodo(){
-  const t = $('tablero');
+   torre. En las dos primeras etapas dice también qué le falta; en la lisa,
+   solo si cabe. La torre más pequeña donde caben los dos es el mcm. */
+function pintaTodo(t){
+  const detalle = etapa().id !== 'lisa';
   const plano = (n, f) => {
     const c = el('div', 'caja');
     const ok = cabe(f, P.torre);
@@ -815,7 +964,8 @@ function pintaTodo(){
     const falta = Object.keys(bf).filter(p => (bt[p] || 0) < bf[p]).map(p => { const k = bf[p] - (bt[p] || 0);
       return k === 1 ? 'un ' + p : (CUANTOS[k] || k) + ' ' + (NOMBRES[p] || 'piezas de ' + p); });
     const cuantas = Object.keys(bf).reduce((x, p) => x + Math.max(0, bf[p] - (bt[p] || 0)), 0);
-    pl.appendChild(el('span', 'ok ' + (ok ? 'si' : 'no'), ok ? '✓ cabe' : (cuantas > 1 ? 'faltan ' : 'falta ') + falta.join(' y ')));
+    pl.appendChild(el('span', 'ok ' + (ok ? 'si' : 'no'), ok ? '✓ cabe: la torre es múltiplo del ' + n
+      : (detalle ? (cuantas > 1 ? 'faltan ' : 'falta ') + falta.join(' y ') : '✗ no cabe')));
     c.appendChild(pl);
     return c;
   };
@@ -833,44 +983,141 @@ function pintaTodo(){
   f.classList.add('torre'); obra.appendChild(f);
   t.appendChild(obra);
   const bt = el('div', 'botones');
-  const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', compruebaTodo); bt.appendChild(ok);
+  const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', () => compruebaTodo(t)); bt.appendChild(ok);
   const emp = el('button', 'b', 'Empezar con las del ' + P.a); emp.addEventListener('click', () => { P.torre = P.fa.slice(); deFrente('torre'); dice('Ya cabe el <b>' + P.a + '</b>. ¿Qué le falta para que quepa también el ' + P.b + '?'); pinta(); }); bt.appendChild(emp);
   const vac = el('button', 'b', 'Vaciar'); vac.addEventListener('click', () => { P.torre = []; deFrente('torre'); dice(''); pinta(); }); bt.appendChild(vac);
   t.appendChild(bt);
 }
-function compruebaTodo(){
+function compruebaTodo(t){
   const m = mcm(P.a, P.b), M = primos(m);
   const caA = cabe(P.fa, P.torre), caB = cabe(P.fb, P.torre);
   if(!caA || !caB){
     const n = !caA ? P.a : P.b, f = !caA ? P.fa : P.fb, bt = bolsa(P.torre), bf = bolsa(f);
+    if(!detalla()) return dice('Aún no: en la torre <b>no cabe el ' + n + '</b>. Una torre donde cabe es un múltiplo suyo.', 'mal');
     const p = Object.keys(bf).find(q => (bt[q] || 0) < bf[q]);
     return dice('En la torre todavía no cabe el <b>' + n + '</b>: lleva ' + (bf[p] === 1 ? 'un ' + p : bf[p] + ' piezas de ' + p)
       + ', y la torre tiene ' + ((bt[p] || 0) ? (bt[p] === 1 ? 'una' : bt[p]) : 'ninguna') + '.', 'mal');
   }
   if(!iguales(P.torre, M)){
+    if(!detalla()) return dice('Caben los dos, así que la torre es un <b>múltiplo común</b>. Pero <b>no es la más pequeña</b>: ¿sobra alguna pieza?', 'mal');
     const bt = bolsa(P.torre), bm = bolsa(M);
     const p = Object.keys(bt).find(q => bt[q] > (bm[q] || 0));
-    return dice('Caben los dos, así que ' + producto(P.torre) + ' es un <b>múltiplo común</b>. Pero no es el más pequeño: <b>sobra un ' + p
+    return dice('Caben los dos, así que es un <b>múltiplo común</b>. Pero no es el más pequeño: <b>sobra un ' + p
       + '</b>. Quítalo y mira: siguen cabiendo los dos.', 'mal');
   }
-  gana('La torre más pequeña donde caben los dos: <b>' + M.join(' · ') + ' = ' + m + '</b>. Es el <b>mínimo común múltiplo</b>: mcm(' + P.a + ', ' + P.b + ') = ' + m
+  const fin = () => gana('La torre más pequeña donde caben los dos: <b>' + M.join(' · ') + ' = ' + m + '</b>. ' + m + ' es <b>múltiplo</b> del ' + P.a + ' y del ' + P.b
+    + ', y ninguno menor lo es: es el <b>mínimo común múltiplo</b>, mcm(' + P.a + ', ' + P.b + ') = ' + m
     + '. En potencias, ' + enPotencias(P.a) + ' y ' + enPotencias(P.b) + ' → ' + enPotencias(m)
     + ': todas las piezas, <b>comunes y no comunes</b>, tantas veces como las tenga <b>el que más</b>.'
-    + (m === P.a * P.b ? ' No comparten nada, así que el mcm es el producto.' : ' Menos que ' + P.a + ' · ' + P.b + ' = ' + P.a * P.b + ', porque comparten piezas.')
-    + ' Voltea la torre: por detrás dice ' + m + '.');
+    + (m === P.a * P.b ? ' No comparten nada, así que el mcm es el producto.' : ' Menos que ' + P.a + ' · ' + P.b + ' = ' + P.a * P.b + ', porque comparten piezas.'));
+  if(P.visto.torre === m) return fin();
+  dice('La torre está bien. <b>Antes de voltearla</b>: ¿qué número es?');
+  pideNumero(t, '¿qué número es la torre?', m, fin,
+    v => dice('No es ' + v + ': cuenta las piezas, ' + M.join(' · ') + '. Voltéala si quieres mirarlo, y vuelve a comprobar.', 'mal'));
+}
+
+/* ── LA PAREJA · mcd · mcm = a · b ─────────────────────────────────────
+   Las dos torres ya construidas —la del mcd y la del mcm— y las piezas de
+   los dos números. Se juntan las torres y salen exactamente las piezas del
+   a y del b: lo que el mcd tiene, el mcm lo tiene también, y entre los dos
+   cada pieza compartida sale dos veces, como en a · b. Se ve en un
+   segundo, y por eso mcd · mcm = a · b siempre. */
+function pintaPareja(t){
+  const G = primos(mcd(P.a, P.b)), M = primos(mcm(P.a, P.b));
+  const ab = ordena(P.fa.concat(P.fb));
+  const c = el('div', 'caja'); c.appendChild(el('div', 'rot', '<span>las piezas del ' + P.a + ' y del ' + P.b + ', juntas</span><span></span>'));
+  const fab = bloque('ab', ab, {etq:'pieza'}); c.appendChild(fab); t.appendChild(c);
+  const obra = el('div', 'obra' + (P.juntas ? ' encaja' : ''));
+  if(!P.juntas){
+    obra.appendChild(el('div', 'rot', 'la torre del mcd')); obra.appendChild(bloque('mcd', G, {etq:'pieza', vacio:'vacía: el mcd es 1'}));
+    obra.appendChild(el('div', 'rot', 'la torre del mcm')); obra.appendChild(bloque('mcm', M, {etq:'pieza'}));
+  }else{
+    obra.appendChild(el('div', 'rot', 'las dos torres, juntas'));
+    obra.appendChild(bloque('juntas', ordena(G.concat(M)), {etq:'pieza'}));
+    obra.appendChild(el('div', 'igual si', '= las mismas piezas que el ' + P.a + ' y el ' + P.b + ' juntos'));
+  }
+  t.appendChild(obra);
+  const bt = el('div', 'botones');
+  const ok = el('button', 'b ok', 'Responder'); bt.appendChild(ok);
+  const jn = el('button', 'b', P.juntas ? 'Separar las torres' : 'Juntar las dos torres'); bt.appendChild(jn);
+  jn.addEventListener('click', () => { P.juntas = !P.juntas; P.dorso = {}; dice(P.juntas ? 'Mira las dos filas pieza a pieza.' : ''); pinta(); });
+  t.appendChild(bt);
+  ok.addEventListener('click', () => pideNumero(t, 'mcd · mcm =', P.a * P.b,
+    () => gana('<b>mcd · mcm = ' + mcd(P.a, P.b) + ' · ' + mcm(P.a, P.b) + ' = ' + P.a * P.b + ' = ' + P.a + ' · ' + P.b + '</b>. Juntas, las dos torres llevan '
+      + 'exactamente las piezas del ' + P.a + ' y del ' + P.b + ': el mcd se queda con lo compartido y el mcm con todo, así que lo compartido sale dos veces, '
+      + 'como al multiplicar ' + P.a + ' · ' + P.b + '. Pasa siempre: <b>mcd · mcm = a · b</b>.'),
+    v => dice(detalla() ? 'No es ' + v + '. Junta las torres: son las piezas del ' + P.a + ' y del ' + P.b + ', así que su producto es ' + P.a + ' · ' + P.b + '.'
+      : 'No es ' + v + '. <b>Junta las dos torres</b> y compáralas con la fila de arriba.', 'mal')));
+}
+
+/* ── SIN PIEZAS: la pregunta sola, como en la terminal ─────────────────
+   Se contesta escribiendo, y si falla se dice qué falla. Las piezas se
+   pueden sacar debajo como pista; entonces el reto queda «con ayuda». */
+function pintaPregunta(t){
+  const [a, b] = numerosDelReto(), J = est.juego;
+  const f = el('div', 'mision');
+  f.appendChild(el('p', 'enunciado', PREGUNTA[J](a, b)));
+  const fila2 = el('div', 'botones'); fila2.style.marginTop = '8px';
+  const i = el('input', 'num largo'); i.type = 'text'; i.inputMode = J === 'romper' ? 'text' : 'numeric'; i.setAttribute('aria-label', 'tu respuesta');
+  i.placeholder = J === 'romper' ? '2^3·3' : 'un número';
+  const ok = el('button', 'b ok', 'Comprobar');
+  fila2.appendChild(i); fila2.appendChild(ok);
+  const piezas = el('button', 'enlace', P.verPiezas ? 'esconder las piezas' : 'sacar las piezas (pista)');
+  fila2.appendChild(piezas);
+  f.appendChild(fila2); t.appendChild(f);
+  piezas.addEventListener('click', () => { P.verPiezas = !P.verPiezas; if(P.verPiezas) P.ayuda = true; pinta(); });
+  const va = () => { const r = corrigePregunta(J, a, b, i.value); if(r.ok) gana(r.txt); else dice(r.txt, 'mal'); };
+  ok.addEventListener('click', va);
+  i.addEventListener('keydown', e => { if(e.key === 'Enter') va(); });
+  if(P.verPiezas){
+    const ay = el('div', 'ayudaPiezas'); t.appendChild(ay);
+    if(J === 'romper'){ if(!P.romp) P.romp = {n:a, resto:a, piezas:[]}; pintaRomper(ay); }
+    else if(J === 'comun'){ P.ta = P.ta || []; P.tb = P.tb || []; pintaComun(ay); }
+    else if(J === 'todo'){ P.torre = P.torre || []; pintaTodo(ay); }
+    else pintaPareja(ay);
+  }
+}
+function corrigePregunta(J, a, b, v){
+  const s = String(v).trim(); if(!s) return {ok:false, txt:'Escribe la respuesta.'};
+  const n = parseInt(s.replace(/\D/g, ''), 10);
+  if(J === 'romper'){
+    const f = leeFactores(s), g = primos(a), prod = producto(f), noPrimo = f.find(x => primos(x).length !== 1);
+    if(f.length === g.length && f.every((x, k) => x === g[k])) return {ok:true, txt:'<b>' + a + ' = ' + enPotencias(a) + '</b>. Sin piezas y sin piedra.'};
+    if(noPrimo) return {ok:false, txt:'El <b>' + noPrimo + '</b> no es primo: todavía se puede romper' + (detalla() ? ' (' + noPrimo + ' = ' + primos(noPrimo).join(' · ') + ').' : '.')};
+    if(prod !== a) return {ok:false, txt:'Eso da <b>' + prod + '</b>, no ' + a + '.' + (detalla() ? ' Empieza por el primo más pequeño que lo divide: ' + a + ' = ' + g[0] + ' · ' + a / g[0] + '.' : '')};
+    return {ok:false, txt:'Revísalo.'};
+  }
+  if(J === 'comun'){
+    const g = mcd(a, b);
+    if(n === g) return {ok:true, txt:'<b>mcd(' + a + ', ' + b + ') = ' + g + '</b>' + (g > 1 ? ' = ' + enPotencias(g) + ': ' + enPotencias(a) + ' y ' + enPotencias(b) + ', los comunes al menor exponente.' : ': no comparten nada, son primos entre sí.')};
+    const pista = detalla() ? ' ' + a + ' = ' + enPotencias(a) + ' y ' + b + ' = ' + enPotencias(b) + '.' : '';
+    if(n && a % n === 0 && b % n === 0) return {ok:false, txt:'<b>' + n + '</b> divide a los dos, pero no es el mayor: hay un divisor común más grande.' + pista};
+    return {ok:false, txt:'<b>' + (n || s) + '</b> no divide ' + (n && a % n ? 'al ' + a : 'al ' + b) + '.' + pista};
+  }
+  if(J === 'todo'){
+    const m = mcm(a, b);
+    if(n === m) return {ok:true, txt:'<b>mcm(' + a + ', ' + b + ') = ' + m + ' = ' + enPotencias(m) + '</b>: ' + enPotencias(a) + ' y ' + enPotencias(b) + ', comunes y no comunes al mayor exponente.'};
+    const pista = detalla() ? ' ' + a + ' = ' + enPotencias(a) + ' y ' + b + ' = ' + enPotencias(b) + '.' : '';
+    if(n && n % a === 0 && n % b === 0) return {ok:false, txt:'<b>' + n + '</b> es múltiplo de los dos, pero no el menor: hay uno más pequeño.' + pista};
+    return {ok:false, txt:'<b>' + (n || s) + '</b> no es múltiplo ' + (n && n % a ? 'del ' + a : 'del ' + b) + '.' + pista};
+  }
+  const m = mcm(a, b);
+  if(n === m) return {ok:true, txt:'<b>mcm = ' + a * b + ' : ' + mcd(a, b) + ' = ' + m + '</b>, porque mcd · mcm = a · b.'};
+  return {ok:false, txt:'No es ' + (n || s) + '.' + (detalla() ? ' mcd · mcm = a · b: el mcm es ' + a * b + ' entre ' + mcd(a, b) + '.' : ' Recuerda la pareja: mcd · mcm = a · b.')};
 }
 
 /* ── ACERTAR ── */
 function gana(txt){
-  const h = est.hechos[est.juego], i = est.nivel[est.juego];
+  const J = est.juego, h = est.hechos[J], i = est.nivel[J];
   if(!h.includes(i)) h.push(i);
+  const ay = est.ayuda[J];
+  if(P.ayuda){ if(!ay.includes(i)) ay.push(i); } else if(ay.includes(i)) ay.splice(ay.indexOf(i), 1);
   guarda();
-  const ultimo = i === RETOS[est.juego].length - 1;
-  dice(txt + '<br><span class="sellazo">' + (ultimo ? 'Reto libre hecho' : 'Hecho') + '</span>', 'bien');
+  dice(txt + '<br><span class="sellazo">' + (esLibre() ? 'Reto libre hecho' : P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>', 'bien');
   pintaCabecera();
 }
 
-/* ── EL RETO LIBRE: dos campos para poner los números que se quieran ── */
+/* ── EL RETO LIBRE: los números que se quieran, con primos hasta el 13 ── */
 function pintaLibre(t){
   const c = el('div', 'botones'); c.style.marginTop = '0';
   c.appendChild(el('span', 'etq', est.juego === 'romper' ? 'tu número' : 'tus números'));
@@ -879,6 +1126,9 @@ function pintaLibre(t){
   const lee = () => {
     const ns = ins.map(i => parseInt(i.value.replace(/\D/g, ''), 10));
     if(ns.some(n => !(n >= 2 && n <= 9999))) return dice('Pon números entre 2 y 9999.', 'mal');
+    /* las piezas son del 2 al 13, y una torre de más de diez no cabe en la mesa */
+    const malo = ns.find(n => primos(n).some(p => p > 13) || primos(n).length > 10);
+    if(malo) return dice('El <b>' + malo + '</b> lleva ' + (primos(malo).some(p => p > 13) ? 'un primo mayor que 13 (' + primos(malo).filter(p => p > 13).join(', ') + '), y en la mesa solo hay piezas hasta el 13' : 'más de diez piezas, y no cabe en la mesa') + '. Prueba con otro.', 'mal');
     LIBRE[est.juego] = ns; empieza();
   };
   va.addEventListener('click', lee);
@@ -892,21 +1142,38 @@ function pintaCabecera(){
   const lista = RETOS[est.juego], i = est.nivel[est.juego];
   $('cual').textContent = esLibre() ? 'libre' : (i + 1) + ' de ' + (lista.length - 1);
   $('atras').disabled = i === 0; $('adelante').disabled = i === lista.length - 1;
-  $('puntos').innerHTML = lista.map((_, k) => '<i class="' + (est.hechos[est.juego].includes(k) ? 'hecho' : '') + (k === i ? ' aqui' : '') + '"></i>').join('');
+  /* los puntos, agrupados por etapa; el hecho con ayuda, en hueco */
+  let h = '', e0 = -1;
+  lista.forEach((r, k) => {
+    const e = r.libre ? 'libre' : r.e;
+    if(e !== e0){ if(e0 !== -1) h += '</span>'; h += '<span class="grupo" title="' + (r.libre ? 'libre' : ETAPAS[r.e].n) + '">'; e0 = e; }
+    const cls = (est.hechos[est.juego].includes(k) ? (est.ayuda[est.juego].includes(k) ? 'ayuda' : 'hecho') : '') + (k === i ? ' aqui' : '');
+    h += '<i class="' + cls + '"></i>';
+  });
+  $('puntos').innerHTML = h + '</span>';
 }
 function pinta(nuevo){
   pintaCabecera();
-  const [a, b] = numerosDelReto();
-  $('encTxt').innerHTML = (esLibre() ? 'Reto libre. ' : '') + INTRO[est.juego](a, b);
+  const [a, b] = numerosDelReto(), E = etapa();
+  /* la etapa manda en cómo se ven las piezas; con la pista abierta en una
+     pregunta, se ven lisas */
+  document.body.dataset.etapa = E.id === 'pregunta' ? (P.verPiezas ? 'lisa' : 'pregunta') : E.id;
+  $('encTxt').innerHTML = '<span class="chipEtapa">' + (esLibre() ? 'Reto libre' : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
+    + (enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Rompe primero las dos piedras, el <b>' + a + '</b> y el <b>' + b + '</b>. Luego: ' + INTRO[est.juego](a, b).replace(/^./, c => c.toLowerCase()) : INTRO[est.juego](a, b));
   const t = $('tablero'); t.innerHTML = '';
   if(esLibre()) pintaLibre(t);
-  if(est.juego === 'romper') pintaRomper(t);
-  else if(est.juego === 'comun') pintaComun();
-  else pintaTodo();
-  if(nuevo) dice({
+  if(enPregunta()) pintaPregunta(t);
+  else if(est.juego === 'romper' || P.cadena) pintaRomper(t);
+  else if(est.juego === 'comun') pintaComun(t);
+  else if(est.juego === 'todo') pintaTodo(t);
+  else pintaPareja(t);
+  if(nuevo) dice(enPregunta() ? 'Piensa en las piezas sin verlas. Si te atascas, puedes sacarlas, pero el reto quedará <b>con ayuda</b>.'
+    : P.cadena ? 'Golpea la piedra con los primos que caigan justo, como en Romper.'
+    : {
     romper: 'Las herramientas son primos. Si uno cae justo, se lleva una pieza de la piedra.',
     comun: 'Toca una pieza de cada caja y mira las dos torres. Solo encajan si son <b>iguales</b>.',
-    todo: 'Toca las piezas del almacén para construir. Arriba ves si ya caben el ' + a + ' y el ' + b + '.'
+    todo: 'Toca las piezas del almacén para construir. Arriba ves si ya caben el ' + a + ' y el ' + b + '.',
+    pareja: 'Antes de voltear, di qué número crees que hay detrás. Y antes de juntar, piensa qué va a salir.'
   }[est.juego]);
 }
 function vaA(juego, nivel){
