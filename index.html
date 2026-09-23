@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.6.3
+  Manipulativo para 1.º y 2.º de ESO · versión 0.7
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,17 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.7 · EL MANOTAZO Y MIUT QUE SE ASOMA
+  · EL MANOTAZO: el gato naranja coge impulso y da un manotazo rápido
+    sobre la mano de Miut, que sale despedida, con un chispazo y una riña
+    de gato muy bajita —un cachete y un bufido, hechos con el sintetizador
+    del navegador—. El sonido se quita en Ajustes.
+  · MIUT SE ASOMA por el borde de abajo, con las patas agarradas, y dice
+    algo útil en un bocadillo: una pista si llevas 25 segundos parado, el
+    criterio de divisibilidad si el naranja te ha parado dos veces, el
+    aviso de etapa nueva y la enhorabuena al acabar una. Nunca más de una
+    vez cada veinte segundos; se va sola o tocándola.
 
   VERSIÓN 0.6.3
   · LO COMÚN, MÁS ORDENADO: cada torre se construye debajo de la caja de
@@ -371,6 +382,29 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
   filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
 .fantasma svg{width:100%;height:100%;overflow:visible}
 
+/* el chispazo del manotazo */
+.zas{position:fixed;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:42;pointer-events:none;animation:zas .38s ease-out forwards}
+.zas svg{width:100%;height:100%;overflow:visible}
+.zas path{stroke:#FFF6DA;stroke-width:4;stroke-linecap:round;filter:drop-shadow(0 0 2px rgba(120,60,10,.8))}
+@keyframes zas{0%{transform:scale(.45);opacity:1}60%{opacity:1}100%{transform:scale(1.25);opacity:0}}
+
+/* ── MIUT SE ASOMA. De vez en cuando la cabeza de Miut sube por el borde
+   de abajo de la pantalla, con las patas agarradas al borde, y dice algo
+   en un bocadillo: una pista si llevas rato parado, el aviso de que cambia
+   la etapa, o el criterio si el gato naranja ya te ha parado dos veces.
+   Se va sola, o tocándola. ── */
+.asoma{position:fixed;right:max(14px,calc(50vw - 420px));bottom:0;z-index:44;display:flex;align-items:flex-end;gap:6px;
+  transform:translateY(110%);transition:transform .5s cubic-bezier(.3,1.35,.5,1);cursor:pointer}
+.asoma.ve{transform:translateY(7px)}
+.asoma .bocadillo{position:relative;max-width:min(300px,calc(100vw - 150px));margin-bottom:62px;padding:9px 12px;border-radius:14px;
+  background:var(--panel);border:1.5px solid var(--oro);color:var(--tinta);font-size:14.5px;line-height:1.4;box-shadow:0 8px 22px var(--sombra)}
+.asoma .bocadillo b{color:var(--oro)}
+.asoma .bocadillo::after{content:'';position:absolute;right:-9px;bottom:14px;border:8px solid transparent;border-left:10px solid var(--oro);border-right:0}
+.asoma .cabeza{width:104px;height:100px;flex:0 0 104px;filter:drop-shadow(0 -4px 10px rgba(40,20,5,.3))}
+.asoma.ve .cabeza{animation:ladea 2.6s ease-in-out .5s infinite}
+@keyframes ladea{0%,100%{transform:rotate(0)}30%{transform:rotate(-6deg)}60%{transform:rotate(3deg)}}
+@media (max-width:480px){ .asoma .cabeza{width:82px;height:79px;flex-basis:82px} .asoma .bocadillo{margin-bottom:48px;font-size:13.5px} }
+
 /* ── LAS ETAPAS. Según se sube, las piezas dicen menos: en la de texturas
    son todas de cartón; en la lisa, además, sin textura. El reverso no
    cambia: su color es el del número, no el del primo. ── */
@@ -501,6 +535,9 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <div class="aj"><span class="etq">Antes de voltear</span>
     <span class="ops" role="group" aria-label="Antes de voltear"><button data-aj="predice" data-v="no">Voltear sin más</button><button data-aj="predice" data-v="si">Decir antes el número</button></span>
     <small>Con «decir antes el número», para voltear una torre o darla por buena hay que escribir primero qué número es. Más lento, y más exigente.</small></div>
+  <div class="aj"><span class="etq">El sonido</span>
+    <span class="ops" role="group" aria-label="El sonido"><button data-aj="sonido" data-v="si">Con sonido</button><button data-aj="sonido" data-v="no">Sin sonido</button></span>
+    <small>Solo suena la riña del gato naranja, muy bajito.</small></div>
   <div class="aj"><span class="etq">Las patas</span>
     <span class="ops" role="group" aria-label="Las patas"><button data-aj="patas" data-v="si">Se ven</button><button data-aj="patas" data-v="no">Sin animaciones</button></span></div>
   <div class="botones"><button class="b" id="bReglas">Las reglas enteras</button><button class="b ok" id="ajCerrar">Cerrar</button></div>
@@ -542,11 +579,32 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.6.3
+  · versión 0.7
 </footer>
 </div>
 
 <div class="patas" id="patas" aria-hidden="true"></div>
+<div class="asoma" id="asoma" role="status" aria-live="polite" hidden>
+  <div class="bocadillo" id="asomaTxt"></div>
+  <svg class="cabeza" viewBox="0 0 46 44" aria-hidden="true">
+    <path d="M9 16 L7 2 L19 9 Z M37 16 L39 2 L27 9 Z" fill="#A48AB8" stroke="#3B2A4A" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M11 13 L10 6 L16 10 Z M35 13 L36 6 L30 10 Z" fill="#E7A9BE"/>
+    <ellipse cx="23" cy="22" rx="14.5" ry="13.5" fill="#A48AB8" stroke="#3B2A4A" stroke-width="1.4"/>
+    <path d="M18 10 Q19 13 18 15 M23 9 V13 M28 10 Q27 13 28 15" stroke="#7F6596" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="17.5" cy="20" rx="3.2" ry="3.6" fill="#6FBF5C" stroke="#3B2A4A" stroke-width="1"/>
+    <ellipse cx="28.5" cy="20" rx="3.2" ry="3.6" fill="#6FBF5C" stroke="#3B2A4A" stroke-width="1"/>
+    <ellipse cx="18" cy="20.4" rx="1.3" ry="2.7" fill="#1E1A24"/><ellipse cx="29" cy="20.4" rx="1.3" ry="2.7" fill="#1E1A24"/>
+    <circle cx="18.6" cy="19" r=".7" fill="#fff"/><circle cx="29.6" cy="19" r=".7" fill="#fff"/>
+    <path d="M21.2 25 H24.8 L23 27 Z" fill="#E58AA6" stroke="#3B2A4A" stroke-width=".8" stroke-linejoin="round"/>
+    <path d="M23 27 Q21.5 29.4 19.6 28.4 M23 27 Q24.5 29.4 26.4 28.4" stroke="#3B2A4A" stroke-width=".9" fill="none" stroke-linecap="round"/>
+    <path d="M13 25 L6 24 M13 27 L6.5 28.5 M33 25 L40 24 M33 27 L39.5 28.5" stroke="#F4EEF8" stroke-width=".8" stroke-linecap="round"/>
+    <circle cx="8.4" cy="18.4" r="1.9" fill="none" stroke="#3B2A4A" stroke-width="2"/>
+    <circle cx="8.4" cy="18.4" r="1.9" fill="none" stroke="#E0B24A" stroke-width="1.1"/>
+    <!-- las patas, agarradas al borde de la pantalla -->
+    <g fill="#FFFFFF" stroke="#3B2A4A" stroke-width="1.2"><ellipse cx="11" cy="38.5" rx="7" ry="5"/><ellipse cx="35" cy="38.5" rx="7" ry="5"/></g>
+    <path d="M8.6 34.6 V37 M11 34 V36.6 M13.4 34.6 V37 M32.6 34.6 V37 M35 34 V36.6 M37.4 34.6 V37" stroke="#B9A9C4" stroke-width=".9" stroke-linecap="round"/>
+  </svg>
+</div>
 <div class="guia" id="guia" hidden>
   <div class="guia-foco" id="guiaFoco"></div>
   <div class="guia-globo" id="guiaGlobo" role="dialog" aria-modal="true" aria-labelledby="guiaTit" tabindex="-1">
@@ -578,6 +636,8 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>Cada juego sube en cuatro etapas de tres retos, y en cada una las piezas ayudan menos: <b>Colores</b> (color, textura y número), <b>Texturas</b> (todas de cartón), <b>Lisas</b> (solo el número; en el mcd, el mcm y la pareja, los números llegan como piedras y hay que romperlos antes) y <b>Sin piezas</b> (solo la pregunta, escrita). En la última se pueden sacar las piezas como pista, pero el reto queda <b>con ayuda</b>, marcado con un punto hueco.</p>
   <h3>En clase</h3>
   <p>En <b>Ajustes</b> se cambia a la mesa oscura, de nogal, para aulas con poca luz. Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas.</p>
+  <h3>Miut se asoma</h3>
+  <p>De vez en cuando Miut se asoma por abajo con un bocadillo: una pista si llevas un rato parado, el criterio de divisibilidad si el gato naranja te ha parado la pata dos veces, o el aviso de que cambia la etapa. Tócala y se va.</p>
   <h3>Practicar</h3>
   <p>Ejercicios nuevos cada vez, que no cuentan para los retos. Se elige la dificultad —<b>fácil</b>, <b>media</b>, <b>difícil</b> o <b>sin piezas</b>— y con «tus números» se ponen los que se quieran, con primos hasta el 13.</p>
   <div class="botones"><button class="b ok" id="ayCerrar">Volver a las piezas</button></div>
@@ -861,39 +921,80 @@ function toca(r, alTocar){
    un manotazo encima de la pata antes de que llegue: ese golpe no vale. La
    piedra ni se toca. */
 function cancela(r, siQuieto){
-  if(quieto() || !r){ siQuieto && siQuieto(); return; }
+  if(quieto() || !r){ siQuieto && siQuieto(); rina(0); return; }
   acabaTodo();
-  const esc = escala(), T = 1150;
+  const esc = escala(), T = 980, GOLPE = .44;                        // el manotazo llega al 44 %
   const a = {x: r.left + r.width / 2, y: r.bottom + 14 * esc};         // la punta de los dedos, justo antes de la piedra
   const {d, lado} = sacaPata(a.x);
-  const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
-  const baja = {x: a.x + (lado === 'izq' ? -8 : 8), y: a.y + 44 * esc};  // adonde la empuja el manotazo
+  const lejos = lado === 'izq' ? -1 : 1;                              // hacia dónde sale despedida: hacia su lado
+  const fuera = {x: a.x + lejos * 40, y: innerHeight + 120};
+  const baja = {x: a.x + lejos * 30 * esc, y: a.y + 58 * esc};        // adonde la manda el manotazo
   const anM = d.animate([
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
-    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .34, easing: 'ease-in-out'},
-    {transform: postura(a.x, a.y - 5, lado, esc), filter: AIRE, offset: .45, easing: 'ease-in'},
-    {transform: postura(baja.x, baja.y, lado, esc * .95), filter: APOYO, offset: .52, easing: 'ease-out'},
-    {transform: postura(baja.x, baja.y + 3, lado, esc * .95), filter: APOYO, offset: .68, easing: 'ease-in'},
+    {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .3, easing: 'ease-out'},
+    {transform: postura(a.x, a.y - 4, lado, esc), filter: AIRE, offset: GOLPE, easing: 'cubic-bezier(.1,.9,.3,1)'},
+    {transform: postura(baja.x, baja.y, lado, esc * .93), filter: APOYO, offset: GOLPE + .07, easing: 'ease-out'},
+    {transform: postura(baja.x, baja.y + 4, lado, esc * .95), filter: APOYO, offset: .66, easing: 'ease-in'},
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 1}
   ], {duration: T, fill: 'forwards'});
-  /* el naranja entra por arriba, por el otro lado, y pone la palma sobre
-     la mano de Miut: sus dedos acaban por debajo de los de ella */
+  /* el naranja entra por arriba, por el otro lado: coge impulso hacia
+     atrás y da un manotazo rápido encima de la mano de Miut */
   const o = el('div', 'pataM', PATA_NARANJA); $('patas').appendChild(o);
-  const ladoO = lado === 'izq' ? 'der' : 'izq', dx = lado === 'izq' ? 4 : -4;
-  const sobre = {x: a.x + dx, y: a.y + 68 * esc}, sobre2 = {x: baja.x + dx, y: baja.y + 68 * esc};
-  const arriba = {x: sobre.x + (ladoO === 'izq' ? -70 : 70), y: -170};
+  const ladoO = lado === 'izq' ? 'der' : 'izq';
+  const sobre = {x: a.x - lejos * 6, y: a.y + 70 * esc}, sobre2 = {x: baja.x - lejos * 6, y: baja.y + 70 * esc};
+  const arriba = {x: sobre.x - lejos * 70, y: -170};
+  const impulso = {x: sobre.x - lejos * 46 * esc, y: sobre.y - 96 * esc};
   const anO = o.animate([
     {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: 0},
-    {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: .24},
-    {transform: postura(sobre.x, sobre.y - 34 * esc, ladoO, esc * 1.03, true), filter: AIRE, offset: .45, easing: 'ease-in'},
-    {transform: postura(sobre2.x, sobre2.y, ladoO, esc * .97, true), filter: APOYO, offset: .52, easing: 'ease-out'},
-    {transform: postura(sobre2.x, sobre2.y + 3, ladoO, esc * .97, true), filter: APOYO, offset: .7, easing: 'ease-in'},
+    {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: .14, easing: 'ease-out'},
+    {transform: postura(impulso.x, impulso.y, ladoO, esc * 1.06, true), filter: AIRE, offset: .34, easing: 'cubic-bezier(.6,0,.9,.5)'},
+    {transform: postura(sobre.x, sobre.y, ladoO, esc, true), filter: APOYO, offset: GOLPE, easing: 'cubic-bezier(.1,.9,.3,1)'},
+    {transform: postura(sobre2.x, sobre2.y, ladoO, esc * .95, true), filter: APOYO, offset: GOLPE + .07, easing: 'ease-out'},
+    {transform: postura(sobre2.x, sobre2.y + 4, ladoO, esc * .97, true), filter: APOYO, offset: .7, easing: 'ease-in'},
     {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: 1}
   ], {duration: T, fill: 'forwards'});
+  /* en el golpe: un chispazo de rayitas sobre las manos y la riña */
+  const tz = setTimeout(() => {
+    const z = el('div', 'zas', '<svg viewBox="-30 -30 60 60">' + [0, 1, 2, 3, 4, 5, 6].map(k => { const g = k * 51.4 - 90, c = Math.cos(g * Math.PI / 180), s2 = Math.sin(g * Math.PI / 180);
+      return '<path d="M' + (c * 13).toFixed(1) + ' ' + (s2 * 13).toFixed(1) + ' L' + (c * 25).toFixed(1) + ' ' + (s2 * 25).toFixed(1) + '"/>'; }).join('') + '</svg>');
+    z.style.left = (a.x - lejos * 4) + 'px'; z.style.top = (a.y + 34 * esc) + 'px';
+    document.body.appendChild(z); setTimeout(() => z.remove(), 420);
+  }, T * GOLPE);
+  rina(T * GOLPE);
   let hecho = false;
-  const fin = () => { if(hecho) return; hecho = true; d.remove(); o.remove(); anM.cancel(); anO.cancel(); };
+  const fin = () => { if(hecho) return; hecho = true; clearTimeout(tz); d.remove(); o.remove(); anM.cancel(); anO.cancel(); };
   anM.finished.then(fin, fin);
   enCurso.push(fin);
+}
+
+/* LA RIÑA, con sonido: un cachete seco y un bufido corto de gato, todo
+   hecho con el sintetizador del navegador —no hay archivos de sonido—. Muy
+   bajo, para que haga gracia sin romper la clase. Se quita en Ajustes. */
+let AC = null;
+function rina(retraso){
+  if(aj.sonido === 'no') return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if(AC.state === 'suspended') AC.resume();
+    const t0 = AC.currentTime + retraso / 1000;
+    const ruido = seg => { const n = Math.floor(AC.sampleRate * seg), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0);
+      for(let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const src = AC.createBufferSource(); src.buffer = buf; return src; };
+    const sale = AC.createGain(); sale.gain.value = .5; sale.connect(AC.destination);
+    /* el cachete: un golpe de ruido grave, cortísimo */
+    const c = ruido(.09), fc = AC.createBiquadFilter(); fc.type = 'lowpass'; fc.frequency.value = 1400;
+    const gc = AC.createGain(); gc.gain.setValueAtTime(.0001, t0); gc.gain.exponentialRampToValueAtTime(.55, t0 + .004); gc.gain.exponentialRampToValueAtTime(.0001, t0 + .085);
+    c.connect(fc); fc.connect(gc); gc.connect(sale); c.start(t0); c.stop(t0 + .1);
+    /* el bufido: ¡fff! agudo que se apaga */
+    const h = ruido(.42), fh = AC.createBiquadFilter(); fh.type = 'bandpass'; fh.frequency.setValueAtTime(5200, t0 + .05); fh.frequency.linearRampToValueAtTime(3600, t0 + .45); fh.Q.value = .8;
+    const gh = AC.createGain(); gh.gain.setValueAtTime(.0001, t0 + .05); gh.gain.exponentialRampToValueAtTime(.22, t0 + .09); gh.gain.exponentialRampToValueAtTime(.0001, t0 + .46);
+    h.connect(fh); fh.connect(gh); gh.connect(sale); h.start(t0 + .05); h.stop(t0 + .48);
+    /* y un gruñidito por debajo: «mrrr», una nota grave que tiembla */
+    const g = AC.createOscillator(); g.type = 'sawtooth'; g.frequency.setValueAtTime(210, t0 + .04); g.frequency.linearRampToValueAtTime(150, t0 + .3);
+    const fg = AC.createBiquadFilter(); fg.type = 'lowpass'; fg.frequency.value = 900;
+    const gg = AC.createGain(); gg.gain.setValueAtTime(.0001, t0 + .04); gg.gain.exponentialRampToValueAtTime(.07, t0 + .08); gg.gain.exponentialRampToValueAtTime(.0001, t0 + .32);
+    const lfo = AC.createOscillator(), lg = AC.createGain(); lfo.frequency.value = 32; lg.gain.value = .05; lfo.connect(lg); lg.connect(gg.gain);
+    g.connect(fg); fg.connect(gg); gg.connect(sale); g.start(t0 + .04); g.stop(t0 + .34); lfo.start(t0 + .04); lfo.stop(t0 + .34);
+  }catch(e){}
 }
 
 /* DE PIEDRA A PIEZA. Cuando lo que queda de la piedra es un primo, ya no se
@@ -1090,6 +1191,12 @@ function empieza(){
     if(cadena){ P.cadena = [a, b]; P.rotos = []; P.romp = {n:a, resto:a, piezas:[]}; }
   }
   pinta(true);
+  vigila();
+  /* al empezar la primera de una etapa, Miut se asoma a avisar */
+  const e = etapa().id, i = est.nivel[est.juego];
+  if(!esPractica() && i > 0 && RETOS[est.juego][i - 1].e !== reto().e && AVISO_ETAPA[e]){
+    asomaUltima = 0; setTimeout(() => asoma(AVISO_ETAPA[e] + (e === 'lisa' && est.juego !== 'romper' ? ' Y los números llegan como <b>piedras</b>: hay que romperlos antes.' : '')), 700);
+  }
 }
 
 /* ── ROMPER ─────────────────────────────────────────────────────────────
@@ -1110,6 +1217,8 @@ function golpe(p){
   const piedra = document.querySelector('.piedra'), rp = piedra && piedra.getBoundingClientRect();
   if(R.resto % p){
     /* la pata da un golpecito y la piedra tiembla: no se rompe */
+    P.malos = (P.malos || 0) + 1;
+    if(P.malos === 2) setTimeout(() => asoma(pistaPiedra(R.resto)), 1300);
     cancela(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
     dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(R.resto, p) + '. Prueba con otro.', 'mal');
     return;
@@ -1446,6 +1555,7 @@ function celebra(){
   setTimeout(() => capa.remove(), 2300);
 }
 function gana(txt){
+  P.ganado = true; clearTimeout(quietoT);
   if(est.juego !== 'romper') celebra();
   if(esPractica()){
     dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span> <button class="b otro" onclick="otroEjercicio()">Otro ejercicio ›</button>', 'bien');
@@ -1457,6 +1567,10 @@ function gana(txt){
   if(P.ayuda){ if(!ay.includes(i)) ay.push(i); } else if(ay.includes(i)) ay.splice(ay.indexOf(i), 1);
   guarda();
   dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>', 'bien');
+  /* el último reto de una etapa: Miut se asoma a felicitar */
+  const L = RETOS[J];
+  if(i === L.length - 1) setTimeout(() => asoma('¡Has terminado <b>' + ({romper:'Romper', comun:'Lo común', todo:'Todo', pareja:'La pareja'})[J] + '</b>! Ahora prueba en <b>Practicar</b>, con números nuevos.'), 1200);
+  else if(L[i + 1].e !== L[i].e) setTimeout(() => asoma('¡Etapa <b>' + ETAPAS[L[i].e].n + '</b> terminada! En la siguiente, las piezas ayudan un poco menos.'), 1200);
   pintaCabecera();
 }
 
@@ -1565,6 +1679,50 @@ $('ayCerrar').addEventListener('click', cierraAyuda);
 $('mAyuda').addEventListener('click', e => { if(e.target.id === 'mAyuda') cierraAyuda(); });
 addEventListener('keydown', e => { if(e.key === 'Escape' && !$('mAyuda').hidden) cierraAyuda(); });
 
+/* ── MIUT SE ASOMA ──────────────────────────────────────────────────────
+   Pocas veces y con algo útil que decir: nunca más de una cada veinte
+   segundos, y nunca con la guía abierta. */
+let asomaT = 0, asomaUltima = 0, quietoT = 0;
+function asoma(txt, ms){
+  if(!$('guia').hidden || document.hidden) return;
+  if(Date.now() - asomaUltima < 20000) return;
+  asomaUltima = Date.now();
+  const a = $('asoma');
+  $('asomaTxt').innerHTML = txt;
+  a.hidden = false; void a.offsetWidth; a.classList.add('ve');
+  clearTimeout(asomaT); asomaT = setTimeout(escondeAsoma, ms || 6500);
+}
+function escondeAsoma(){
+  const a = $('asoma'); clearTimeout(asomaT);
+  a.classList.remove('ve'); setTimeout(() => { if(!a.classList.contains('ve')) a.hidden = true; }, 520);
+}
+$('asoma').addEventListener('click', escondeAsoma);
+/* la pista de la piedra: el criterio del primo más pequeño que la parte */
+function pistaPiedra(n){
+  const s2 = String(n).split('').reduce((x, y) => x + +y, 0);
+  if(n % 2 === 0) return 'Psst… el <b>' + n + '</b> acaba en ' + n % 10 + ', que es par: <b>el 2</b> cae justo.';
+  if(n % 3 === 0) return 'Psst… suma las cifras del <b>' + n + '</b>: dan ' + s2 + ', que es múltiplo de 3. Prueba <b>el 3</b>.';
+  if(n % 5 === 0) return 'Psst… el <b>' + n + '</b> acaba en ' + n % 10 + ': <b>el 5</b> cae justo.';
+  return 'Psst… el ' + n + ' no es par, sus cifras no suman un múltiplo de 3 y no acaba en 0 ni en 5. Prueba con <b>el 7</b>, <b>el 11</b> o <b>el 13</b>.';
+}
+/* si alguien lleva rato sin tocar nada en un reto sin acabar */
+function pistaParado(){
+  if(P.ganado || !$('mAyuda').hidden) return;
+  if(enPregunta()) return asoma(P.verPiezas ? 'Mira las piezas de abajo: son la misma pregunta, pero se pueden tocar.'
+    : '¿Atascado? Puedes <b>sacar las piezas</b>. El reto quedará con ayuda, pero lo terminas.');
+  if(P.romp && P.romp.resto > 1) return asoma(pistaPiedra(P.romp.resto));
+  if(est.juego === 'comun') return asoma('Busca las piezas que estén <b>en las dos cajas</b>. Cada una que pongas en una torre, ponla también en la otra.');
+  if(est.juego === 'todo') return asoma('Prueba <b>«Empezar con las del ' + P.a + '»</b>, y luego mira qué le falta a la torre para que quepa el ' + P.b + '.');
+  if(est.juego === 'pareja') return asoma('Toca <b>«Juntar las dos torres»</b> y compara la fila con las piezas de arriba.');
+}
+const vigila = () => { clearTimeout(quietoT); quietoT = setTimeout(pistaParado, 25000); };
+['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, vigila, {passive:true}));
+const AVISO_ETAPA = {
+  textura: '¡Etapa nueva! Ahora las piezas son <b>de cartón</b>: fíjate en la <b>textura</b> y en el número.',
+  lisa: '¡Etapa nueva! Las piezas son <b>lisas</b>: solo queda el número.' ,
+  pregunta: '¡Última etapa! <b>Sin piezas</b>: piénsalo de cabeza… y si hace falta, sácalas.'
+};
+
 /* ── LA GUÍA ────────────────────────────────────────────────────────────
    Una visita por la mesa: un foco y un papel en cada parte. Cada parada
    dice qué se toca y qué pasa, y solo salen las que se ven en el juego que
@@ -1651,7 +1809,7 @@ addEventListener('scroll', colocaGuia, {passive:true});
 addEventListener('resize', colocaGuia);
 
 const AJ = 'miut.piezas.ajustes.v2';        /* v2: ya no hay noche ni papiro, sino dos maderas */
-let aj = {modo:'haya', aula:'no', predice:'no', patas:'si'};
+let aj = {modo:'haya', aula:'no', predice:'no', patas:'si', sonido:'si'};
 try{ Object.assign(aj, JSON.parse(localStorage.getItem(AJ) || '{}')); }catch(e){}
 const predice = () => aj.predice === 'si';
 function pintaAjustes(){
