@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8.6
+  Manipulativo para 1.º y 2.º de ESO · versión 0.8.7
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,13 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.8.7
+  · LAS PATAS, UNIFICADAS: la viñeta del choque toma el pelo de las patas
+    de la mesa —el calcetín acaba en mechones de punta desiguales y asoman
+    pelillos blancos en los deditos—, un contorno algo más fino y las
+    rayas del mismo color y transparencia. La misma pata, por el dorso en
+    la mesa y por la palma en la viñeta.
 
   VERSIÓN 0.8.6
   · LA VIÑETA, MÁS FINA: cada mano es un solo contorno, con surcos entre
@@ -651,7 +658,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8.6
+  · versión 0.8.7
 </footer>
 </div>
 
@@ -1118,20 +1125,25 @@ const VINETA_SVG = (() => {
   /* cada mano es un solo contorno: primero el trazo grueso de todas sus
      formas —palma y deditos— y encima el relleno, así solo queda el borde
      de fuera y los deditos se funden con la palma sin costuras */
-  const mano = (formas, borde, relleno) => '<g fill="none" stroke="' + borde + '" stroke-width="6.4" stroke-linejoin="round">' + formas + '</g>'
+  const mano = (formas, borde, relleno) => '<g fill="none" stroke="' + borde + '" stroke-width="5" stroke-linejoin="round">' + formas + '</g>'
     + '<g fill="' + relleno + '">' + formas + '</g>';
   /* el borde del calcetín: pelo en mechones suaves, no en sierra */
-  const mechones = (x0, x1, y, borde, relleno) => { let d = 'M' + x0 + ' ' + (y - 8) + ' L' + x0 + ' ' + y; const n = 7, w = (x1 - x0) / n;
-    for(let k = 0; k < n; k++){ const xa = x0 + k * w; d += ' Q' + (xa + w * .3).toFixed(1) + ' ' + (y + 7 + (k % 2) * 2) + ' ' + (xa + w * .55).toFixed(1) + ' ' + (y + 2) + ' Q' + (xa + w * .8).toFixed(1) + ' ' + (y - 1) + ' ' + (xa + w).toFixed(1) + ' ' + y; }
-    /* el relleno, sin borde; el borde, solo por la línea de los mechones */
-    const borde2 = d.replace('M' + x0 + ' ' + (y - 8) + ' L', 'M');
-    d += ' L' + x1 + ' ' + (y - 8) + ' Z';
-    return '<path d="' + d + '" fill="' + relleno + '"/><path d="' + borde2 + '" fill="none" stroke="' + borde + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>'; };
+  /* el borde del calcetín, como en las patas de la mesa: pelo en mechones
+     de punta, de largo desigual */
+  const PICOS = [4, 9, 3, 8, 5, 10, 4, 7, 3, 9, 5];
+  const mechones = (x0, x1, y, borde, relleno) => {
+    const n = PICOS.length, w = (x1 - x0) / n;
+    let linea = 'M' + x0 + ' ' + y;
+    PICOS.forEach((h, k) => { const x = x0 + k * w; linea += ' L' + (x + w * .5).toFixed(1) + ' ' + (y + h * .8).toFixed(1) + ' L' + (x + w).toFixed(1) + ' ' + (y + (k % 3) * .6).toFixed(1); });
+    /* como en la mesa: el pelo blanco sobre el brazo, sin contorno */
+    return '<path d="M' + (x0 + 1.4) + ' ' + (y - 8) + ' ' + linea.slice(1).replace(/^/, 'L') + ' L' + (x1 - 1.4) + ' ' + (y - 8) + ' Z" fill="' + relleno + '"/>'; };
+  /* los pelillos blancos que asoman en la punta de los deditos, como en la mesa */
+  const pelillos = trazos => '<path d="' + trazos + '" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>';
   /* una raya atigrada: media luna que se afina en las puntas */
   const raya = (cx, y, w, g, col) => '<path d="M' + (cx - w) + ' ' + (y + 2) + ' Q' + cx + ' ' + (y - g) + ' ' + (cx + w) + ' ' + (y + 2) + ' Q' + cx + ' ' + (y - g * .35) + ' ' + (cx - w) + ' ' + (y + 2) + ' Z" fill="' + col + '"/>';
   /* ── LA DE MIUT, por la palma ── */
-  const brazoM = '<path d="M71 214 C71 176 72 144 74 108 L122 108 C124 144 125 176 125 214 Z" fill="url(#vBrazoM)" stroke="' + B + '" stroke-width="3.2" stroke-linejoin="round"/>'
-    + raya(98, 136, 24, 8, '#6E5586') + raya(98, 164, 25, 9, '#6E5586') + raya(94, 190, 20, 7, '#6E5586');
+  const brazoM = '<path d="M71 214 C71 176 72 144 74 108 L122 108 C124 144 125 176 125 214 Z" fill="url(#vBrazoM)" stroke="' + B + '" stroke-width="2.5" stroke-linejoin="round"/>'
+    + '<g opacity=".55">' + raya(98, 136, 24, 8, PELO.miut.raya) + raya(98, 164, 25, 9, PELO.miut.raya) + raya(94, 190, 20, 7, PELO.miut.raya) + '</g>';
   const formasM = '<circle cx="74" cy="61" r="11.5"/><circle cx="89.5" cy="46.5" r="12.5"/><circle cx="107.5" cy="46.5" r="12.5"/><circle cx="123" cy="61" r="11.5"/>'
     + '<path d="M70 72 C70 57 84 53 98 53 C112 53 127 57 127 72 C127 90 126 104 124 114 L72 114 C70 104 70 90 70 72 Z"/>';
   const surcosM = '<g fill="none" stroke="#D9CFE0" stroke-width="1.8" stroke-linecap="round">'
@@ -1144,18 +1156,20 @@ const VINETA_SVG = (() => {
     + judia(75, 62.5, 4.8, 5.8, -22) + judia(90, 49.5, 5.2, 6.4, -8) + judia(107, 49.5, 5.2, 6.4, 8) + judia(122, 62.5, 4.8, 5.8, 22)
     + '<path d="M98 72.5 C108.5 72.5 117 80 117 88.5 C117 94.5 113.5 97.5 109.5 96.5 C106.5 99.5 102.5 100.5 98 98.5 C93.5 100.5 89.5 99.5 86.5 96.5 C82.5 97.5 79 94.5 79 88.5 C79 80 87.5 72.5 98 72.5 Z"/>'
     + '<path d="M89 80 Q93 76.5 99 76.5" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" opacity=".55"/></g>';
-  const manoM = mano(formasM, B, 'url(#vPalma)') + surcosM + almohadillas + mechones(72, 124, 116, B, '#FFFFFF');
+  const manoM = mano(formasM, B, 'url(#vPalma)') + surcosM + almohadillas + mechones(74, 122.5, 116, B, '#FFFFFF')
+    + pelillos('M86 33.5 l-1.2 -3.4 M92 33.5 l1 -3.4 M104.5 33.5 l-1 -3.4 M110.5 33.5 l1.2 -3.4 M64 55 l-3 -1.8 M133 55 l3 -1.8');
   /* ── LA DEL NARANJA, por el dorso, con la mano en (0,0) y el brazo hacia
      abajo ── */
-  const brazoN = '<path d="M-25 22 C-26 84 -28 154 -30 244 L30 244 C28 154 26 84 25 22 Z" fill="url(#vBrazoN)" stroke="' + BN + '" stroke-width="3.2" stroke-linejoin="round"/>'
-    + raya(0, 72, 26, 9, '#9A4412') + raya(-3, 104, 22, 8, '#9A4412') + raya(0, 138, 28, 9, '#9A4412') + raya(2, 172, 28, 9, '#9A4412');
+  const brazoN = '<path d="M-25 22 C-26 84 -28 154 -30 244 L30 244 C28 154 26 84 25 22 Z" fill="url(#vBrazoN)" stroke="' + BN + '" stroke-width="2.5" stroke-linejoin="round"/>'
+    + '<g opacity=".55">' + raya(0, 72, 26, 9, PELO.naranja.raya) + raya(-3, 104, 22, 8, PELO.naranja.raya) + raya(0, 138, 28, 9, PELO.naranja.raya) + raya(2, 172, 28, 9, PELO.naranja.raya) + '</g>';
   const formasN = '<circle cx="-23.5" cy="-13" r="10.5"/><circle cx="-8.5" cy="-26" r="11.5"/><circle cx="8.5" cy="-26" r="11.5"/><circle cx="23.5" cy="-13" r="10.5"/>'
     + '<path d="M-27 -4 C-27 -18 -13 -21 0 -21 C13 -21 27 -18 27 -4 C27 12 26 26 24 36 L-24 36 C-26 26 -27 12 -27 -4 Z"/>';
   const surcosN = '<g fill="none" stroke="#C9B8AE" stroke-width="1.8" stroke-linecap="round">'
     + '<path d="M-16 -18 Q-14.5 -12 -13 -8"/><path d="M0 -24 V-12"/><path d="M16 -18 Q14.5 -12 13 -8"/></g>'
     /* los nudillos, con la luz de arriba */
     + '<path d="M-14 -3 Q0 -8 14 -3" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>';
-  const manoN = mano(formasN, BN, 'url(#vDorso)') + surcosN + mechones(-24, 24, 38, BN, '#FFFFFF');
+  const manoN = mano(formasN, BN, 'url(#vDorso)') + surcosN + mechones(-24.5, 24.5, 38, BN, '#FFFFFF')
+    + pelillos('M-11.5 -38 l-1.1 -3.2 M-5.5 -38 l1 -3.2 M5.5 -38 l-1 -3.2 M11.5 -38 l1.1 -3.2 M-33 -18 l-3 -1.6 M33 -18 l3 -1.6');
   const rayos = [0, 1, 2, 3, 4, 5, 6].map(k => { const g = (k * 34 - 190) * Math.PI / 180;
     return '<path d="M' + (98 + Math.cos(g) * 50).toFixed(1) + ' ' + (68 + Math.sin(g) * 50).toFixed(1) + ' L' + (98 + Math.cos(g) * 64).toFixed(1) + ' ' + (68 + Math.sin(g) * 64).toFixed(1) + '"/>'; }).join('');
   return '<svg viewBox="0 0 200 200" aria-hidden="true"><defs>'
