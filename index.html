@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.6.1
+  Manipulativo para 1.º y 2.º de ESO · versión 0.6.2
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,11 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.6.2
+  · EL ALMACÉN SIN FIN: en el mcm, cada primo del almacén es una fila de
+    piezas de pie, como fichas de dominó, que se aleja hasta perderse; al
+    coger una, la fila avanza un puesto.
 
   VERSIÓN 0.6.1
   · EL ACIERTO: en el mcd, el mcm y la pareja, al comprobar bien, el borde
@@ -300,6 +305,23 @@ body[data-movimiento="menos"] .volteo .gira{animation:none !important}
 /* en el almacén las piezas están SUELTAS: con aire entre ellas, para que no
    se lean como una torre (un 2 y un 3 pegados parecerían un 6) */
 .fila.suelta .pieza + .pieza{margin-left:-6px}
+/* EL ALMACÉN SIN FIN. Cada primo es una fila de piezas de pie, una detrás
+   de otra, como fichas de dominó puestas para tumbarse: se alejan hacia el
+   fondo, más pequeñas y más oscuras, hasta perderse. Delante está la que
+   se toca; cuando la pata se la lleva, la fila avanza un puesto y sigue
+   igual de larga. Así se ve que no se acaban, y no que siempre hay dos. */
+.fila.almacen{gap:6px 10px;padding-top:16px}
+.pila{position:relative;display:inline-block;line-height:0;margin-right:72px}
+.pila .tras{position:absolute;left:0;top:0;width:64px;height:54px;pointer-events:none;transform-origin:30% 100%;
+  --x:calc(var(--i) * 11px);--y:calc(var(--i) * -4px);--s:calc(1 - var(--i) * .06);
+  transform:translate(var(--x),var(--y)) scale(var(--s));
+  filter:brightness(calc(1 - var(--i) * .06));opacity:calc(1 - var(--i) * .1)}
+.pila .tras svg{width:100%;height:100%;overflow:visible}
+.pila > button.pieza{position:relative;z-index:1}
+.pila.avanza .tras{animation:avanza .34s .26s cubic-bezier(.3,.6,.4,1) backwards}
+.pila.avanza > button.pieza{animation:avanzaFrente .34s .26s cubic-bezier(.3,.6,.4,1) backwards}
+@keyframes avanza{from{transform:translate(calc(var(--x) + 11px),calc(var(--y) - 4px)) scale(calc(var(--s) - .06))}}
+@keyframes avanzaFrente{from{transform:translate(11px,-4px) scale(.94);filter:brightness(.94)}}
 
 /* ── LOS BOTONES ── */
 .botones{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;align-items:center}
@@ -511,7 +533,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.6.1
+  · versión 0.6.2
 </footer>
 </div>
 
@@ -937,7 +959,7 @@ function morfea(r, p, destino){
 }
 
 /* dónde acaba cada pieza, después de repintar */
-const conEtiqueta = (cont, p) => cont ? [...cont.querySelectorAll('.pieza')].filter(x => x.getAttribute('aria-label').endsWith(' ' + p)) : [];
+const conEtiqueta = (cont, p) => cont ? [...cont.querySelectorAll('.pieza[aria-label]')].filter(x => x.getAttribute('aria-label').endsWith(' ' + p)) : [];
 function enTorre(clave, p, ultima){
   if(ultima){ const todas = document.querySelectorAll('[data-torre="' + clave + '"] .frente .pieza'); return todas[todas.length - 1]; }
   const fs = conEtiqueta(document.querySelector('[data-torre="' + clave + '"] .frente'), p);
@@ -1247,8 +1269,18 @@ function pintaTodo(t){
   const alm = el('div', 'caja'); alm.style.marginTop = '10px'; alm.dataset.alm = '1';
   alm.appendChild(el('div', 'rot', '<span>el almacén · piezas sin fin</span><span></span>'));
   const tipos = [...new Set([...P.fa, ...P.fb])].sort((x, y) => x - y);
-  alm.appendChild(fila(tipos, {etq:'poner', suelta:true, al: (p, i, btn) => { const r = btn.getBoundingClientRect();
-    P.torre.push(p); deFrente('torre'); dice(''); pinta(); mueve(p, r, enTorre('torre', p)); }}));
+  const fa = fila(tipos, {etq:'poner', suelta:true, al: (p, i, btn) => { const r = btn.getBoundingClientRect();
+    P.torre.push(p); deFrente('torre'); dice(''); pinta();
+    const pl = document.querySelector('[data-alm] .pila[data-p="' + p + '"]'); if(pl) pl.classList.add('avanza');
+    mueve(p, r, enTorre('torre', p)); }});
+  /* cada pieza del almacén, delante de su fila de copias que se alejan */
+  fa.classList.add('almacen');
+  [...fa.querySelectorAll('.pieza')].forEach((b, k) => {
+    const pl = el('div', 'pila'); pl.dataset.p = tipos[k];
+    for(let i = 8; i >= 1; i--){ const c = el('span', 'pieza tras', piezaSVG(tipos[k])); c.style.setProperty('--i', i); c.setAttribute('aria-hidden', 'true'); pl.appendChild(c); }
+    b.replaceWith(pl); pl.appendChild(b);
+  });
+  alm.appendChild(fa);
   t.appendChild(alm);
   const obra = el('div', 'obra' + (cabe(P.fa, P.torre) && cabe(P.fb, P.torre) ? ' encaja' : ''));
   obra.appendChild(el('div', 'rot', 'la torre'));
