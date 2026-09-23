@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8.7
+  Manipulativo para 1.º y 2.º de ESO · versión 0.9
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,20 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.9 · EL PUENTE CON EL PAPEL Y LOS PRIMOS
+  · LA BARRA DEL CUADERNO: al lado de la piedra se escribe la barra de la
+    libreta según se golpea, y la línea «12 = 2² · 3» es grande y en
+    potencias.
+  · RETOS POR ENLACE: ?j=comun&n=36,48&d=2 abre ese ejercicio; en Practicar
+    se copia el enlace del ejercicio que hay en la mesa.
+  · TODAS LAS TORRES COMUNES: al acertar el mcd salen todas las torres
+    iguales posibles —los divisores comunes—, y todas caben en la del mcd.
+  · ¿Y CON TRES? En La pareja, por qué mcd · mcm = a · b no vale con tres.
+  · YA NO SE ROMPE: desde la etapa lisa, el alumno decide cuándo lo que
+    queda es primo; si se equivoca, el naranja le para la pata. Piedras con
+    17, 19 y 23, que no tienen herramienta, y la regla de la raíz: «¿7 · 7
+    ya se pasa?».
 
   VERSIÓN 0.8.7
   · LAS PATAS, UNIFICADAS: la viñeta del choque toma el pelo de las patas
@@ -333,6 +347,14 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 /* las dos torres del mcd, cada una bajo su caja; el hueco vacío se ajusta
    a la media columna */
 .obra .torres{gap:10px 20px}
+.comunes{margin-top:10px;padding-top:8px;border-top:1px dashed var(--linea)}
+.comunes .lista{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;margin:4px 0}
+.torrecita{display:flex;flex-direction:column;align-items:center;gap:1px}
+.torrecita > b{font-family:'Space Mono',monospace;font-size:16px}
+.torrecita.mayor > b{color:var(--oro);font-size:19px}
+.torrecita .vacio{font-size:11px;padding:8px 8px}
+.comunes .nota{margin:4px 0 0;font-size:14.5px}
+.comunes .nota b{color:var(--oro)}
 .obra .torres .vacio{padding:12px 12px}
 .obra.encaja{border-color:var(--oro);box-shadow:0 0 0 2px var(--brillo) inset}
 .igual{font-family:'Rokkitt',serif;font-weight:700;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;text-align:center;
@@ -352,6 +374,17 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 .herr button:active{transform:translateY(2px);box-shadow:none}
 .herr button:disabled{opacity:.35;cursor:default}
 .herr .etq{width:100%;text-align:center}
+.herr .yaNo{flex-basis:100%;max-width:260px;margin:4px auto 0;min-height:44px;background:linear-gradient(180deg,var(--panel2),var(--panel)) !important;color:var(--tinta);border:2px solid var(--oro)}
+/* LA BARRA DEL CUADERNO: dos columnas y la raya vertical, como en la libreta */
+.cuaderno{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:6px 10px;border-radius:10px;background:var(--noche);border:1px solid var(--linea)}
+.barra{display:grid;grid-template-columns:auto auto;font-family:'Space Mono',monospace;font-size:19px;line-height:1.35;min-width:84px}
+.barra .izq{text-align:right;padding:0 10px 0 4px;border-right:2.5px solid var(--tinta)}
+.barra .der{padding:0 4px 0 10px;color:var(--oro);font-weight:700}
+.barra .aqui{font-weight:700}
+.barra .hueco::after{content:'?';color:var(--tenue);font-weight:400}
+/* la línea que se evalúa, grande */
+.cuenta.grande{font-size:24px;color:var(--tinta);text-align:center;margin:6px 0 2px}
+.cuenta.grande b{font-size:26px;color:var(--oro)}
 
 /* ── EL VOLTEO, COMO DE VERDAD. Las piezas unidas se dan la vuelta enteras
    y por detrás conservan su forma: la misma silueta de puzle, vista en
@@ -587,6 +620,9 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <pattern id="tx7" width="8" height="6" patternUnits="userSpaceOnUse"><path d="M0 3 H8" stroke="#1A1226" stroke-width="1.8"/></pattern>
   <pattern id="tx11" width="10" height="7" patternUnits="userSpaceOnUse"><path d="M0 5 L2.5 2 L5 5 L7.5 2 L10 5" fill="none" stroke="#1A1226" stroke-width="1.4"/></pattern>
   <pattern id="tx13" width="9" height="9" patternUnits="userSpaceOnUse"><path d="M4.5 2 V7 M2 4.5 H7" stroke="#1A1226" stroke-width="1.5"/></pattern>
+  <pattern id="tx17" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M-2 -2 L10 10 M-2 6 L2 10 M6 -2 L10 2" stroke="#1A1226" stroke-width="1.8"/></pattern>
+  <pattern id="tx19" width="10" height="7" patternUnits="userSpaceOnUse"><path d="M0 4 Q2.5 1 5 4 T10 4" fill="none" stroke="#1A1226" stroke-width="1.4"/></pattern>
+  <pattern id="tx23" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2" fill="none" stroke="#1A1226" stroke-width="1.2"/></pattern>
 </defs></svg>
 <div class="lienzo">
 <header class="cab">
@@ -658,7 +694,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8.7
+  · versión 0.9
 </footer>
 </div>
 
@@ -709,6 +745,10 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>Hay que construir la torre <b>más pequeña</b> en la que quepan los dos números, pieza a pieza. Esa torre es el <b>mínimo común múltiplo</b>: hace falta cada pieza tantas veces como la tenga el que más.</p>
   <h3>La pareja · mcd · mcm = a · b</h3>
   <p>Las torres del mcd y del mcm, ya hechas. Se juntan y salen exactamente las piezas de los dos números: por eso <b>mcd · mcm = a · b</b>, siempre.</p>
+  <h3>Ya no se rompe</h3>
+  <p>Desde la etapa lisa, cuando lo que queda de la piedra es un primo, no se convierte sola en pieza: hay que pulsar <b>«Ya no se rompe»</b>. Si todavía se podía romper, el gato naranja para la pata. El 17, el 19 y el 23 no tienen herramienta, así que en sus piedras siempre hay que decirlo. Basta probar los primos cuyo cuadrado no se pasa: si 7 · 7 = 49 ya es más que 47 y ninguno menor lo parte, el 47 es primo.</p>
+  <h3>El cuaderno</h3>
+  <p>Al lado de la piedra se va escribiendo la <b>barra</b> de la libreta: a la izquierda lo que queda, a la derecha el primo que la ha partido. Y debajo, en grande, la descomposición en potencias.</p>
   <h3>Si algo falla</h3>
   <p>Miut dice primero <b>qué</b> está mal; solo si se vuelve a fallar dice <b>dónde</b>. En Romper, si Miut va a golpear con un primo que no divide, un gato naranja le para la pata. En <b>Ajustes</b> se puede pedir además <b>decir antes el número</b>: para voltear una torre o darla por buena hay que escribir primero qué número es.</p>
   <h3>Las cuatro etapas</h3>
@@ -718,7 +758,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <h3>Miut se asoma</h3>
   <p>De vez en cuando Miut se asoma por abajo con un bocadillo: una pista si llevas un rato parado, el criterio de divisibilidad si el gato naranja te ha parado la pata dos veces, o el aviso de que cambia la etapa. Tócala y se va.</p>
   <h3>Practicar</h3>
-  <p>Ejercicios nuevos cada vez, que no cuentan para los retos. Se elige la dificultad —<b>fácil</b>, <b>media</b>, <b>difícil</b> o <b>sin piezas</b>—; en difícil y sin piezas, a veces el mcd o el mcm son de <b>tres o cuatro números</b>. Con <b>«Poner mis números»</b> se ponen los que se quieran, con primos hasta el 13; en el mcd y el mcm, de dos a cuatro, con + y −.</p>
+  <p>Ejercicios nuevos cada vez, que no cuentan para los retos. Se elige la dificultad —<b>fácil</b>, <b>media</b>, <b>difícil</b> o <b>sin piezas</b>—; en difícil y sin piezas, a veces el mcd o el mcm son de <b>tres o cuatro números</b>. Con <b>«Poner mis números»</b> se ponen los que se quieran, con primos hasta el 13; en el mcd y el mcm, de dos a cuatro, con + y −. Con <b>«enlace de este ejercicio»</b> se copia una dirección que abre justo ese ejercicio, para ponerla en una ficha con un QR.</p>
   <div class="botones"><button class="b ok" id="ayCerrar">Volver a las piezas</button></div>
  </div>
 </div>
@@ -760,7 +800,9 @@ const cabe = (x, y) => { const bx = bolsa(x), by = bolsa(y); return Object.keys(
 const quitaUna = (lista, p) => { const i = lista.indexOf(p); const c = lista.slice(); if(i >= 0) c.splice(i, 1); return c; };
 
 /* ── EL COLOR DE CADA PRIMO, el mismo que en el templo ── */
-const COLORP = {2:'#6FB7E0', 3:'#9BC26A', 5:'#B58CF0', 7:'#F08A6B', 11:'#5FD0C0', 13:'#E89AC7'};
+const COLORP = {2:'#6FB7E0', 3:'#9BC26A', 5:'#B58CF0', 7:'#F08A6B', 11:'#5FD0C0', 13:'#E89AC7',
+  /* los primos sin herramienta: salen en piedras que hay que declarar primas */
+  17:'#E3C05C', 19:'#93A9B8', 23:'#C99A73'};
 const colorDe = p => COLORP[p] || '#E8DCC8';
 
 /* LA PIEZA, en SVG. El hueco a la izquierda y la lengüeta a la derecha, a
@@ -770,7 +812,7 @@ const colorDe = p => COLORP[p] || '#E8DCC8';
    de la clase */
 const TAM = 76 / 64;
 const FORMA = 'M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z';
-const TEXTURAS = [2, 3, 5, 7, 11, 13];
+const TEXTURAS = [2, 3, 5, 7, 11, 13, 17, 19, 23];
 function piezaSVG(p){
   return '<svg viewBox="0 0 64 54" aria-hidden="true">'
     + '<path class="cuerpo relleno" fill="' + colorDe(p) + '" d="' + FORMA + '"/>'
@@ -1484,7 +1526,11 @@ const soloCon = (n, ps) => primos(n).every(q => ps.includes(q));
 function nuevoEjercicio(juego, d){
   const D = DIFS[d], viejo = (PRAC[juego] || []).join();
   for(let k = 0; k < 4000; k++){
-    if(juego === 'romper'){
+    if(juego === 'romper' && d >= 2 && Math.random() < .35){
+      /* una piedra con un primo sin herramienta: 119 = 7 · 17, 221 = 13 · 17 */
+      const g = [17, 19, 23][azar(0, 2)], m = azar(2, Math.floor(480 / g));
+      if(soloCon(m, [2, 3, 5, 7, 11, 13]) && primos(m).length <= 3 && String(g * m) !== viejo) return [g * m];
+    }else if(juego === 'romper'){
       const n = azar(4, D.max[0]), f = primos(n);
       if(soloCon(n, D.ps) && f.length >= D.f[0] && f.length <= D.f[1] && String(n) !== viejo) return [n];
     }else if(juego !== 'pareja' && d >= 2 && k % 2 === 0 && Math.random() < .45){
@@ -1582,36 +1628,79 @@ function porQueNo(n, p){
   if(p === 3) return 'las cifras de ' + n + ' suman ' + s + ', que no es múltiplo de 3';
   return n + ' = ' + p + ' · ' + Math.floor(n / p) + ' + ' + (n % p) + ': sobran ' + (n % p);
 }
+/* ¿HAY QUE DECIRLO? Desde la etapa lisa —y en la pregunta sin piezas—
+   la piedra que ya es un primo no se convierte sola en pieza: hay que
+   pulsar «Ya no se rompe». Y si un primo no tiene herramienta (17, 19, 23),
+   hay que decirlo en cualquier etapa. */
+const declarar = () => ['lisa', 'pregunta'].includes(etapa().id);
+const sinHerramienta = n => n > 1 && !HERR.some(p => n % p === 0);
+const esPrimo = n => n > 1 && primos(n).length === 1;
+/* LA REGLA DE LA RAÍZ: basta probar los primos cuyo cuadrado no se pasa */
+const hastaRaiz = n => { let q = 2; while(q * q <= n) q++; while(!esPrimo(q)) q++; return q; };
+function porQueEsPrimo(n){
+  const q = hastaRaiz(n), antes = [2, 3, 5, 7, 11, 13, 17, 19, 23].filter(x => x * x <= n);
+  if(!antes.length) return 'El <b>' + n + '</b> es primo: solo se parte por sí mismo.';
+  const ninguno = antes.length === 1 ? 'el ' + antes[0] + ' no lo parte' : antes.map(x => 'ni el ' + x).join(' ') + ' lo parten';
+  return 'El <b>' + n + '</b> es primo: ' + ninguno + ', y ' + q + ' · ' + q + ' = ' + q * q + ' ya se pasa de ' + n + ', así que no hace falta probar más.';
+}
 function golpe(p){
   const R = P.romp;
   if(!R || R.resto === 1) return;
   const piedra = document.querySelector('.piedra'), rp = piedra && piedra.getBoundingClientRect();
+  const tiembla = () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } };
   if(R.resto % p){
     /* la pata da un golpecito y la piedra tiembla: no se rompe */
     P.malos = (P.malos || 0) + 1;
     if(P.malos === 2) setTimeout(() => asoma(pistaPiedra(R.resto)), 1300);
-    cancela(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
-    dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(R.resto, p) + '. Prueba con otro.', 'mal');
+    cancela(rp, tiembla);
+    const primo = esPrimo(R.resto) && (declarar() || sinHerramienta(R.resto)) && p * p > R.resto;
+    dice('El <b>' + p + '</b> no rompe esta piedra: ' + porQueNo(R.resto, p) + '.'
+      + (primo ? ' Y como ' + p + ' · ' + p + ' = ' + p * p + ' ya se pasa de ' + R.resto + ', ningún primo mayor lo partirá: <b>el ' + R.resto + ' es primo</b>. Pulsa «Ya no se rompe».' : ' Prueba con otro.'), 'mal');
     return;
   }
+  /* un primo contra sí mismo no deja nada más pequeño: desde la etapa lisa,
+     eso hay que decirlo con el botón */
+  if(p === R.resto && declarar()){
+    toca(rp, tiembla);
+    return dice('El <b>' + p + '</b> contra el ' + p + ' no deja nada más pequeño: esta piedra <b>ya no se rompe</b>. Díselo a Miut con el botón.', 'mal');
+  }
+  parte(p, rp);
+}
+/* YA NO SE ROMPE: el alumno dice que lo que queda es primo */
+function declara(){
+  const R = P.romp;
+  if(!R || R.resto === 1) return;
+  const piedra = document.querySelector('.piedra'), rp = piedra && piedra.getBoundingClientRect();
+  if(!esPrimo(R.resto)){
+    const q = primos(R.resto)[0];
+    cancela(rp, () => { const pi = document.querySelector('.piedra'); if(pi){ pi.classList.remove('golpe'); void pi.offsetWidth; pi.classList.add('golpe'); } });
+    return dice(detalla() ? 'Todavía se rompe: <b>' + R.resto + ' = ' + q + ' · ' + R.resto / q + '</b>. Golpéala con el ' + q + '.'
+      : 'Todavía se rompe: hay un primo que cae justo. Prueba con las herramientas, empezando por las pequeñas.', 'mal');
+  }
+  parte(R.resto, rp, porQueEsPrimo(R.resto) + ' ');
+}
+function parte(p, rp, nota){
+  const R = P.romp;
+  nota = nota || '';
   R.piezas.push(p); R.resto /= p; deFrente('rotas');
   if(R.resto === 1 && P.cadena){
     /* una piedra de la cadena, rota: se guardan sus piezas y viene la otra */
     P.rotos.push(R.piezas.slice());
     if(P.rotos.length < P.cadena.length){
       const n = P.cadena[P.rotos.length];
-      dice('El <b>' + R.n + ' = ' + enPotencias(R.n) + '</b>. Ahora la piedra del <b>' + n + '</b>.', 'bien');
+      dice(nota + 'El <b>' + R.n + ' = ' + enPotencias(R.n) + '</b>. Ahora la piedra del <b>' + n + '</b>.', 'bien');
       P.romp = {n, resto:n, piezas:[]}; P.dorso = {}; P.visto = {};
     }else{
       P.cadena = null; P.romp = null; P.dorso = {}; P.visto = {};
-      dice('Las piedras, rotas: ' + yLista(P.ns.map(n => '<b>' + n + ' = ' + enPotencias(n) + '</b>')) + '. Ya tienes las piezas: '
+      dice(nota + 'Las piedras, rotas: ' + yLista(P.ns.map(n => '<b>' + n + ' = ' + enPotencias(n) + '</b>')) + '. Ya tienes las piezas: '
         + {comun: 'construye la misma torre con las de ' + losN(P.ns.length) + '.', todo: 'construye la torre más pequeña donde quepan ' + losN(P.ns.length) + '.', pareja: 'aquí están las torres del mcd y del mcm.'}[est.juego], 'bien');
     }
     pinta();
     morfea(rp, p, null);
     return;
   }
-  if(R.resto === 1){ gana('Roto del todo: <b>' + R.n + ' = ' + ordena(R.piezas).join(' · ') + ' = ' + enPotencias(R.n) + '</b>. '
+  const lista = ordena(R.piezas).join(' · '), pot = enPotencias(R.n);
+  if(R.resto === 1){ gana(nota + 'Roto del todo: <b>' + R.n + ' = ' + lista + (pot !== lista ? ' = ' + pot : '') + '</b>. '
     + (R.piezas.length === 1 ? 'Una sola pieza: <b>' + R.n + ' es primo</b>.' : 'Esas piezas y ninguna otra: cada número tiene una sola bolsa.')
     + ' <b>Voltea las piezas</b>: por detrás está la piedra entera.'); }
   else dice('Se desprende un <b>' + p + '</b> y queda una piedra de <b>' + R.resto + '</b>. Sigue golpeando.');
@@ -1620,18 +1709,36 @@ function golpe(p){
   if(rp && R.resto === 1) morfea(rp, p, enTorre('rotas', p, true));
   else if(rp) mueve(p, {left: rp.left + rp.width / 2 - 38, top: rp.top + rp.height / 2 - 32, width: 76, height: 64}, enTorre('rotas', p, true));
 }
+/* LA BARRA DEL CUADERNO: lo mismo que pasa en la mesa, escrito como en la
+   libreta. A la izquierda lo que queda de la piedra; a la derecha, el
+   primo que la ha partido. La barra no es otro método: es esta mesa. */
+function barra(R){
+  const b = el('div', 'barra'); b.setAttribute('aria-label', 'la barra del cuaderno');
+  let v = R.n;
+  R.piezas.forEach(p => { b.appendChild(el('span', 'izq', String(v))); b.appendChild(el('span', 'der', String(p))); v /= p; });
+  b.appendChild(el('span', 'izq' + (v > 1 ? ' aqui' : ''), String(v)));
+  b.appendChild(el('span', 'der' + (v > 1 ? ' hueco' : ''), v > 1 ? '' : ''));
+  return b;
+}
 function pintaRomper(t){
   const R = P.romp;
   if(P.cadena) t.appendChild(el('div', 'rot', 'Primero, las piedras · ' + (P.rotos.length + 1) + ' de ' + P.cadena.length));
   const r = el('div', 'romper');
   r.appendChild(bloque('rotas', R.piezas, {vacio:'aún ninguna pieza'}));
   if(R.resto > 1) r.appendChild(el('div', 'piedra', String(R.resto)));
+  const cuaderno = el('div', 'cuaderno'); cuaderno.appendChild(el('span', 'etq', 'en el cuaderno')); cuaderno.appendChild(barra(R));
+  r.appendChild(cuaderno);
   t.appendChild(r);
-  t.appendChild(el('div', 'cuenta', R.piezas.length
-    ? R.n + ' = ' + R.piezas.join(' · ') + (R.resto > 1 ? ' · <b>' + R.resto + '</b>' : ' = <b>' + enPotencias(R.n) + '</b>') : R.n + ' = ?'));
+  /* LA LÍNEA QUE SE EVALÚA: grande, y en potencias en cuanto se repite una pieza */
+  t.appendChild(el('div', 'cuenta grande', R.piezas.length
+    ? R.n + ' = ' + (R.resto > 1 ? enPotencias(producto(R.piezas)) + ' · <b>' + R.resto + '</b>' : '<b>' + enPotencias(R.n) + '</b>') : R.n + ' = ?'));
   const h = el('div', 'herr'); h.appendChild(el('span', 'etq', 'golpear con'));
   HERR.forEach(p => { const b = el('button', '', String(p)); b.style.background = colorDe(p); b.disabled = R.resto === 1;
     b.setAttribute('aria-label', 'golpear con el ' + p); b.addEventListener('click', () => golpe(p)); h.appendChild(b); });
+  if(R.resto > 1 && (declarar() || sinHerramienta(R.resto))){
+    const y = el('button', 'b yaNo', 'Ya no se rompe'); y.setAttribute('aria-label', 'ya no se rompe: es primo');
+    y.addEventListener('click', declara); h.appendChild(y);
+  }
   t.appendChild(h);
 }
 
@@ -1671,9 +1778,9 @@ function pintaComun(t){
     const usadas = bolsa(torre);
     c.appendChild(fila(f, {etq:'coger', usada: p => { cont[p] = (cont[p] || 0) + 1; return cont[p] <= (usadas[p] || 0); },
       al: (p, i, btn) => { const r = btn.getBoundingClientRect();
-        P.ts[k].push(p); deFrente(lado); dice(''); pinta();
+        P.ts[k].push(p); P.comunes = false; deFrente(lado); dice(''); pinta();
         mueve(p, r, enTorre(lado, p)); }}));
-    c.appendChild(el('div', 'cuenta', n + ' = ' + (f.length > 1 ? f.join(' · ') : f[0] + (f.length === 1 ? ', primo' : ''))));
+    c.appendChild(el('div', 'cuenta', n + ' = ' + (f.length > 1 ? enPotencias(n) : f[0] + (f.length === 1 ? ', primo' : ''))));
     return c;
   };
   const dos = el('div', 'dosCajas');
@@ -1689,19 +1796,33 @@ function pintaComun(t){
     col.appendChild(el('div', 'rot', 'la torre del ' + n));
     const f = bloque(lado, ordena(P.ts[k]), {etq:'devolver', vacio:'toca una pieza de arriba',
       al: (p, i, btn) => { const r = btn.getBoundingClientRect();
-        P.ts[k] = quitaUna(P.ts[k], p); deFrente(lado); dice(''); pinta();
+        P.ts[k] = quitaUna(P.ts[k], p); P.comunes = false; deFrente(lado); dice(''); pinta();
         mueve(p, r, enCaja(lado, p)); }});
     f.classList.add('torre'); col.appendChild(f);
   });
   obra.appendChild(cols);
   /* sin decir el número: «divide a todos» es lo que se ve, el cuánto se
      dice al voltear */
+  /* al acertar: todas las torres iguales que se podían construir —los
+     divisores comunes— y todas caben en la del mcd */
+  const conComunes = P.comunes;
   obra.appendChild(el('div', 'igual' + (enc ? ' si' : ''), enc ? (P.ts[0].length ? '= iguales: esa torre divide ' + yLista(P.ns.map(n => 'al ' + n))
     : (N === 2 ? 'las dos torres están vacías' : 'las torres están vacías')) : '≠ las torres no son iguales'));
+  if(conComunes){
+    const g = mcdN(P.ns), divs = []; for(let d = 1; d <= g; d++) if(g % d === 0) divs.push(d);
+    const c = el('div', 'comunes');
+    c.appendChild(el('div', 'rot', 'todas las torres iguales que se podían construir · los divisores comunes'));
+    const l = el('div', 'lista');
+    divs.forEach(d => { const w = el('div', 'torrecita' + (d === g ? ' mayor' : ''));
+      w.appendChild(d === 1 ? el('span', 'vacio', 'ninguna pieza') : fila(primos(d), {chica:true, etq:'pieza'})); w.appendChild(el('b', '', String(d))); l.appendChild(w); });
+    c.appendChild(l);
+    c.appendChild(el('p', 'nota', 'Hay <b>' + divs.length + '</b>, y <b>todas caben en la del ' + g + '</b>: los divisores comunes son los divisores del mcd, y el mcd es <b>el mayor</b> de todos.'));
+    obra.appendChild(c);
+  }
   t.appendChild(obra);
   const bt = el('div', 'botones');
   const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', () => compruebaComun(t)); bt.appendChild(ok);
-  const vac = el('button', 'b', 'Vaciar las torres'); vac.addEventListener('click', () => { P.ts = P.ns.map(() => []); P.dorso = {}; P.visto = {}; dice(''); pinta(); }); bt.appendChild(vac);
+  const vac = el('button', 'b', 'Vaciar las torres'); vac.addEventListener('click', () => { P.ts = P.ns.map(() => []); P.comunes = false; P.dorso = {}; P.visto = {}; dice(''); pinta(); }); bt.appendChild(vac);
   t.appendChild(bt);
 }
 /* LAS PISTAS, POR ESCALONES: el primer fallo solo dice QUÉ está mal; a
@@ -1728,10 +1849,10 @@ function compruebaComun(t){
     const falta = ordena(G).find(q => (bolsa(G)[q] || 0) > (bolsa(P.ts[0])[q] || 0));
     return dice('Las torres son iguales, y eso ya es un <b>divisor común</b>. Pero aún puede crecer: <b>' + todos + ' tienen otro ' + falta + '</b> que no has usado.', 'mal');
   }
-  const fin = () => gana('La torre más grande que se construye igual con ' + todos + ': <b>' + (G.length ? G.join(' · ') + ' = ' : '') + g + '</b>. '
+  const fin = () => { P.comunes = true; pinta(); gana('La torre más grande que se construye igual con ' + todos + ': <b>' + (G.length ? G.join(' · ') + ' = ' : '') + g + '</b>. '
     + (g === 1 ? (N === 2 ? 'No comparten ninguna pieza: su mcd es <b>1</b>, y se dice que son <b>primos entre sí</b>.' : 'No hay ninguna pieza que tengan todos: su mcd es <b>1</b>.')
       : g + ' <b>divide</b> ' + yLista(ns.map(n => 'al ' + n)) + ', y ninguno mayor lo hace: es el <b>máximo común divisor</b>, mcd(' + ns.join(', ') + ') = ' + g
-        + '. En potencias, ' + yLista(ns.map(enPotencias)) + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b> a ' + todos + ', tantas veces como las tenga <b>el que menos</b>.'));
+        + '. En potencias, ' + yLista(ns.map(enPotencias)) + ' → ' + enPotencias(g) + ': las piezas <b>comunes</b> a ' + todos + ', tantas veces como las tenga <b>el que menos</b>.')); };
   if(!predice() || g === 1 || ns.some((_, k) => P.visto[LETRA[k]] === g)) return fin();
   dice('Las torres están bien. <b>Antes de voltearlas</b>: ¿qué número es esa torre?');
   pideNumero(t, '¿qué número es la torre?', g, fin,
@@ -1752,7 +1873,7 @@ function pintaTodo(t){
     const pl = el('div', 'plano'); pl.appendChild(fila(f, {chica:true, etq:'plano'}));
     const bt = bolsa(P.torre), bf = bolsa(f);
     /* «falta un 2, dos 3», con palabras: «2 × 2» se leería como 4 */
-    const NOMBRES = {2:'doses', 3:'treses', 5:'cincos', 7:'sietes', 11:'onces', 13:'treces'};
+    const NOMBRES = {2:'doses', 3:'treses', 5:'cincos', 7:'sietes', 11:'onces', 13:'treces', 17:'diecisietes', 19:'diecinueves', 23:'veintitreses'};
     const CUANTOS = ['', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis'];
     const falta = Object.keys(bf).filter(p => (bt[p] || 0) < bf[p]).map(p => { const k = bf[p] - (bt[p] || 0);
       return k === 1 ? 'un ' + p : (CUANTOS[k] || k) + ' ' + (NOMBRES[p] || 'piezas de ' + p); });
@@ -1844,6 +1965,11 @@ function pintaPareja(t){
   const bt = el('div', 'botones');
   const ok = el('button', 'b ok', 'Responder'); bt.appendChild(ok);
   const jn = el('button', 'b', P.juntas ? 'Separar las torres' : 'Juntar las dos torres'); bt.appendChild(jn);
+  /* para que no generalicen la fórmula */
+  const tres = el('button', 'enlace', '¿y con tres números?'); bt.appendChild(tres);
+  tres.addEventListener('click', () => dice('<b>Con tres números no funciona.</b> Mira el 2, el 4 y el 8: el mcd es 2 y el mcm es 8, así que mcd · mcm = <b>16</b>; pero 2 · 4 · 8 = <b>64</b>. '
+    + 'Con dos números, cada pieza compartida sale una vez en el mcd y otra en el mcm, igual que en a · b. Con tres, las piezas que están en los tres se repiten más veces en el producto. '
+    + '<b>mcd · mcm = a · b</b> vale solo para dos.'));
   jn.addEventListener('click', () => { P.juntas = !P.juntas; P.dorso = {}; dice(P.juntas ? 'Mira las dos filas pieza a pieza.' : ''); pinta(); });
   t.appendChild(bt);
   ok.addEventListener('click', () => pideNumero(t, 'mcd · mcm =', P.a * P.b,
@@ -1954,6 +2080,21 @@ function gana(txt){
   pintaCabecera();
 }
 
+/* qué números caben en la mesa: piezas hasta el 23, como mucho una sin
+   herramienta (17, 19, 23) por número —si no, no se podría romper—, diez
+   piezas por torre y números distintos */
+function revisaNumeros(ns, J){
+  if(ns.some(n => !(n >= 2 && n <= 9999))) return 'Pon números entre 2 y 9999.';
+  const grande = ns.find(n => primos(n).some(p => p > 23));
+  if(grande) return 'El <b>' + grande + '</b> lleva un primo mayor que 23 (' + primos(grande).filter(p => p > 23).join(', ') + '), y en la mesa solo hay piezas hasta el 23. Prueba con otro.';
+  const dos = ns.find(n => primos(n).filter(p => p > 13).length > 1);
+  if(dos) return 'El <b>' + dos + '</b> lleva dos primos sin herramienta (' + primos(dos).filter(p => p > 13).join(' y ') + '), y no se podría romper en la mesa. Prueba con otro.';
+  const largo = ns.find(n => primos(n).length > 10);
+  if(largo) return 'El <b>' + largo + '</b> lleva más de diez piezas, y no cabe en la mesa. Prueba con otro.';
+  if(new Set(ns).size < ns.length) return 'Hay dos números repetidos: pon números distintos.';
+  if(J === 'todo' && primos(mcmN(ns)).length > 12) return 'El mcm de esos números lleva ' + primos(mcmN(ns)).length + ' piezas, y la torre no cabe en la mesa. Prueba con números más pequeños.';
+  return '';
+}
 /* ── TUS NÚMEROS, en Practicar: los que se quieran, con primos hasta el 13 ── */
 function pintaLibre(t){
   const c = el('div', 'botones propios'); c.style.marginTop = '0';
@@ -1974,12 +2115,8 @@ function pintaLibre(t){
   const va = el('button', 'b ok', 'Empezar'); c.appendChild(va);
   const lee = () => {
     const ns = ins.map(i => parseInt(i.value.replace(/\D/g, ''), 10));
-    if(ns.some(n => !(n >= 2 && n <= 9999))) return dice('Pon números entre 2 y 9999.', 'mal');
-    /* las piezas son del 2 al 13, y una torre de más de diez no cabe en la mesa */
-    const malo = ns.find(n => primos(n).some(p => p > 13) || primos(n).length > 10);
-    if(malo) return dice('El <b>' + malo + '</b> lleva ' + (primos(malo).some(p => p > 13) ? 'un primo mayor que 13 (' + primos(malo).filter(p => p > 13).join(', ') + '), y en la mesa solo hay piezas hasta el 13' : 'más de diez piezas, y no cabe en la mesa') + '. Prueba con otro.', 'mal');
-    if(new Set(ns).size < ns.length) return dice('Hay dos números repetidos: pon números distintos.', 'mal');
-    if(J === 'todo' && primos(mcmN(ns)).length > 12) return dice('El mcm de esos números lleva ' + primos(mcmN(ns)).length + ' piezas, y la torre no cabe en la mesa. Prueba con números más pequeños.', 'mal');
+    const mal = revisaNumeros(ns, J);
+    if(mal) return dice(mal, 'mal');
     PRAC[J] = ns; P.propios = false; empieza();
   };
   va.addEventListener('click', lee);
@@ -1998,10 +2135,12 @@ function pintaCabecera(){
     $('puntos').innerHTML = '<span class="ops difs" role="group" aria-label="Dificultad">'
       + DIFS.map((d, k) => '<button data-dif="' + k + '" aria-pressed="' + (k === est.dif) + '">' + d.n + '</button>').join('') + '</span>'
       + '<button class="b" id="bPropios" aria-pressed="' + !!P.propios + '">' + (P.propios ? 'Esconder mis números' : 'Poner mis números') + '</button>'
+      + '<button class="enlace" id="bEnlace">enlace de este ejercicio</button>'
       + '<button class="b otro" id="bOtro">Otro ejercicio ›</button>';
     $('puntos').querySelectorAll('[data-dif]').forEach(x => x.addEventListener('click', () => { est.dif = +x.dataset.dif; guarda(); otroEjercicio(); }));
     $('bOtro').addEventListener('click', otroEjercicio);
     $('bPropios').addEventListener('click', () => { P.propios = !P.propios; pinta(); if(P.propios) document.querySelector('.propios input').focus(); });
+    $('bEnlace').addEventListener('click', copiaEnlace);
     return;
   }
   const lista = RETOS[est.juego], i = est.nivel[est.juego];
@@ -2097,6 +2236,8 @@ function pistaPiedra(n){
   if(n % 2 === 0) return 'Psst… el <b>' + n + '</b> acaba en ' + n % 10 + ', que es par: <b>el 2</b> cae justo.';
   if(n % 3 === 0) return 'Psst… suma las cifras del <b>' + n + '</b>: dan ' + s2 + ', que es múltiplo de 3. Prueba <b>el 3</b>.';
   if(n % 5 === 0) return 'Psst… el <b>' + n + '</b> acaba en ' + n % 10 + ': <b>el 5</b> cae justo.';
+  if(esPrimo(n) && (declarar() || sinHerramienta(n))){ const q = hastaRaiz(n);
+    return 'Psst… ¿' + q + ' · ' + q + ' = ' + q * q + ' ya se pasa del ' + n + '? Entonces basta probar los primos más pequeños que ' + q + '. Si ninguno lo parte, <b>es primo</b>: pulsa «Ya no se rompe».'; }
   return 'Psst… el ' + n + ' no es par, sus cifras no suman un múltiplo de 3 y no acaba en 0 ni en 5. Prueba con <b>el 7</b>, <b>el 11</b> o <b>el 13</b>.';
 }
 /* si alguien lleva rato sin tocar nada en un reto sin acabar */
@@ -2230,8 +2371,30 @@ $('ajCerrar').addEventListener('click', () => { abreAjustes(false); $('bAjustes'
 $('bAula').addEventListener('click', () => { aj.aula = aj.aula === 'si' ? 'no' : 'si'; pintaAjustes(); });
 addEventListener('resize', pintaAjustes);
 
+/* RETOS POR ENLACE: «?j=comun&n=36,48» abre ese ejercicio en Practicar, y
+   «&d=2» elige la dificultad —la etapa en que se ven las piezas—. Así cada
+   ejercicio de una ficha puede llevar su QR. */
+const RETO_ENLACE = (() => {
+  try{
+    const q = new URLSearchParams(location.search), j = q.get('j');
+    if(!RETOS[j]) return false;
+    est.juego = j;
+    const d = parseInt(q.get('d'), 10); if(DIFS[d]) est.dif = d;
+    const cuantos = j === 'romper' ? 1 : j === 'pareja' ? 2 : 4;
+    const ns = (q.get('n') || '').split(/[^\d]+/).filter(Boolean).map(Number).slice(0, cuantos);
+    if(ns.length < (j === 'romper' ? 1 : 2) || revisaNumeros(ns, j)) return !!ns.length;
+    PRAC[j] = ns; est.practica = true;
+    return true;
+  }catch(e){ return false; }
+})();
+function copiaEnlace(){
+  const url = location.origin + location.pathname + '?j=' + est.juego + '&n=' + (PRAC[est.juego] || numerosDelReto()).join(',') + '&d=' + est.dif;
+  const texto = c => dice('Enlace de este ejercicio' + (c ? ', copiado' : '') + ': <b style="word-break:break-all">' + url + '</b>. Con un generador de QR se puede poner en una ficha.');
+  texto(false);
+  try{ navigator.clipboard.writeText(url).then(() => texto(true), () => {}); }catch(e){}
+}
 pintaAjustes();
 empieza();
-try{ if(!localStorage.getItem('miut.piezas.guia')) setTimeout(abreGuia, 500); }catch(e){}
+try{ if(!localStorage.getItem('miut.piezas.guia') && !RETO_ENLACE) setTimeout(abreGuia, 500); }catch(e){}
 </script>
 </body></html>
