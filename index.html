@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8.2
+  Manipulativo para 1.º y 2.º de ESO · versión 0.8.3
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,14 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.8.3
+  · LA RIÑA, A TIEMPO: el cachete suena en el instante del golpe, contando
+    lo que tarda el altavoz; el maullido arranca mientras el naranja coge
+    impulso y el golpe cae en plena subida. El maullido va al 70 % —más
+    corto— y el manotazo es más rápido, como una riña de verdad.
+  · LAS PATAS DE MIUT, MÁS PAUSADAS: llevar una pieza dura 1,15 segundos
+    en vez de 0,86 —en la pizarra apenas se veía— y tocar, 0,72.
 
   VERSIÓN 0.8.2
   · LA RIÑA, DE VERDAD: el bufido del gato naranja pasa a ser un maullido
@@ -622,7 +630,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8.2
+  · versión 0.8.3
 </footer>
 </div>
 
@@ -980,7 +988,7 @@ function mueve(p, r0, destino, desaparece){
   const a = punto(r0, true), b = punto(r1, true), esc = escala();
   const {d, lado} = sacaPata(a.x);
   const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
-  const T = 860;
+  const T = 1150;                                  // más pausado: en la pizarra, a 860 apenas se veía
   const anP = d.animate([
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
     {transform: postura(a.x, a.y, lado, esc), filter: APOYO, offset: .26, easing: 'ease-in-out'},
@@ -1010,7 +1018,7 @@ function toca(r, alTocar){
   const a = punto(r), esc = escala();
   const {d, lado} = sacaPata(a.x);
   const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
-  const T = 620;
+  const T = 720;
   const an = d.animate([
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
     {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .4, easing: 'ease-in'},
@@ -1032,7 +1040,7 @@ function toca(r, alTocar){
 function cancela(r, siQuieto){
   if(quieto() || !r){ siQuieto && siQuieto(); rina(0); return; }
   acabaTodo();
-  const esc = escala(), T = 980, GOLPE = .44;                        // el manotazo llega al 44 %
+  const esc = escala(), T = 760, GOLPE = .44;                        // el manotazo llega al 44 %
   const a = {x: r.left + r.width / 2, y: r.bottom + 14 * esc};         // la punta de los dedos, justo antes de la piedra
   const {d, lado} = sacaPata(a.x);
   const lejos = lado === 'izq' ? -1 : 1;                              // hacia dónde sale despedida: hacia su lado
@@ -1085,24 +1093,44 @@ function cancela(r, siQuieto){
    pasa de «m» a «AAA» y se cierra en «u». Bajo, para que haga gracia sin
    romper la clase. Se quita en Ajustes. */
 let AC = null;
+/* el sintetizador se enciende con el primer toque en la página: así el
+   primer manotazo no espera a que arranque y suena a tiempo */
+addEventListener('pointerdown', () => {
+  if(aj.sonido === 'no') return;
+  try{ AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if(AC.state === 'suspended') AC.resume(); }catch(e){}
+}, {passive: true});
 function rina(retraso){
   if(aj.sonido === 'no') return;
   try{
     AC = AC || new (window.AudioContext || window.webkitAudioContext)();
     if(AC.state === 'suspended') AC.resume();
     const sale = AC.createGain(); sale.gain.value = .45; sale.connect(AC.destination);
-    /* el maullido, a la altura del cachete: sin saturar y sin tapar la clase */
-    ENFADO(AC, sale, AC.currentTime + retraso / 1000, .11, 1);
+    /* LA SINCRONÍA. El cachete suena en el instante del golpe, descontando
+       lo que tarda el altavoz. El maullido empieza un poco antes —mientras el
+       naranja coge impulso— para que el golpe caiga en plena subida, justo
+       cuando el «mrrr» se dispara al «¡AU!»; y va a un 70 % de la grabación,
+       más corto, como una riña de verdad */
+    const ahora = AC.currentTime, lat = AC.outputLatency || AC.baseLatency || 0;
+    const golpe = Math.max(ahora + .005, ahora + retraso / 1000 - lat);
+    ENFADO(AC, sale, Math.max(ahora + .005, golpe - .28), .11, 0, .7);
+    cachete(AC, sale, golpe);
   }catch(e){}
 }
-function ENFADO(AC, sale, t, vol, cachete){
+function cachete(AC, sale, t){
+  const n = Math.floor(AC.sampleRate * .09), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0);
+  for(let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  const c = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(); c.buffer = buf; f.type = 'lowpass'; f.frequency.value = 1400;
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.55, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .085);
+  c.connect(f); f.connect(g); g.connect(sale); c.start(t); c.stop(t + .1);
+}
+/* K encoge o estira el maullido en el tiempo: 1 es la grabación, 0,7 más corto */
+function ENFADO(AC, sale, t, vol, conCachete, K){
+  K = K || 1;
   const ruido = seg => { const n = Math.floor(AC.sampleRate * seg), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0);
     for(let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const s = AC.createBufferSource(); s.buffer = buf; return s; };
-  const curva = (param, pts) => { param.setValueAtTime(pts[0][1], t + pts[0][0]); pts.slice(1).forEach(([dt, v]) => param.linearRampToValueAtTime(v, t + dt)); };
-  const D = 1.15;
-  if(cachete){ const c = ruido(.09), f = AC.createBiquadFilter(), g = AC.createGain(); f.type = 'lowpass'; f.frequency.value = 1400;
-    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.55 * cachete, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .085);
-    c.connect(f); f.connect(g); g.connect(sale); c.start(t); c.stop(t + .1); t += .05; }
+  const curva = (param, pts) => { param.setValueAtTime(pts[0][1], t + pts[0][0] * K); pts.slice(1).forEach(([dt, v]) => param.linearRampToValueAtTime(v, t + dt * K)); };
+  const D = 1.15 * K;
+  if(conCachete){ cachete(AC, sale, t); t += .05; }
   /* la voz */
   const o = AC.createOscillator(); o.type = 'sawtooth';
   /* sube despacio hasta unos 500 Hz, se dispara hasta unos 1000, aguanta y cae */
@@ -1136,9 +1164,9 @@ function ENFADO(AC, sale, t, vol, cachete){
   const cg = AC.createGain(); curva(cg.gain, [[0, .12], [.2, .06], [.4, .03], [.9, .05], [1.15, .22]]); am.connect(cuerpo); cuerpo.connect(cg); cg.connect(mezcla);
   /* la envolvente de la grabación: crece despacio, aguanta y se corta rápido */
   const env = AC.createGain(); env.gain.setValueAtTime(.0001, t);
-  env.gain.exponentialRampToValueAtTime(.18 * vol, t + .05); env.gain.exponentialRampToValueAtTime(.42 * vol, t + .28);
-  env.gain.exponentialRampToValueAtTime(1 * vol, t + .42); env.gain.linearRampToValueAtTime(.95 * vol, t + .86);
-  env.gain.exponentialRampToValueAtTime(.35 * vol, t + .95); env.gain.exponentialRampToValueAtTime(.14 * vol, t + 1.05); env.gain.exponentialRampToValueAtTime(.0001, t + D + .02);
+  env.gain.exponentialRampToValueAtTime(.18 * vol, t + .05 * K); env.gain.exponentialRampToValueAtTime(.42 * vol, t + .28 * K);
+  env.gain.exponentialRampToValueAtTime(1 * vol, t + .42 * K); env.gain.linearRampToValueAtTime(.95 * vol, t + .86 * K);
+  env.gain.exponentialRampToValueAtTime(.35 * vol, t + .95 * K); env.gain.exponentialRampToValueAtTime(.14 * vol, t + 1.05 * K); env.gain.exponentialRampToValueAtTime(.0001, t + D + .02);
   const brillo = AC.createBiquadFilter(); brillo.type = 'peaking'; brillo.frequency.value = 3500; brillo.Q.value = .9;
   curva(brillo.gain, [[0, 3], [.37, 5], [.58, 14], [.84, 13], [.95, 4], [1.15, 0]]);
   const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200;
