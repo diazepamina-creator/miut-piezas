@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.7.2
+  Manipulativo para 1.º y 2.º de ESO · versión 0.7.3
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,11 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.7.3
+  · EL CODO, más fino: el brazo es un solo contorno que se dobla; por fuera
+    abomba un poco el hueso, con una sombra suave, y por dentro la piel se
+    recoge en un pliegue.
 
   VERSIÓN 0.7.2
   · LAS OREJAS DE MIUT, curvas y con la punta redondeada, con un mechón
@@ -595,7 +600,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.7.2
+  · versión 0.7.3
 </footer>
 </div>
 
@@ -812,15 +817,51 @@ const pataSVG = (quien, lado) => {
      hombro. El codo asoma por fuera, redondeado, y queda del lado de fuera
      de la pantalla, como en un brazo de verdad apoyado en la mesa. */
   const CODO = 330, giro = (lado === 'izq' ? -1 : 1) * 9, fuera = lado === 'izq' ? -1 : 1;
-  /* el antebrazo y el brazo acaban justo en el centro del codo, y el codo
-     es un círculo del mismo ancho: así las tres piezas se funden sin picos */
-  const brazo = 'M26 44 C25.5 150 25 250 23.4 ' + CODO + ' L72.6 ' + CODO + ' C71 250 70.5 150 70 44 Z';
-  const hombro = 'M23.4 ' + CODO + ' C21 700 17 1100 13 1500 L83 1500 C79 1100 75 700 72.6 ' + CODO + ' Z';
-  const codo = '<circle cx="48" cy="' + CODO + '" r="24.6"/><ellipse cx="' + (48 + fuera * 15) + '" cy="' + (CODO + 6) + '" rx="12" ry="17"/>';
+  /* Todo el brazo es UN solo contorno: el antebrazo recto, el brazo girado
+     alrededor del codo y, entre los dos, dos curvas. Por fuera, el codo
+     abomba un poco, que es el hueso; por dentro, la piel se recoge en un
+     pliegue suave. Sin círculos pegados, no queda ni costura ni bulto. */
+  const G = giro * Math.PI / 180;
+  const R = (x, y) => { const dx = x - 48, dy = y - CODO;
+    return (48 + dx * Math.cos(G) - dy * Math.sin(G)).toFixed(1) + ' ' + (CODO + dx * Math.sin(G) + dy * Math.cos(G)).toFixed(1); };
+  /* cada lado del codo, bajando: del borde del antebrazo al del brazo. El
+     de fuera sale recto, abomba hasta el punto del hueso y vuelve a entrar
+     recto en el brazo —dos curvas que empalman sin esquina—; el de dentro
+     casi no se mueve, y el giro del brazo ya hace el pliegue. */
+  const J = 48, P = v => v.toFixed(1);
+  const junta = sd => {                       // sd: −1 el lado izquierdo, +1 el derecho
+    const x0 = 48 + sd * 24.4, x1 = 48 + sd * 24.6;
+    if(sd === fuera){
+      const cima = x0 + sd * 3.6;
+      return ' C' + P(x0 + sd * .4) + ' ' + (CODO - J + 20) + ' ' + P(cima) + ' ' + (CODO - 18) + ' ' + P(cima) + ' ' + CODO
+        + ' C' + P(cima) + ' ' + (CODO + 18) + ' ' + R(x1 + sd * .4, CODO + J - 20) + ' ' + R(x1, CODO + J);
+    }
+    return ' C' + P(x0 - sd * .8) + ' ' + (CODO - J + 14) + ' ' + R(x1 - sd * .8, CODO + J - 14) + ' ' + R(x1, CODO + J);
+  };
+  /* la junta de la derecha se recorre subiendo: la misma curva, del revés */
+  const juntaSube = () => {
+    const sd = 1, x0 = 48 + sd * 24.4, x1 = 48 + sd * 24.6;
+    if(sd === fuera){
+      const cima = x0 + sd * 3.6;
+      return ' C' + R(x1 + sd * .4, CODO + J - 20) + ' ' + P(cima) + ' ' + (CODO + 18) + ' ' + P(cima) + ' ' + CODO
+        + ' C' + P(cima) + ' ' + (CODO - 18) + ' ' + P(x0 + sd * .4) + ' ' + (CODO - J + 20) + ' ' + P(x0) + ' ' + (CODO - J);
+    }
+    return ' C' + R(x1 - sd * .8, CODO + J - 14) + ' ' + P(x0 - sd * .8) + ' ' + (CODO - J + 14) + ' ' + P(x0) + ' ' + (CODO - J);
+  };
+  const brazo = 'M26 44 C25.5 150 25 250 23.6 ' + (CODO - J) + junta(-1)
+    + ' C' + R(21, 700) + ' ' + R(17, 1100) + ' ' + R(13, 1500) + ' L' + R(83, 1500)
+    + ' C' + R(79, 1100) + ' ' + R(75, 700) + ' ' + R(72.6, CODO + J) + juntaSube()
+    + ' C71 250 70.5 150 70 44 Z';
+  const codo = '';
   const doblado = x => '<g transform="rotate(' + giro + ' 48 ' + CODO + ')">' + x + '</g>';
+  /* el hueso del codo, en sombra suave por fuera, y el pliegue por dentro */
+  const detalleCodo = '<path d="M' + (48 + fuera * 20) + ' ' + (CODO - 22) + ' Q' + (48 + fuera * 25) + ' ' + CODO + ' ' + R(48 + fuera * 20, CODO + 22)
+      + '" fill="none" stroke="' + C.raya + '" stroke-width="3" stroke-linecap="round" opacity=".3"/>'
+    + '<path d="M' + (48 - fuera * 21.5) + ' ' + (CODO - 3) + ' Q' + (48 - fuera * 15) + ' ' + (CODO + 2) + ' ' + (48 - fuera * 10) + ' ' + (CODO + 1)
+      + '" fill="none" stroke="' + C.borde + '" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>';
   const palma = '<ellipse cx="48" cy="50" rx="25" ry="23"/>';
   const dedos = '<circle cx="27.5" cy="35" r="9.2"/><circle cx="40" cy="24.5" r="10.2"/><circle cx="56" cy="24.5" r="10.2"/><circle cx="68.5" cy="35" r="9.2"/>';
-  const contorno = doblado('<path d="' + hombro + '"/>') + codo + '<path d="' + brazo + '"/>' + palma + dedos;
+  const contorno = '<path d="' + brazo + '"/>' + palma + dedos;
   /* el calcetín blanco: hasta pasada la muñeca, con el borde de pelo en
      zigzag irregular */
   const picos = [4, 9, 3, 8, 5, 10, 4, 7, 3, 9, 5];
@@ -845,7 +886,7 @@ const pataSVG = (quien, lado) => {
     + '<clipPath id="soloMano-' + id + '"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath></defs>'
     + '<g fill="none" stroke="' + C.borde + '" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
     + '<g fill="url(#pelo-' + id + ')">' + contorno + '</g>'
-    + '<g fill="' + C.raya + '" opacity=".55">' + rayas + '</g>'
+    + '<g fill="' + C.raya + '" opacity=".55">' + rayas + '</g>' + detalleCodo
     + '<g clip-path="url(#soloMano-' + id + ')"><path d="' + zig + '" fill="url(#calcetin-' + id + ')"/>'
     + palma.replace('/>', ' fill="url(#calcetin-' + id + ')"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin-' + id + ')"/>')
     /* la sombra de la mano sobre la muñeca: separa el mitón del brazo */
