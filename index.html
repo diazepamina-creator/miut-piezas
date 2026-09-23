@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8.4
+  Manipulativo para 1.º y 2.º de ESO · versión 0.8.5
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,12 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.8.5
+  · EL CHOQUE, EN VIÑETA: al acertar se abre un momento un sticker redondo
+    sobre la obra con las patas vistas de frente —la de Miut enseñando sus
+    almohadillas rosas— y la naranja que entra en arco, le planta la mano,
+    aprieta y se va: dos veces, «¡pa… pa!».
 
   VERSIÓN 0.8.4
   · ¡CHOCA ESOS CINCO! Al acertar, Miut y el gato naranja se chocan la
@@ -440,10 +446,9 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
 .zas{position:fixed;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:42;pointer-events:none;animation:zas .38s ease-out forwards}
 .zas svg{width:100%;height:100%;overflow:visible}
 .zas path{stroke:#FFF6DA;stroke-width:4;stroke-linecap:round;filter:drop-shadow(0 0 2px rgba(120,60,10,.8))}
-/* el choque de manos: el mismo chispazo, dorado y con estrellitas */
-.zas.cinco{width:96px;height:96px;margin:-48px 0 0 -48px;animation-duration:.55s}
-.zas.cinco path{stroke:#F6C94E;stroke-width:4.5;filter:drop-shadow(0 0 3px rgba(160,90,10,.7))}
-.zas.cinco .estrella{fill:#FFE6A0;stroke:#B97A12;stroke-width:1.2}
+/* la viñeta del choque de manos: un sticker redondo, por encima de todo */
+.vineta{position:fixed;z-index:43;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(40,20,5,.35))}
+.vineta svg{width:100%;height:100%;display:block;overflow:visible}
 @keyframes zas{0%{transform:scale(.45);opacity:1}60%{opacity:1}100%{transform:scale(1.25);opacity:0}}
 
 /* ── MIUT SE ASOMA. De vez en cuando la cabeza de Miut sube por el borde
@@ -639,7 +644,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8.4
+  · versión 0.8.5
 </footer>
 </div>
 
@@ -1094,61 +1099,96 @@ function cancela(r, siQuieto){
   enCurso.push(fin);
 }
 
-/* ¡CHOCA ESOS CINCO! Al acertar, Miut sube una pata desde su lado de la
-   mesa y el gato naranja baja la suya desde el otro: se encuentran en el
-   centro de la obra, palma con palma, con un ¡plas! y un destello dorado, y
-   cada uno vuelve a lo suyo. El mismo gato que te para la pata cuando te
-   equivocas es el que te choca la mano cuando aciertas. */
+/* ¡CHOCA ESOS CINCO! Al acertar se abre un momento una viñeta redonda
+   sobre la obra, como un sticker, con las patas vistas DE FRENTE: la de
+   Miut levantada y quieta, enseñando la palma y sus almohadillas rosas, y
+   la del gato naranja, que entra en arco desde abajo a la derecha, le
+   planta la mano encima, aprieta un momento y se va de golpe. Dos veces:
+   «¡pa… pa!». Luego la viñeta se cierra. */
+const VINETA_SVG = (() => {
+  const B = '#3B2A4A';
+  /* la pata de Miut, por la palma: brazo lila atigrado, calcetín blanco,
+     cuatro deditos y cinco almohadillas rosas */
+  const brazoM = '<path d="M71 210 C71 170 72 140 74 104 L122 104 C124 140 125 170 125 210 Z" fill="#A48AB8" stroke="' + B + '" stroke-width="3.2" stroke-linejoin="round"/>'
+    + '<g fill="#7F6596" opacity=".6"><path d="M74 150 Q98 142 122 150 Q98 147 74 153 Z"/><path d="M73 178 Q98 170 124 178 Q98 175 73 181 Z"/><path d="M75 128 Q90 123 104 126 Q90 126 75 131 Z"/></g>';
+  const manoM = '<g stroke="' + B + '" stroke-width="3.2" fill="#FFFFFF">'
+    + '<circle cx="73" cy="60" r="11.5"/><circle cx="89" cy="45" r="12.5"/><circle cx="108" cy="45" r="12.5"/><circle cx="124" cy="60" r="11.5"/>'
+    + '<path d="M70 70 C70 54 84 50 98 50 C112 50 127 54 127 70 L125 112 L72 112 Z"/></g>'
+    /* se tapan las costuras de los dedos con la palma, y el calcetín acaba en pelo */
+    + '<path d="M72.5 70 C73 57 85 53 98 53 C111 53 124 57 124.5 70 L123 110 L74 110 Z" fill="#FFFFFF"/>'
+    + '<path d="M72 110 L77 116 L81 110 L86 117 L91 110 L96 116 L101 110 L106 117 L111 110 L116 116 L121 110" fill="#FFFFFF" stroke="' + B + '" stroke-width="2" stroke-linejoin="round"/>'
+    + '<g fill="#F2A7BC" stroke="#C97891" stroke-width="1"><ellipse cx="74" cy="61" rx="5" ry="5.5"/><ellipse cx="89.5" cy="48" rx="5.5" ry="6"/><ellipse cx="107.5" cy="48" rx="5.5" ry="6"/><ellipse cx="123" cy="61" rx="5" ry="5.5"/>'
+    + '<path d="M98 72 C108 72 115 80 113 88 C111 95 104 94 98 92 C92 94 85 95 83 88 C81 80 88 72 98 72 Z"/></g>';
+  /* la del naranja, por el dorso (la palma va contra la de Miut): mano
+     blanca con sus deditos, brazo naranja atigrado. Dibujada con el centro
+     de la mano en (0,0) y el brazo hacia abajo */
+  const brazoN = '<path d="M-25 18 C-26 80 -28 150 -30 240 L30 240 C28 150 26 80 25 18 Z" fill="#E08A3C" stroke="#5A2A0C" stroke-width="3.2" stroke-linejoin="round"/>'
+    + '<g fill="#8A3A0A" opacity=".55"><path d="M-27 70 Q0 60 27 70 Q0 66 -27 74 Z"/><path d="M-28 105 Q-5 97 14 101 Q-5 101 -28 109 Z"/><path d="M-29 140 Q0 130 29 140 Q0 136 -29 144 Z"/><path d="M-29 175 Q0 166 29 175 Q0 171 -29 179 Z"/></g>';
+  const manoN = '<g stroke="#5A2A0C" stroke-width="3.2" fill="#FFFFFF">'
+    + '<circle cx="-24" cy="-14" r="10.5"/><circle cx="-9" cy="-27" r="11.5"/><circle cx="9" cy="-27" r="11.5"/><circle cx="24" cy="-14" r="10.5"/>'
+    + '<path d="M-27 -6 C-27 -20 -13 -22 0 -22 C13 -22 27 -20 27 -6 L25 34 L-25 34 Z"/></g>'
+    + '<path d="M-24.5 -6 C-24 -18 -12 -19 0 -19 C12 -19 24 -18 24.5 -6 L23 32 L-23 32 Z" fill="#FFFFFF"/>'
+    + '<path d="M-25 32 L-20 38 L-15 32 L-10 39 L-5 32 L0 38 L5 32 L10 39 L15 32 L20 38 L25 32" fill="#FFFFFF" stroke="#5A2A0C" stroke-width="2" stroke-linejoin="round"/>'
+    + '<g fill="none" stroke="#B9A9A0" stroke-width="1.6" stroke-linecap="round"><path d="M-16 -12 Q-15 -6 -13 -2"/><path d="M0 -18 V-8"/><path d="M16 -12 Q15 -6 13 -2"/></g>';
+  const rayos = [0, 1, 2, 3, 4, 5, 6].map(k => { const g = (k * 34 - 190) * Math.PI / 180;
+    return '<path d="M' + (98 + Math.cos(g) * 50).toFixed(1) + ' ' + (68 + Math.sin(g) * 50).toFixed(1) + ' L' + (98 + Math.cos(g) * 64).toFixed(1) + ' ' + (68 + Math.sin(g) * 64).toFixed(1) + '"/>'; }).join('');
+  return '<svg viewBox="0 0 200 200" aria-hidden="true"><defs><clipPath id="vinetaCirculo"><circle cx="100" cy="100" r="94"/></clipPath></defs>'
+    + '<circle cx="100" cy="100" r="94" fill="#F6D3DE"/>'
+    + '<g clip-path="url(#vinetaCirculo)">'
+    + '<g class="vM">' + brazoM + manoM + '</g>'
+    + '<g class="vRayos" fill="none" stroke="#E8A93A" stroke-width="4" stroke-linecap="round" opacity="0">' + rayos + '</g>'
+    + '<g class="vN"><g class="vNgira">' + brazoN + manoN + '</g></g>'
+    + '</g><circle cx="100" cy="100" r="94" fill="none" stroke="#3B2A4A" stroke-width="5"/></svg>';
+})();
 function chocaCinco(){
   const caja = document.querySelector('#tablero .obra') || document.querySelector('#tablero .mision') || document.querySelector('#tablero .romper');
   if(quieto() || !caja) return;
   const rc = caja.getBoundingClientRect();
   if(rc.bottom < 0 || rc.top > innerHeight) return;
-  acabaTodo();
-  const esc = escala(), T = 1100, CHOQUE = .44;
-  const P0 = {x: rc.left + rc.width * .5, y: Math.max(90, Math.min(innerHeight - 160, rc.top + rc.height * .45))};
-  /* Miut, desde abajo: sus dedos llegan un poco por encima del centro */
-  const {d, lado} = sacaPata(P0.x + 30);
-  const lejos = lado === 'izq' ? -1 : 1;
-  const m = {x: P0.x + lejos * 6, y: P0.y - 16 * esc}, mFuera = {x: m.x + lejos * 40, y: innerHeight + 120};
-  const anM = d.animate([
-    {transform: postura(mFuera.x, mFuera.y, lado, esc), filter: AIRE, offset: 0},
-    {transform: postura(m.x, m.y + 34 * esc, lado, esc), filter: AIRE, offset: .34, easing: 'cubic-bezier(.3,.8,.4,1)'},
-    {transform: postura(m.x, m.y, lado, esc * 1.02), filter: AIRE, offset: CHOQUE, easing: 'ease-out'},
-    {transform: postura(m.x, m.y + 7 * esc, lado, esc * .97), filter: APOYO, offset: CHOQUE + .06, easing: 'ease-out'},
-    {transform: postura(m.x, m.y + 3 * esc, lado, esc), filter: AIRE, offset: .64, easing: 'ease-in'},
-    {transform: postura(mFuera.x, mFuera.y, lado, esc), filter: AIRE, offset: 1}
+  const esc = escala(), S = Math.round(Math.min(230, innerWidth * .52) * esc);
+  const cx = rc.left + rc.width / 2, cy = Math.max(S / 2 + 10, Math.min(innerHeight - S / 2 - 10, rc.top + rc.height / 2));
+  document.querySelectorAll('.vineta').forEach(v => v.remove());
+  const v = el('div', 'vineta', VINETA_SVG);
+  v.style.cssText = 'left:' + (cx - S / 2) + 'px;top:' + (cy - S / 2) + 'px;width:' + S + 'px;height:' + S + 'px';
+  document.body.appendChild(v);
+  const T = 1650;
+  /* la viñeta aparece con un saltito y se cierra al final */
+  const anV = v.animate([
+    {transform: 'scale(.4) rotate(-8deg)', opacity: 0, offset: 0},
+    {transform: 'scale(1.06) rotate(2deg)', opacity: 1, offset: .1, easing: 'ease-out'},
+    {transform: 'scale(1) rotate(0)', opacity: 1, offset: .16},
+    {transform: 'scale(1) rotate(0)', opacity: 1, offset: .86, easing: 'ease-in'},
+    {transform: 'scale(.5) rotate(6deg)', opacity: 0, offset: 1}
   ], {duration: T, fill: 'forwards'});
-  /* el naranja, desde arriba, por el otro lado: sus dedos llegan un poco por
-     debajo del centro, así que las manos se montan como en un choque */
-  const ladoO = lado === 'izq' ? 'der' : 'izq';
-  const o = el('div', 'pataM naranja', pata('naranja', lado)); $('patas').appendChild(o);
-  const n = {x: P0.x - lejos * 6, y: P0.y + 16 * esc}, nFuera = {x: n.x - lejos * 70, y: -170};
-  const anO = o.animate([
-    {transform: postura(nFuera.x, nFuera.y, ladoO, esc, true), filter: AIRE, offset: 0},
-    {transform: postura(n.x, n.y - 34 * esc, ladoO, esc, true), filter: AIRE, offset: .34, easing: 'cubic-bezier(.3,.8,.4,1)'},
-    {transform: postura(n.x, n.y, ladoO, esc * 1.02, true), filter: AIRE, offset: CHOQUE, easing: 'ease-out'},
-    {transform: postura(n.x, n.y - 7 * esc, ladoO, esc * .97, true), filter: APOYO, offset: CHOQUE + .06, easing: 'ease-out'},
-    {transform: postura(n.x, n.y - 3 * esc, ladoO, esc, true), filter: AIRE, offset: .64, easing: 'ease-in'},
-    {transform: postura(nFuera.x, nFuera.y, ladoO, esc, true), filter: AIRE, offset: 1}
-  ], {duration: T, fill: 'forwards'});
-  const tz = setTimeout(() => {
-    const rayas = [0, 1, 2, 3, 4, 5, 6, 7].map(k => { const g = k * 45 + 22, c = Math.cos(g * Math.PI / 180), s2 = Math.sin(g * Math.PI / 180);
-      return '<path d="M' + (c * 20).toFixed(1) + ' ' + (s2 * 20).toFixed(1) + ' L' + (c * 36).toFixed(1) + ' ' + (s2 * 36).toFixed(1) + '"/>'; }).join('');
-    const estrella = (x, y, r) => '<path class="estrella" d="M' + x + ' ' + (y - r) + ' L' + (x + r * .3) + ' ' + (y - r * .3) + ' L' + (x + r) + ' ' + y + ' L' + (x + r * .3) + ' ' + (y + r * .3)
-      + ' L' + x + ' ' + (y + r) + ' L' + (x - r * .3) + ' ' + (y + r * .3) + ' L' + (x - r) + ' ' + y + ' L' + (x - r * .3) + ' ' + (y - r * .3) + ' Z"/>';
-    const z = el('div', 'zas cinco', '<svg viewBox="-48 -48 96 96">' + rayas + estrella(-34, -26, 7) + estrella(36, -14, 5.5) + estrella(-26, 32, 5) + estrella(30, 30, 6.5) + '</svg>');
-    z.style.left = P0.x + 'px'; z.style.top = P0.y + 'px';
-    document.body.appendChild(z); setTimeout(() => z.remove(), 600);
-  }, T * CHOQUE);
-  plas(T * CHOQUE);
-  let hecho = false;
-  const fin = () => { if(hecho) return; hecho = true; clearTimeout(tz); d.remove(); o.remove(); anM.cancel(); anO.cancel(); };
-  anM.finished.then(fin, fin);
-  enCurso.push(fin);
+  /* la pata naranja: fuera (abajo a la derecha) → junto al borde → encima
+     de la de Miut → aprieta → y vuelta, dos veces. La posición es la del
+     centro de su mano y el giro el de su brazo */
+  const pose = (x, y, g) => 'translate(' + x + 'px,' + y + 'px) rotate(' + g + 'deg)';
+  const FUERA = pose(178, 262, -8), BORDE = pose(176, 120, -6), ENCIMA = pose(102, 72, -31), APRIETA = pose(99, 77, -32);
+  const golpe = (a) => [
+    {transform: FUERA, offset: a},
+    {transform: BORDE, offset: a + .045, easing: 'cubic-bezier(.2,.7,.4,1)'},
+    {transform: ENCIMA, offset: a + .075, easing: 'ease-out'},
+    {transform: APRIETA, offset: a + .1},
+    {transform: APRIETA, offset: a + .23, easing: 'ease-in'},
+    {transform: BORDE, offset: a + .265, easing: 'ease-in'},
+    {transform: FUERA, offset: a + .3}
+  ];
+  const n = v.querySelector('.vNgira');
+  const anN = n.animate([{transform: FUERA, offset: 0}].concat(golpe(.14), golpe(.46), [{transform: FUERA, offset: 1}]), {duration: T, fill: 'forwards'});
+  /* Miut recibe el golpe: su mano cede un poquito hacia atrás */
+  const m = v.querySelector('.vM'), cede = (a) => [{transform: 'translate(0,0) scale(1)', offset: a + .07}, {transform: 'translate(1px,4px) scale(.97)', offset: a + .1}, {transform: 'translate(0,0) scale(1)', offset: a + .16}];
+  const anMi = m.animate([{transform: 'translate(0,0) scale(1)', offset: 0}].concat(cede(.14), cede(.46), [{transform: 'translate(0,0) scale(1)', offset: 1}]), {duration: T, fill: 'forwards'});
+  m.style.transformOrigin = '98px 110px'; m.style.transformBox = 'view-box';
+  /* y un destello en cada choque */
+  const ra = v.querySelector('.vRayos'), destello = (a) => [{opacity: 0, offset: a + .074}, {opacity: 1, offset: a + .08}, {opacity: 0, offset: a + .16}];
+  ra.animate([{opacity: 0, offset: 0}].concat(destello(.14), destello(.46), [{opacity: 0, offset: 1}]), {duration: T, fill: 'forwards'});
+  plas(T * (.14 + .075), true); plas(T * (.46 + .075), false);
+  const fin = () => v.remove();
+  anV.finished.then(fin, fin);
 }
 /* el ¡plas! del choque y un «¡prrr!» contento, cortito */
-function plas(retraso){
+function plas(retraso, prrr){
   if(aj.sonido === 'no') return;
   try{
     AC = AC || new (window.AudioContext || window.webkitAudioContext)();
@@ -1160,6 +1200,7 @@ function plas(retraso){
     const c = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(); c.buffer = buf; f.type = 'bandpass'; f.frequency.value = 1700; f.Q.value = .8;
     g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.7, t + .003); g.gain.exponentialRampToValueAtTime(.0001, t + .07);
     c.connect(f); f.connect(g); g.connect(sale); c.start(t); c.stop(t + .08);
+    if(prrr === false) return;
     /* el «¡prrr!»: una nota que sube, con el trino del ronroneo */
     const o = AC.createOscillator(), bp = AC.createBiquadFilter(), go = AC.createGain(), tr = AC.createOscillator(), tg = AC.createGain();
     o.type = 'sawtooth'; o.frequency.setValueAtTime(620, t + .04); o.frequency.linearRampToValueAtTime(940, t + .2);
