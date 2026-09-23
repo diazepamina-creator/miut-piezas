@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.7
+  Manipulativo para 1.º y 2.º de ESO · versión 0.7.1
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,10 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.7.1
+  · EL BRAZO NARANJA tiene un largo máximo y se desvanece hacia el hombro:
+    ya no parece un palo cuando cruza una pantalla alta.
 
   VERSIÓN 0.7 · EL MANOTAZO Y MIUT QUE SE ASOMA
   · EL MANOTAZO: el gato naranja coge impulso y da un manotazo rápido
@@ -382,6 +386,12 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
   filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
 .fantasma svg{width:100%;height:100%;overflow:visible}
 
+/* el brazo del gato naranja entra desde arriba, y en una pantalla alta
+   llegaba a parecer un palo larguísimo. Se ve un trozo fijo —la mano y un
+   buen tramo de brazo— y a partir de ahí se desvanece, como si el gato
+   estuviera al otro lado de la mesa, fuera de la vista */
+.pataM.naranja{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 420px);
+  mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 420px)}
 /* el chispazo del manotazo */
 .zas{position:fixed;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:42;pointer-events:none;animation:zas .38s ease-out forwards}
 .zas svg{width:100%;height:100%;overflow:visible}
@@ -579,7 +589,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.7
+  · versión 0.7.1
 </footer>
 </div>
 
@@ -939,7 +949,7 @@ function cancela(r, siQuieto){
   ], {duration: T, fill: 'forwards'});
   /* el naranja entra por arriba, por el otro lado: coge impulso hacia
      atrás y da un manotazo rápido encima de la mano de Miut */
-  const o = el('div', 'pataM', PATA_NARANJA); $('patas').appendChild(o);
+  const o = el('div', 'pataM naranja', PATA_NARANJA); $('patas').appendChild(o);
   const ladoO = lado === 'izq' ? 'der' : 'izq';
   const sobre = {x: a.x - lejos * 6, y: a.y + 70 * esc}, sobre2 = {x: baja.x - lejos * 6, y: baja.y + 70 * esc};
   const arriba = {x: sobre.x - lejos * 70, y: -170};
