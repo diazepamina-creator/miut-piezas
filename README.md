@@ -14,6 +14,12 @@ Cada juego sube en cuatro etapas —colores, texturas, lisas y sin piezas— en 
 - **Guía**: una visita con un foco sobre cada parte de la mesa. Se abre sola la primera vez.
 - **Practicar**: ejercicios nuevos sin fin, con cuatro dificultades, o con tus números.
 - **Ajustes**: mesa clara u oscura, decir el número antes de voltear y patas sin animación.
+- **Retos por enlace**: una dirección abre un ejercicio concreto en Practicar, para ponerla en una ficha con un QR. Por ejemplo, `?j=comun&n=36,48&d=1`:
+  - `j` es el juego: `romper`, `comun` (mcd), `todo` (mcm) o `pareja`;
+  - `n`, los números, separados por comas (uno en Romper, dos en La pareja, de dos a cuatro en el mcd y el mcm);
+  - `d`, la dificultad: `0` fácil, `1` media, `2` difícil, `3` sin piezas.
+
+  En Practicar, «enlace de este ejercicio» da la dirección del que está en la mesa.
 
 Es un solo archivo, `index.html`, sin dependencias: se abre en el navegador y ya está.
 
