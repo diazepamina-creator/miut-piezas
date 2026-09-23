@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.9
+  Manipulativo para 1.º y 2.º de ESO · versión 0.9.1
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,10 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.9.1
+  · EL BRAZO DE MIUT SE DESVANECE, como el del naranja: se ven la mano,
+    el antebrazo y el codo, y el resto se pierde hacia el hombro.
 
   VERSIÓN 0.9 · EL PUENTE CON EL PAPEL Y LOS PRIMOS
   · LA BARRA DEL CUADERNO: al lado de la piedra se escribe la barra de la
@@ -489,6 +493,11 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
    estuviera al otro lado de la mesa, fuera de la vista */
 .pataM.naranja{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 420px);
   mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 420px)}
+/* la de Miut, igual: se ve la mano, el antebrazo y el codo, y el brazo se
+   desvanece hacia el hombro, que está debajo de la pantalla. Un poco más
+   larga que la naranja, porque Miut es quien trabaja */
+.pataM.deMiut{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 330px,transparent 520px);
+  mask-image:linear-gradient(to bottom,#000 0,#000 330px,transparent 520px)}
 /* el chispazo del manotazo */
 .zas{position:fixed;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:42;pointer-events:none;animation:zas .38s ease-out forwards}
 .zas svg{width:100%;height:100%;overflow:visible}
@@ -694,7 +703,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.9
+  · versión 0.9.1
 </footer>
 </div>
 
@@ -1032,7 +1041,7 @@ function postura(x, y, lado, esc, arriba){
 }
 function sacaPata(x){
   const lado = x < innerWidth / 2 ? 'izq' : 'der';
-  const d = el('div', 'pataM', pata('miut', lado));
+  const d = el('div', 'pataM deMiut', pata('miut', lado));
   $('patas').appendChild(d);
   return {d, lado};
 }
