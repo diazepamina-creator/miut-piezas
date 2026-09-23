@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.6.2
+  Manipulativo para 1.º y 2.º de ESO · versión 0.6.3
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,11 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.6.3
+  · LO COMÚN, MÁS ORDENADO: cada torre se construye debajo de la caja de
+    su número, en dos columnas. Cabe mejor en el aula y en el móvil
+    apaisado.
 
   VERSIÓN 0.6.2
   · EL ALMACÉN SIN FIN: en el mcm, cada primo del almacén es una fila de
@@ -246,6 +251,10 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
   background:radial-gradient(ellipse 72% 62% at 50% 0%, var(--brillo), transparent 72%), var(--panel2)}
 .obra .rot{font-family:'Rokkitt',serif;font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin:2px 0 4px}
 .obra .torre{padding:4px 0}
+/* las dos torres del mcd, cada una bajo su caja; el hueco vacío se ajusta
+   a la media columna */
+.obra .torres{gap:10px 20px}
+.obra .torres .vacio{padding:12px 12px}
 .obra.encaja{border-color:var(--oro);box-shadow:0 0 0 2px var(--brillo) inset}
 .igual{font-family:'Rokkitt',serif;font-weight:700;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;text-align:center;
   margin:4px 0;color:var(--tenue)}
@@ -533,7 +542,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.6.2
+  · versión 0.6.3
 </footer>
 </div>
 
@@ -1190,19 +1199,23 @@ function pintaComun(t){
   t.appendChild(dos);
   const enc = iguales(P.ta, P.tb);
   const obra = el('div', 'obra' + (enc && P.ta.length ? ' encaja' : ''));
+  /* cada torre, debajo de la caja de su número: en dos columnas, como las
+     cajas, y en una sola en pantallas estrechas */
+  const cols = el('div', 'dosCajas torres');
   const torre = (n, lista, lado) => {
-    obra.appendChild(el('div', 'rot', 'torre con las piezas del ' + n));
+    const col = el('div'); cols.appendChild(col);
+    col.appendChild(el('div', 'rot', 'la torre del ' + n));
     const f = bloque(lado, ordena(lista), {etq:'devolver', vacio:'toca una pieza de arriba',
       al: (p, i, btn) => { const r = btn.getBoundingClientRect();
         if(lado === 'a') P.ta = quitaUna(P.ta, p); else P.tb = quitaUna(P.tb, p); deFrente(lado); dice(''); pinta();
         mueve(p, r, enCaja(lado, p)); }});
-    f.classList.add('torre'); obra.appendChild(f);
+    f.classList.add('torre'); col.appendChild(f);
   };
-  torre(P.a, P.ta, 'a');
+  torre(P.a, P.ta, 'a'); torre(P.b, P.tb, 'b');
+  obra.appendChild(cols);
   /* sin decir el número: «divide a los dos» es lo que se ve, el cuánto se
      dice al voltear */
   obra.appendChild(el('div', 'igual' + (enc ? ' si' : ''), enc ? (P.ta.length ? '= iguales: esa torre divide al ' + P.a + ' y al ' + P.b : 'las dos torres están vacías') : '≠ las torres no son iguales'));
-  torre(P.b, P.tb, 'b');
   t.appendChild(obra);
   const bt = el('div', 'botones');
   const ok = el('button', 'b ok', 'Comprobar'); ok.addEventListener('click', () => compruebaComun(t)); bt.appendChild(ok);
