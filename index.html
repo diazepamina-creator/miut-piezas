@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8.1
+  Manipulativo para 1.º y 2.º de ESO · versión 0.8.2
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,12 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.8.2
+  · LA RIÑA, DE VERDAD: el bufido del gato naranja pasa a ser un maullido
+    enfadado que imita una grabación real, medida en su espectrograma y
+    rehecha con el sintetizador: rellano, subida brusca, voz rota y caída.
+    Sigue sin archivos de sonido.
 
   VERSIÓN 0.8.1
   · EL BRAZO DE MIUT ya no acaba en punta: al doblarse en el codo se
@@ -574,7 +580,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
     <small>Con «decir antes el número», para voltear una torre o darla por buena hay que escribir primero qué número es. Más lento, y más exigente.</small></div>
   <div class="aj"><span class="etq">El sonido</span>
     <span class="ops" role="group" aria-label="El sonido"><button data-aj="sonido" data-v="si">Con sonido</button><button data-aj="sonido" data-v="no">Sin sonido</button></span>
-    <small>Solo suena la riña del gato naranja, muy bajito.</small></div>
+    <small>Solo suena la riña del gato naranja —un maullido enfadado—, bajito.</small></div>
   <div class="aj"><span class="etq">Las patas</span>
     <span class="ops" role="group" aria-label="Las patas"><button data-aj="patas" data-v="si">Se ven</button><button data-aj="patas" data-v="no">Sin animaciones</button></span></div>
   <div class="botones"><button class="b" id="bReglas">Las reglas enteras</button><button class="b ok" id="ajCerrar">Cerrar</button></div>
@@ -616,7 +622,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8.1
+  · versión 0.8.2
 </footer>
 </div>
 
@@ -1071,34 +1077,75 @@ function cancela(r, siQuieto){
   enCurso.push(fin);
 }
 
-/* LA RIÑA, con sonido: un cachete seco y un bufido corto de gato, todo
-   hecho con el sintetizador del navegador —no hay archivos de sonido—. Muy
-   bajo, para que haga gracia sin romper la clase. Se quita en Ajustes. */
+/* LA RIÑA, con sonido: un cachete seco y un maullido enfadado, todo hecho
+   con el sintetizador del navegador —no hay archivos de sonido—. El
+   maullido imita una grabación real de un gato enfadado, medida en su
+   espectrograma: arranca en unos 400 Hz, se queda plano en 500, se dispara
+   hasta unos 1100 entre 0,37 y 0,6 segundos, aguanta rasposo y cae. La voz
+   pasa de «m» a «AAA» y se cierra en «u». Bajo, para que haga gracia sin
+   romper la clase. Se quita en Ajustes. */
 let AC = null;
 function rina(retraso){
   if(aj.sonido === 'no') return;
   try{
     AC = AC || new (window.AudioContext || window.webkitAudioContext)();
     if(AC.state === 'suspended') AC.resume();
-    const t0 = AC.currentTime + retraso / 1000;
-    const ruido = seg => { const n = Math.floor(AC.sampleRate * seg), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0);
-      for(let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const src = AC.createBufferSource(); src.buffer = buf; return src; };
-    const sale = AC.createGain(); sale.gain.value = .5; sale.connect(AC.destination);
-    /* el cachete: un golpe de ruido grave, cortísimo */
-    const c = ruido(.09), fc = AC.createBiquadFilter(); fc.type = 'lowpass'; fc.frequency.value = 1400;
-    const gc = AC.createGain(); gc.gain.setValueAtTime(.0001, t0); gc.gain.exponentialRampToValueAtTime(.55, t0 + .004); gc.gain.exponentialRampToValueAtTime(.0001, t0 + .085);
-    c.connect(fc); fc.connect(gc); gc.connect(sale); c.start(t0); c.stop(t0 + .1);
-    /* el bufido: ¡fff! agudo que se apaga */
-    const h = ruido(.42), fh = AC.createBiquadFilter(); fh.type = 'bandpass'; fh.frequency.setValueAtTime(5200, t0 + .05); fh.frequency.linearRampToValueAtTime(3600, t0 + .45); fh.Q.value = .8;
-    const gh = AC.createGain(); gh.gain.setValueAtTime(.0001, t0 + .05); gh.gain.exponentialRampToValueAtTime(.22, t0 + .09); gh.gain.exponentialRampToValueAtTime(.0001, t0 + .46);
-    h.connect(fh); fh.connect(gh); gh.connect(sale); h.start(t0 + .05); h.stop(t0 + .48);
-    /* y un gruñidito por debajo: «mrrr», una nota grave que tiembla */
-    const g = AC.createOscillator(); g.type = 'sawtooth'; g.frequency.setValueAtTime(210, t0 + .04); g.frequency.linearRampToValueAtTime(150, t0 + .3);
-    const fg = AC.createBiquadFilter(); fg.type = 'lowpass'; fg.frequency.value = 900;
-    const gg = AC.createGain(); gg.gain.setValueAtTime(.0001, t0 + .04); gg.gain.exponentialRampToValueAtTime(.07, t0 + .08); gg.gain.exponentialRampToValueAtTime(.0001, t0 + .32);
-    const lfo = AC.createOscillator(), lg = AC.createGain(); lfo.frequency.value = 32; lg.gain.value = .05; lfo.connect(lg); lg.connect(gg.gain);
-    g.connect(fg); fg.connect(gg); gg.connect(sale); g.start(t0 + .04); g.stop(t0 + .34); lfo.start(t0 + .04); lfo.stop(t0 + .34);
+    const sale = AC.createGain(); sale.gain.value = .45; sale.connect(AC.destination);
+    /* el maullido, a la altura del cachete: sin saturar y sin tapar la clase */
+    ENFADO(AC, sale, AC.currentTime + retraso / 1000, .11, 1);
   }catch(e){}
+}
+function ENFADO(AC, sale, t, vol, cachete){
+  const ruido = seg => { const n = Math.floor(AC.sampleRate * seg), buf = AC.createBuffer(1, n, AC.sampleRate), d = buf.getChannelData(0);
+    for(let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const s = AC.createBufferSource(); s.buffer = buf; return s; };
+  const curva = (param, pts) => { param.setValueAtTime(pts[0][1], t + pts[0][0]); pts.slice(1).forEach(([dt, v]) => param.linearRampToValueAtTime(v, t + dt)); };
+  const D = 1.15;
+  if(cachete){ const c = ruido(.09), f = AC.createBiquadFilter(), g = AC.createGain(); f.type = 'lowpass'; f.frequency.value = 1400;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.55 * cachete, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .085);
+    c.connect(f); f.connect(g); g.connect(sale); c.start(t); c.stop(t + .1); t += .05; }
+  /* la voz */
+  const o = AC.createOscillator(); o.type = 'sawtooth';
+  /* sube despacio hasta unos 500 Hz, se dispara hasta unos 1000, aguanta y cae */
+  curva(o.frequency, [[0, 400], [.1, 470], [.17, 500], [.37, 510], [.42, 600], [.48, 760], [.54, 920], [.6, 1060], [.68, 1100], [.78, 1080], [.84, 1000], [.9, 800], [.95, 640], [1.02, 500], [1.1, 420], [1.15, 400]]);
+  const vib = AC.createOscillator(), vg = AC.createGain(); vib.frequency.value = 6.5; curva(vg.gain, [[0, 0], [.37, 0], [.6, 18], [.85, 18], [1.15, 4]]); vib.connect(vg); vg.connect(o.frequency);
+  /* la aspereza: la voz se rompe en el centro —una modulación grave y rápida
+     que entra y sale— */
+  const am = AC.createGain(); am.gain.value = 1;
+  const ra = AC.createOscillator(), rg = AC.createGain(); ra.type = 'triangle'; ra.frequency.value = 90; ra.connect(rg); rg.connect(am.gain);
+  curva(rg.gain, [[0, 0], [.37, .08], [.55, .6], [.8, .65], [.88, .2], [1.05, .05]]);
+  const tj = AC.createOscillator(), tg = AC.createGain(); tj.type = 'square'; tj.frequency.value = 23; tj.connect(tg); tg.connect(o.frequency);
+  curva(tg.gain, [[0, 0], [.37, 3], [.56, 30], [.8, 30], [.88, 5], [1.05, 0]]);
+  o.connect(am);
+  /* el aliento, más fuerte donde la voz se rompe */
+  const r = ruido(D), rgn = AC.createGain(); r.connect(rgn);
+  curva(rgn.gain, [[0, .05], [.37, .07], [.56, .38], [.8, .38], [.9, .08], [1.1, .05]]);
+  /* los formantes */
+  const mezcla = AC.createGain(); mezcla.gain.value = 1;
+  const F = [
+    {q: 5, g: .8,  f: [[0, 1000], [.1, 1350], [.37, 1500], [.6, 2400], [.8, 2200], [.9, 1900], [1.15, 800]]},
+    {q: 6, g: 1,   f: [[0, 1650], [.1, 2200], [.37, 2450], [.6, 3300], [.8, 3000], [.9, 2600], [1.15, 1300]]},
+    {q: 6, g: .9,  f: [[0, 2250], [.1, 2700], [.37, 3000], [.6, 4100], [.8, 3800], [.9, 3300], [1.15, 1900]]}
+  ];
+  F.forEach(({q, g, f}) => {
+    const b = AC.createBiquadFilter(); b.type = 'bandpass'; b.Q.value = q; curva(b.frequency, f);
+    const gg = AC.createGain(); gg.gain.value = g;
+    am.connect(b); rgn.connect(b); b.connect(gg); gg.connect(mezcla);
+  });
+  /* un poco de cuerpo grave para la «m» del principio y la «u» del final */
+  const cuerpo = AC.createBiquadFilter(); cuerpo.type = 'lowpass'; cuerpo.frequency.value = 700;
+  const cg = AC.createGain(); curva(cg.gain, [[0, .12], [.2, .06], [.4, .03], [.9, .05], [1.15, .22]]); am.connect(cuerpo); cuerpo.connect(cg); cg.connect(mezcla);
+  /* la envolvente de la grabación: crece despacio, aguanta y se corta rápido */
+  const env = AC.createGain(); env.gain.setValueAtTime(.0001, t);
+  env.gain.exponentialRampToValueAtTime(.18 * vol, t + .05); env.gain.exponentialRampToValueAtTime(.42 * vol, t + .28);
+  env.gain.exponentialRampToValueAtTime(1 * vol, t + .42); env.gain.linearRampToValueAtTime(.95 * vol, t + .86);
+  env.gain.exponentialRampToValueAtTime(.35 * vol, t + .95); env.gain.exponentialRampToValueAtTime(.14 * vol, t + 1.05); env.gain.exponentialRampToValueAtTime(.0001, t + D + .02);
+  const brillo = AC.createBiquadFilter(); brillo.type = 'peaking'; brillo.frequency.value = 3500; brillo.Q.value = .9;
+  curva(brillo.gain, [[0, 3], [.37, 5], [.58, 14], [.84, 13], [.95, 4], [1.15, 0]]);
+  const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200;
+  /* la fundamental, casi sin cuerpo, como en la grabación */
+  const hp = AC.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 620; hp.Q.value = .7;
+  mezcla.connect(hp); hp.connect(brillo); brillo.connect(lp); lp.connect(env); env.connect(sale);
+  [o, vib, ra, tj].forEach(x => { x.start(t); x.stop(t + D + .02); }); r.start(t); r.stop(t + D);
 }
 
 /* DE PIEDRA A PIEZA. Cuando lo que queda de la piedra es un primo, ya no se
