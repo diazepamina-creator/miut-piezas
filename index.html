@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8
+  Manipulativo para 1.º y 2.º de ESO · versión 0.8.1
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,12 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.8.1
+  · EL BRAZO DE MIUT ya no acaba en punta: al doblarse en el codo se
+    salía del dibujo y se recortaba en diagonal. Ahora el dibujo deja ver
+    lo que sobresale, y el brazo es más largo, para llegar al borde de
+    abajo también en pantallas altas y en el aula.
 
   VERSIÓN 0.8 · PIEZAS MÁS GRANDES Y MÁS DE DOS NÚMEROS
   · LAS PIEZAS crecen de 64 × 54 a 76 × 64 puntos, y la piedra con ellas:
@@ -400,7 +406,7 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
 .patas{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
 .pataM{position:absolute;left:0;top:0;width:96px;height:1500px;transform-origin:0 0;will-change:transform,filter;
   filter:drop-shadow(10px 16px 10px rgba(40,20,5,.30))}
-.pataM svg{width:96px;height:1500px;display:block}
+.pataM svg{width:96px;height:1500px;display:block;overflow:visible}
 .fantasma.pieza{position:fixed;left:0;top:0;z-index:39;pointer-events:none;will-change:transform;line-height:0;transition:none;
   filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
 .fantasma svg{width:100%;height:100%;overflow:visible}
@@ -610,7 +616,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8
+  · versión 0.8.1
 </footer>
 </div>
 
@@ -870,8 +876,8 @@ const pataSVG = (quien, lado) => {
     return ' C' + R(x1 - sd * .8, CODO + J - 14) + ' ' + P(x0 - sd * .8) + ' ' + (CODO - J + 14) + ' ' + P(x0) + ' ' + (CODO - J);
   };
   const brazo = 'M26 44 C25.5 150 25 250 23.6 ' + (CODO - J) + junta(-1)
-    + ' C' + R(21, 700) + ' ' + R(17, 1100) + ' ' + R(13, 1500) + ' L' + R(83, 1500)
-    + ' C' + R(79, 1100) + ' ' + R(75, 700) + ' ' + R(72.6, CODO + J) + juntaSube()
+    + ' C' + R(21, 900) + ' ' + R(15, 1700) + ' ' + R(11, 2600) + ' L' + R(85, 2600)
+    + ' C' + R(81, 1700) + ' ' + R(75, 900) + ' ' + R(72.6, CODO + J) + juntaSube()
     + ' C71 250 70.5 150 70 44 Z';
   const codo = '';
   const doblado = x => '<g transform="rotate(' + giro + ' 48 ' + CODO + ')">' + x + '</g>';
@@ -899,14 +905,19 @@ const pataSVG = (quien, lado) => {
   };
   /* las del antebrazo, rectas; las de más allá del codo, dobladas con él */
   const rayas = [raya(150, 5, 3), raya(178, 2.5, -2, 0, .55), raya(232, 6, -3), raya(292, 4.5, 4)].join('')
-    + doblado([raya(392, 6.5, -4), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4)].join(''));
+    + doblado([raya(392, 6.5, -4), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4),
+      raya(730, 6, -3), raya(768, 2.5, 2, .5, 1), raya(850, 6.5, 4), raya(960, 5.5, -3), raya(1000, 2.5, -2, 0, .5), raya(1090, 6, 3), raya(1220, 6.5, -4), raya(1360, 6, 3)].join(''));
   return '<svg viewBox="0 0 96 1500" aria-hidden="true"><defs>'
     + '<linearGradient id="pelo-' + id + '" gradientUnits="userSpaceOnUse" x1="16" y1="0" x2="80" y2="0">' + C.pelo.map((c, k) => '<stop offset="' + [0, .22, .48, .78, 1][k] + '" stop-color="' + c + '"/>').join('') + '</linearGradient>'
     + '<radialGradient id="calcetin-' + id + '" cx=".45" cy=".35" r=".65"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F6F1F5"/>'
     + '<stop offset="1" stop-color="#D8CCE0"/></radialGradient>'
-    + '<clipPath id="soloMano-' + id + '"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath></defs>'
+    + '<clipPath id="soloMano-' + id + '"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath>'
+    + '<clipPath id="soloBrazo-' + id + '"><path d="' + brazo + '"/></clipPath></defs>'
     + '<g fill="none" stroke="' + C.borde + '" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
     + '<g fill="url(#pelo-' + id + ')">' + contorno + '</g>'
+    /* más allá del codo, la luz gira con el brazo: el mismo degradado,
+       girado, pintado solo dentro del contorno */
+    + '<g clip-path="url(#soloBrazo-' + id + ')">' + doblado('<rect x="-60" y="' + CODO + '" width="216" height="2400" fill="url(#pelo-' + id + ')"/>') + '</g>'
     + '<g fill="' + C.raya + '" opacity=".55">' + rayas + '</g>' + detalleCodo
     + '<g clip-path="url(#soloMano-' + id + ')"><path d="' + zig + '" fill="url(#calcetin-' + id + ')"/>'
     + palma.replace('/>', ' fill="url(#calcetin-' + id + ')"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin-' + id + ')"/>')
