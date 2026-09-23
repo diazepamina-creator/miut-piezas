@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.8.5
+  Manipulativo para 1.º y 2.º de ESO · versión 0.8.6
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,13 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.8.6
+  · LA VIÑETA, MÁS FINA: cada mano es un solo contorno, con surcos entre
+    los deditos, luz y un borde de calcetín en mechones suaves; las
+    almohadillas de Miut tienen su forma —óvalos inclinados y la grande con
+    tres lóbulos—, color con volumen y brillo; los brazos, luz y rayas que
+    se afinan. Y el choque es uno solo.
 
   VERSIÓN 0.8.5
   · EL CHOQUE, EN VIÑETA: al acertar se abre un momento un sticker redondo
@@ -644,7 +651,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.8.5
+  · versión 0.8.6
 </footer>
 </div>
 
@@ -1103,37 +1110,63 @@ function cancela(r, siQuieto){
    sobre la obra, como un sticker, con las patas vistas DE FRENTE: la de
    Miut levantada y quieta, enseñando la palma y sus almohadillas rosas, y
    la del gato naranja, que entra en arco desde abajo a la derecha, le
-   planta la mano encima, aprieta un momento y se va de golpe. Dos veces:
-   «¡pa… pa!». Luego la viñeta se cierra. */
+   planta la mano encima, aprieta un momento y se va de golpe. Una sola
+   vez: el sticker lo repetía porque va en bucle. Luego la viñeta se
+   cierra. */
 const VINETA_SVG = (() => {
-  const B = '#3B2A4A';
-  /* la pata de Miut, por la palma: brazo lila atigrado, calcetín blanco,
-     cuatro deditos y cinco almohadillas rosas */
-  const brazoM = '<path d="M71 210 C71 170 72 140 74 104 L122 104 C124 140 125 170 125 210 Z" fill="#A48AB8" stroke="' + B + '" stroke-width="3.2" stroke-linejoin="round"/>'
-    + '<g fill="#7F6596" opacity=".6"><path d="M74 150 Q98 142 122 150 Q98 147 74 153 Z"/><path d="M73 178 Q98 170 124 178 Q98 175 73 181 Z"/><path d="M75 128 Q90 123 104 126 Q90 126 75 131 Z"/></g>';
-  const manoM = '<g stroke="' + B + '" stroke-width="3.2" fill="#FFFFFF">'
-    + '<circle cx="73" cy="60" r="11.5"/><circle cx="89" cy="45" r="12.5"/><circle cx="108" cy="45" r="12.5"/><circle cx="124" cy="60" r="11.5"/>'
-    + '<path d="M70 70 C70 54 84 50 98 50 C112 50 127 54 127 70 L125 112 L72 112 Z"/></g>'
-    /* se tapan las costuras de los dedos con la palma, y el calcetín acaba en pelo */
-    + '<path d="M72.5 70 C73 57 85 53 98 53 C111 53 124 57 124.5 70 L123 110 L74 110 Z" fill="#FFFFFF"/>'
-    + '<path d="M72 110 L77 116 L81 110 L86 117 L91 110 L96 116 L101 110 L106 117 L111 110 L116 116 L121 110" fill="#FFFFFF" stroke="' + B + '" stroke-width="2" stroke-linejoin="round"/>'
-    + '<g fill="#F2A7BC" stroke="#C97891" stroke-width="1"><ellipse cx="74" cy="61" rx="5" ry="5.5"/><ellipse cx="89.5" cy="48" rx="5.5" ry="6"/><ellipse cx="107.5" cy="48" rx="5.5" ry="6"/><ellipse cx="123" cy="61" rx="5" ry="5.5"/>'
-    + '<path d="M98 72 C108 72 115 80 113 88 C111 95 104 94 98 92 C92 94 85 95 83 88 C81 80 88 72 98 72 Z"/></g>';
-  /* la del naranja, por el dorso (la palma va contra la de Miut): mano
-     blanca con sus deditos, brazo naranja atigrado. Dibujada con el centro
-     de la mano en (0,0) y el brazo hacia abajo */
-  const brazoN = '<path d="M-25 18 C-26 80 -28 150 -30 240 L30 240 C28 150 26 80 25 18 Z" fill="#E08A3C" stroke="#5A2A0C" stroke-width="3.2" stroke-linejoin="round"/>'
-    + '<g fill="#8A3A0A" opacity=".55"><path d="M-27 70 Q0 60 27 70 Q0 66 -27 74 Z"/><path d="M-28 105 Q-5 97 14 101 Q-5 101 -28 109 Z"/><path d="M-29 140 Q0 130 29 140 Q0 136 -29 144 Z"/><path d="M-29 175 Q0 166 29 175 Q0 171 -29 179 Z"/></g>';
-  const manoN = '<g stroke="#5A2A0C" stroke-width="3.2" fill="#FFFFFF">'
-    + '<circle cx="-24" cy="-14" r="10.5"/><circle cx="-9" cy="-27" r="11.5"/><circle cx="9" cy="-27" r="11.5"/><circle cx="24" cy="-14" r="10.5"/>'
-    + '<path d="M-27 -6 C-27 -20 -13 -22 0 -22 C13 -22 27 -20 27 -6 L25 34 L-25 34 Z"/></g>'
-    + '<path d="M-24.5 -6 C-24 -18 -12 -19 0 -19 C12 -19 24 -18 24.5 -6 L23 32 L-23 32 Z" fill="#FFFFFF"/>'
-    + '<path d="M-25 32 L-20 38 L-15 32 L-10 39 L-5 32 L0 38 L5 32 L10 39 L15 32 L20 38 L25 32" fill="#FFFFFF" stroke="#5A2A0C" stroke-width="2" stroke-linejoin="round"/>'
-    + '<g fill="none" stroke="#B9A9A0" stroke-width="1.6" stroke-linecap="round"><path d="M-16 -12 Q-15 -6 -13 -2"/><path d="M0 -18 V-8"/><path d="M16 -12 Q15 -6 13 -2"/></g>';
+  const B = '#3B2A4A', BN = '#5A2A0C';
+  /* cada mano es un solo contorno: primero el trazo grueso de todas sus
+     formas —palma y deditos— y encima el relleno, así solo queda el borde
+     de fuera y los deditos se funden con la palma sin costuras */
+  const mano = (formas, borde, relleno) => '<g fill="none" stroke="' + borde + '" stroke-width="6.4" stroke-linejoin="round">' + formas + '</g>'
+    + '<g fill="' + relleno + '">' + formas + '</g>';
+  /* el borde del calcetín: pelo en mechones suaves, no en sierra */
+  const mechones = (x0, x1, y, borde, relleno) => { let d = 'M' + x0 + ' ' + (y - 8) + ' L' + x0 + ' ' + y; const n = 7, w = (x1 - x0) / n;
+    for(let k = 0; k < n; k++){ const xa = x0 + k * w; d += ' Q' + (xa + w * .3).toFixed(1) + ' ' + (y + 7 + (k % 2) * 2) + ' ' + (xa + w * .55).toFixed(1) + ' ' + (y + 2) + ' Q' + (xa + w * .8).toFixed(1) + ' ' + (y - 1) + ' ' + (xa + w).toFixed(1) + ' ' + y; }
+    /* el relleno, sin borde; el borde, solo por la línea de los mechones */
+    const borde2 = d.replace('M' + x0 + ' ' + (y - 8) + ' L', 'M');
+    d += ' L' + x1 + ' ' + (y - 8) + ' Z';
+    return '<path d="' + d + '" fill="' + relleno + '"/><path d="' + borde2 + '" fill="none" stroke="' + borde + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>'; };
+  /* una raya atigrada: media luna que se afina en las puntas */
+  const raya = (cx, y, w, g, col) => '<path d="M' + (cx - w) + ' ' + (y + 2) + ' Q' + cx + ' ' + (y - g) + ' ' + (cx + w) + ' ' + (y + 2) + ' Q' + cx + ' ' + (y - g * .35) + ' ' + (cx - w) + ' ' + (y + 2) + ' Z" fill="' + col + '"/>';
+  /* ── LA DE MIUT, por la palma ── */
+  const brazoM = '<path d="M71 214 C71 176 72 144 74 108 L122 108 C124 144 125 176 125 214 Z" fill="url(#vBrazoM)" stroke="' + B + '" stroke-width="3.2" stroke-linejoin="round"/>'
+    + raya(98, 136, 24, 8, '#6E5586') + raya(98, 164, 25, 9, '#6E5586') + raya(94, 190, 20, 7, '#6E5586');
+  const formasM = '<circle cx="74" cy="61" r="11.5"/><circle cx="89.5" cy="46.5" r="12.5"/><circle cx="107.5" cy="46.5" r="12.5"/><circle cx="123" cy="61" r="11.5"/>'
+    + '<path d="M70 72 C70 57 84 53 98 53 C112 53 127 57 127 72 C127 90 126 104 124 114 L72 114 C70 104 70 90 70 72 Z"/>';
+  const surcosM = '<g fill="none" stroke="#D9CFE0" stroke-width="1.8" stroke-linecap="round">'
+    + '<path d="M81.5 55 Q83 58 83.5 61"/><path d="M98.5 47 V53"/><path d="M115.5 55 Q114 58 113.5 61"/></g>';
+  /* las almohadillas: cuatro óvalos un poco inclinados hacia el centro y
+     la grande, con sus tres lóbulos abajo; rosa, con un brillo */
+  const judia = (x, y, rx, ry, g) => '<g transform="rotate(' + g + ' ' + x + ' ' + y + ')"><ellipse cx="' + x + '" cy="' + y + '" rx="' + rx + '" ry="' + ry + '"/>'
+    + '<ellipse cx="' + (x - rx * .3) + '" cy="' + (y - ry * .35) + '" rx="' + (rx * .38) + '" ry="' + (ry * .28) + '" fill="#FFFFFF" opacity=".55"/></g>';
+  const almohadillas = '<g fill="url(#vJudia)" stroke="#C97891" stroke-width="1.1">'
+    + judia(75, 62.5, 4.8, 5.8, -22) + judia(90, 49.5, 5.2, 6.4, -8) + judia(107, 49.5, 5.2, 6.4, 8) + judia(122, 62.5, 4.8, 5.8, 22)
+    + '<path d="M98 72.5 C108.5 72.5 117 80 117 88.5 C117 94.5 113.5 97.5 109.5 96.5 C106.5 99.5 102.5 100.5 98 98.5 C93.5 100.5 89.5 99.5 86.5 96.5 C82.5 97.5 79 94.5 79 88.5 C79 80 87.5 72.5 98 72.5 Z"/>'
+    + '<path d="M89 80 Q93 76.5 99 76.5" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" opacity=".55"/></g>';
+  const manoM = mano(formasM, B, 'url(#vPalma)') + surcosM + almohadillas + mechones(72, 124, 116, B, '#FFFFFF');
+  /* ── LA DEL NARANJA, por el dorso, con la mano en (0,0) y el brazo hacia
+     abajo ── */
+  const brazoN = '<path d="M-25 22 C-26 84 -28 154 -30 244 L30 244 C28 154 26 84 25 22 Z" fill="url(#vBrazoN)" stroke="' + BN + '" stroke-width="3.2" stroke-linejoin="round"/>'
+    + raya(0, 72, 26, 9, '#9A4412') + raya(-3, 104, 22, 8, '#9A4412') + raya(0, 138, 28, 9, '#9A4412') + raya(2, 172, 28, 9, '#9A4412');
+  const formasN = '<circle cx="-23.5" cy="-13" r="10.5"/><circle cx="-8.5" cy="-26" r="11.5"/><circle cx="8.5" cy="-26" r="11.5"/><circle cx="23.5" cy="-13" r="10.5"/>'
+    + '<path d="M-27 -4 C-27 -18 -13 -21 0 -21 C13 -21 27 -18 27 -4 C27 12 26 26 24 36 L-24 36 C-26 26 -27 12 -27 -4 Z"/>';
+  const surcosN = '<g fill="none" stroke="#C9B8AE" stroke-width="1.8" stroke-linecap="round">'
+    + '<path d="M-16 -18 Q-14.5 -12 -13 -8"/><path d="M0 -24 V-12"/><path d="M16 -18 Q14.5 -12 13 -8"/></g>'
+    /* los nudillos, con la luz de arriba */
+    + '<path d="M-14 -3 Q0 -8 14 -3" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>';
+  const manoN = mano(formasN, BN, 'url(#vDorso)') + surcosN + mechones(-24, 24, 38, BN, '#FFFFFF');
   const rayos = [0, 1, 2, 3, 4, 5, 6].map(k => { const g = (k * 34 - 190) * Math.PI / 180;
     return '<path d="M' + (98 + Math.cos(g) * 50).toFixed(1) + ' ' + (68 + Math.sin(g) * 50).toFixed(1) + ' L' + (98 + Math.cos(g) * 64).toFixed(1) + ' ' + (68 + Math.sin(g) * 64).toFixed(1) + '"/>'; }).join('');
-  return '<svg viewBox="0 0 200 200" aria-hidden="true"><defs><clipPath id="vinetaCirculo"><circle cx="100" cy="100" r="94"/></clipPath></defs>'
-    + '<circle cx="100" cy="100" r="94" fill="#F6D3DE"/>'
+  return '<svg viewBox="0 0 200 200" aria-hidden="true"><defs>'
+    + '<clipPath id="vinetaCirculo"><circle cx="100" cy="100" r="94"/></clipPath>'
+    + '<linearGradient id="vBrazoM" x1="0" x2="1"><stop offset="0" stop-color="#8A70A1"/><stop offset=".45" stop-color="#B8A2CB"/><stop offset="1" stop-color="#8C72A3"/></linearGradient>'
+    + '<linearGradient id="vBrazoN" x1="0" x2="1"><stop offset="0" stop-color="#C46A26"/><stop offset=".45" stop-color="#F29C4E"/><stop offset="1" stop-color="#C06524"/></linearGradient>'
+    + '<radialGradient id="vPalma" cx=".45" cy=".35" r=".7"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#FAF6FB"/><stop offset="1" stop-color="#E6DDEB"/></radialGradient>'
+    + '<radialGradient id="vDorso" cx=".45" cy=".35" r=".7"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#FBF7F4"/><stop offset="1" stop-color="#EADFD8"/></radialGradient>'
+    + '<radialGradient id="vJudia" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#F9BFCF"/><stop offset="1" stop-color="#EE93AE"/></radialGradient>'
+    + '<radialGradient id="vFondo" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#FBE3EB"/><stop offset="1" stop-color="#F2C7D5"/></radialGradient></defs>'
+    + '<circle cx="100" cy="100" r="94" fill="url(#vFondo)"/>'
     + '<g clip-path="url(#vinetaCirculo)">'
     + '<g class="vM">' + brazoM + manoM + '</g>'
     + '<g class="vRayos" fill="none" stroke="#E8A93A" stroke-width="4" stroke-linecap="round" opacity="0">' + rayos + '</g>'
@@ -1151,7 +1184,7 @@ function chocaCinco(){
   const v = el('div', 'vineta', VINETA_SVG);
   v.style.cssText = 'left:' + (cx - S / 2) + 'px;top:' + (cy - S / 2) + 'px;width:' + S + 'px;height:' + S + 'px';
   document.body.appendChild(v);
-  const T = 1650;
+  const T = 1250;
   /* la viñeta aparece con un saltito y se cierra al final */
   const anV = v.animate([
     {transform: 'scale(.4) rotate(-8deg)', opacity: 0, offset: 0},
@@ -1165,25 +1198,29 @@ function chocaCinco(){
      centro de su mano y el giro el de su brazo */
   const pose = (x, y, g) => 'translate(' + x + 'px,' + y + 'px) rotate(' + g + 'deg)';
   const FUERA = pose(178, 262, -8), BORDE = pose(176, 120, -6), ENCIMA = pose(102, 72, -31), APRIETA = pose(99, 77, -32);
+  /* los tiempos, en milisegundos: llega en una décima, aprieta casi medio
+     segundo y se va de golpe */
+  const ms = x => x / T;
   const golpe = (a) => [
     {transform: FUERA, offset: a},
-    {transform: BORDE, offset: a + .045, easing: 'cubic-bezier(.2,.7,.4,1)'},
-    {transform: ENCIMA, offset: a + .075, easing: 'ease-out'},
-    {transform: APRIETA, offset: a + .1},
-    {transform: APRIETA, offset: a + .23, easing: 'ease-in'},
-    {transform: BORDE, offset: a + .265, easing: 'ease-in'},
-    {transform: FUERA, offset: a + .3}
+    {transform: BORDE, offset: a + ms(75), easing: 'cubic-bezier(.2,.7,.4,1)'},
+    {transform: ENCIMA, offset: a + ms(125), easing: 'ease-out'},
+    {transform: APRIETA, offset: a + ms(165)},
+    {transform: APRIETA, offset: a + ms(420), easing: 'ease-in'},
+    {transform: BORDE, offset: a + ms(480), easing: 'ease-in'},
+    {transform: FUERA, offset: a + ms(540)}
   ];
   const n = v.querySelector('.vNgira');
-  const anN = n.animate([{transform: FUERA, offset: 0}].concat(golpe(.14), golpe(.46), [{transform: FUERA, offset: 1}]), {duration: T, fill: 'forwards'});
+  const A = ms(230);                         // cuándo arranca el golpe
+  const anN = n.animate([{transform: FUERA, offset: 0}].concat(golpe(A), [{transform: FUERA, offset: 1}]), {duration: T, fill: 'forwards'});
   /* Miut recibe el golpe: su mano cede un poquito hacia atrás */
-  const m = v.querySelector('.vM'), cede = (a) => [{transform: 'translate(0,0) scale(1)', offset: a + .07}, {transform: 'translate(1px,4px) scale(.97)', offset: a + .1}, {transform: 'translate(0,0) scale(1)', offset: a + .16}];
-  const anMi = m.animate([{transform: 'translate(0,0) scale(1)', offset: 0}].concat(cede(.14), cede(.46), [{transform: 'translate(0,0) scale(1)', offset: 1}]), {duration: T, fill: 'forwards'});
+  const m = v.querySelector('.vM'), cede = (a) => [{transform: 'translate(0,0) scale(1)', offset: a + ms(120)}, {transform: 'translate(1px,4px) scale(.97)', offset: a + ms(165)}, {transform: 'translate(0,0) scale(1)', offset: a + ms(260)}];
+  m.animate([{transform: 'translate(0,0) scale(1)', offset: 0}].concat(cede(A), [{transform: 'translate(0,0) scale(1)', offset: 1}]), {duration: T, fill: 'forwards'});
   m.style.transformOrigin = '98px 110px'; m.style.transformBox = 'view-box';
   /* y un destello en cada choque */
-  const ra = v.querySelector('.vRayos'), destello = (a) => [{opacity: 0, offset: a + .074}, {opacity: 1, offset: a + .08}, {opacity: 0, offset: a + .16}];
-  ra.animate([{opacity: 0, offset: 0}].concat(destello(.14), destello(.46), [{opacity: 0, offset: 1}]), {duration: T, fill: 'forwards'});
-  plas(T * (.14 + .075), true); plas(T * (.46 + .075), false);
+  const ra = v.querySelector('.vRayos'), destello = (a) => [{opacity: 0, offset: a + ms(120)}, {opacity: 1, offset: a + ms(130)}, {opacity: 0, offset: a + ms(260)}];
+  ra.animate([{opacity: 0, offset: 0}].concat(destello(A), [{opacity: 0, offset: 1}]), {duration: T, fill: 'forwards'});
+  plas(230 + 125, true);
   const fin = () => v.remove();
   anV.finished.then(fin, fin);
 }
