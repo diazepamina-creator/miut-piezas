@@ -12,7 +12,7 @@ Cuatro juegos, todos a toques (sin arrastrar, para que funcione en la pizarra di
 Cada juego sube en cuatro etapas —colores, texturas, lisas y sin piezas— en las que las piezas ayudan cada vez menos. Además:
 
 - **Guía**: una visita con un foco sobre cada parte de la mesa. Se abre sola la primera vez.
-- **Practicar**: ejercicios nuevos sin fin, con cuatro dificultades o **Auto** (se ajusta sola), que se eligen tocando la etiqueta de arriba. En «Más», mezclar los cuatro juegos, el reto de las 7 vidas, que es el modo difícil (siete vidas para toda la serie; cinco seguidos a la primera devuelven una), repasar lo fallado y poner tus números.
+- **Practicar**: ejercicios nuevos sin fin, con cuatro dificultades o **Auto** (se ajusta sola), que se eligen tocando la etiqueta de arriba. En «Más», mezclar los cuatro juegos, el reto de las 7 vidas, que es el modo muy difícil (siete vidas para toda la serie; cinco seguidos a la primera devuelven una), repasar lo fallado y poner tus números.
 - **Acta**: resumen de lo hecho en el aparato, con nombre, código de verificación y código de expediente, para copiarla o descargarla y entregarla.
 - **Ajustes**: mesa clara u oscura, decir el número antes de voltear y patas sin animación.
 - **Retos por enlace**: una dirección abre un ejercicio concreto en Practicar, para ponerla en una ficha con un QR. Por ejemplo, `?j=comun&n=36,48&d=1`:
