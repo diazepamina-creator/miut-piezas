@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.9.4
+  Manipulativo para 1.º y 2.º de ESO · versión 0.10
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,19 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.10 · EL TURNO, EL ACTA Y LA ESCENA DE INICIO
+  · PRACTICAR, ORDENADO: la dificultad, «Más» y «Otro ejercicio». En
+    «Más», mezclar los cuatro juegos, el reto de las 7 vidas, repasar lo
+    fallado y poner mis números.
+  · LA DIFICULTAD AUTOMÁTICA: sube tras tres ejercicios limpios seguidos y
+    baja si uno cuesta tres vidas o más.
+  · EL ACTA: resumen por juego, con nombre, fecha, tiempo, código de
+    verificación y código de expediente; se copia o se descarga.
+  · EMPEZAR DE CERO, en Ajustes, con doble pulsación; y el enlace del
+    ejercicio pasa a «Para el profesor», explicado.
+  · LA ESCENA DE INICIO: la piedra del 60 se rompe en 2, 2, 3 y 5, la torre
+    se voltea y sale el nombre. Se salta tocando.
 
   VERSIÓN 0.9.4 · LAS SIETE VIDAS
   · Cada ejercicio empieza con siete vidas de gato; cuestan vida los
@@ -620,7 +633,15 @@ button.enlace:hover{color:var(--oro)}
 .puntos .difs{margin-right:4px}
 .puntos .difs button{min-height:30px;padding:4px 10px;font-size:12px}
 .puntos .b.otro{margin-left:auto;min-height:34px;padding:5px 12px}
-.puntos #bPropios,.puntos #bRacha{min-height:34px;padding:5px 12px}
+.masCaja{position:relative;display:inline-block}
+.puntos #bMas{min-height:34px;padding:5px 12px}
+.masMenu{position:absolute;left:0;top:calc(100% + 4px);z-index:30;display:flex;flex-direction:column;min-width:250px;padding:4px;
+  background:var(--panel);border:1px solid var(--oro);border-radius:10px;box-shadow:0 10px 24px var(--sombra)}
+.masMenu button{text-align:left;background:none;border:0;border-radius:7px;padding:9px 10px;font:inherit;font-size:14.5px;color:var(--tinta);cursor:pointer}
+.masMenu button:hover,.masMenu button:focus-visible{background:var(--brillo)}
+.masMenu button[aria-pressed="true"]{color:var(--oro);font-weight:700}
+.profe .enlaceEj{flex:1;min-width:0;font-size:12.5px}
+.b.borrar.seguro{border-color:var(--rojo);color:var(--rojo)}
 .propios .b{min-height:40px;min-width:40px}
 .miut .b.otro{min-height:32px;padding:4px 12px;margin:6px 0 0 8px;vertical-align:1px}
 .propios{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed var(--linea)}
@@ -646,6 +667,44 @@ button.enlace:hover{color:var(--oro)}
 .guia-pie span{font-family:'Space Mono',monospace;font-size:11px;color:var(--tenue)}
 .guia-pie .botones{margin:0}
 .guia-pie button.b{min-height:36px;padding:5px 12px}
+
+/* ── EL ACTA ── */
+.acta .actaSub{margin:0 0 10px;color:var(--tenue)}
+.actaNombre{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.actaNombre input{flex:1;font:inherit;font-size:16px;padding:8px 10px;border-radius:9px;border:1px solid var(--linea);background:var(--noche);color:var(--tinta)}
+.actaDatos{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;margin-bottom:10px}
+.actaDatos div{background:var(--noche);border:1px solid var(--linea);border-radius:9px;padding:6px 9px}
+.actaDatos b{display:block;font-family:'Space Mono',monospace;font-size:18px}
+.actaTabla{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:10px}
+.actaTabla th{font-family:'Rokkitt',serif;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue);text-align:left;padding:4px 6px;border-bottom:1px solid var(--linea)}
+.actaTabla td{padding:6px;border-bottom:1px dashed var(--linea);vertical-align:top}
+.actaTabla td b{color:var(--oro)}
+.actaCodigos{display:grid;gap:6px;margin:6px 0 4px}
+.actaCodigos b{font-family:'Space Mono',monospace;font-size:18px;letter-spacing:2px;color:var(--oro);margin-left:8px}
+.actaCodigos code{display:block;font-size:11px;word-break:break-all;background:var(--noche);border:1px solid var(--linea);border-radius:8px;padding:6px 8px;max-height:64px;overflow:auto}
+.actaMsg{min-height:20px;color:var(--verde);margin:6px 0 0}
+@media (max-width:520px){ .actaTabla{font-size:12.5px} .actaTabla td,.actaTabla th{padding:4px 3px} }
+
+/* ── LA ESCENA DE INICIO: una piedra cae en la mesa, la pata de Miut la
+   parte en 2, 2, 3 y 5, las piezas se encajan en una torre, la torre se
+   voltea —por detrás, el 60— y sale el nombre. Se salta tocando. ── */
+.inicio{position:fixed;inset:0;z-index:36;display:grid;place-items:center;cursor:pointer;
+  background:radial-gradient(ellipse 70% 55% at 50% 40%, rgba(255,244,220,.35), transparent 70%);transition:opacity .5s ease}
+/* mientras dura, la mesa está vacía: solo la madera */
+body.enInicio .lienzo{visibility:hidden}
+.inTorre{zoom:1.35}
+.inicio.fuera{opacity:0}
+.inEscena{display:flex;flex-direction:column;align-items:center;gap:22px;min-height:300px}
+.inTorre{min-height:68px;display:flex;align-items:center}
+.inTorre .fila{min-height:64px}
+.inPiedra{min-width:130px;height:104px;font-size:48px;animation:inCae .6s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes inCae{from{transform:translateY(-60vh) rotate(-8deg)}}
+.inPiedra.pum{animation:golpe .35s ease}
+.inPiedra.hecha{transition:transform .35s ease,opacity .35s ease;transform:scale(.4);opacity:0}
+.inTitulo{font-family:'Rokkitt',serif;font-weight:700;font-size:clamp(26px,6vw,44px);letter-spacing:3px;text-transform:uppercase;color:var(--oro);
+  margin:0;opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.inTitulo.ve{opacity:1;transform:none}
+.inSalta{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-family:'Rokkitt',serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--tenue);opacity:.8}
 
 /* ── LA AYUDA, encima ── */
 .modal{position:fixed;inset:0;background:rgba(12,8,20,.82);display:grid;place-items:center;padding:16px;z-index:60;overflow:auto}
@@ -690,6 +749,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
       <button id="bPracticar" aria-pressed="false">Practicar</button>
       <button id="bAjustes" aria-pressed="false" aria-controls="panelAjustes">Ajustes</button>
       <button id="bAula" aria-pressed="false">Aula</button>
+      <button id="bActa">Acta</button>
     </nav>
   </div>
   <div class="juegos" role="tablist" aria-label="Los cuatro juegos">
@@ -711,6 +771,14 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
     <small>Solo suena la riña del gato naranja —un maullido enfadado—, bajito.</small></div>
   <div class="aj"><span class="etq">Las patas</span>
     <span class="ops" role="group" aria-label="Las patas"><button data-aj="patas" data-v="si">Se ven</button><button data-aj="patas" data-v="no">Sin animaciones</button></span></div>
+  <div class="aj"><span class="etq">Al abrir</span>
+    <span class="ops" role="group" aria-label="La animación de inicio"><button data-aj="inicio" data-v="si">Con animación</button><button data-aj="inicio" data-v="no">Sin animación</button></span></div>
+  <div class="aj profe"><span class="etq">Para el profesor</span>
+    <small>Esta dirección abre <b>justo el ejercicio que hay ahora en la mesa</b>. Cópiala y hazle un QR para ponerlo en una ficha: al escanearlo, el alumno lo tiene delante, en Practicar.</small>
+    <input class="num largo enlaceEj" id="enlaceEj" readonly aria-label="enlace de este ejercicio"><button class="b" id="bCopiaEnlace">Copiar</button></div>
+  <div class="aj"><span class="etq">Empezar de cero</span>
+    <small>Borra de este aparato los retos hechos, las marcas, los récords y el acta. Hay que pulsar dos veces.</small>
+    <button class="b borrar" id="bBorrar">Borrar todo</button></div>
   <div class="botones"><button class="b" id="bReglas">Las reglas enteras</button><button class="b ok" id="ajCerrar">Cerrar</button></div>
 </div>
 
@@ -751,7 +819,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.9.4
+  · versión 0.10
 </footer>
 </div>
 
@@ -786,6 +854,23 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
       <span class="botones"><button class="b" id="guiaSalir">Salir</button><button class="b ok" id="guiaSig">Siguiente</button></span></div>
   </div>
 </div>
+<div class="modal" id="mActa" hidden>
+ <div class="caja2 acta" role="dialog" aria-modal="true" aria-labelledby="actaTit">
+  <h2 id="actaTit">El acta de Miut</h2>
+  <p class="actaSub">Lo que has hecho en este aparato. Cópiala o descárgala para dársela a tu profesor.</p>
+  <label class="actaNombre"><span class="etq">Tu nombre</span><input id="actaNombre" autocomplete="name" placeholder="Escribe tu nombre"></label>
+  <div id="actaCuerpo"></div>
+  <div class="actaCodigos"><div><span class="etq">Código de verificación</span><b id="actaFirma">—</b></div>
+    <div><span class="etq">Código de expediente (para tu profesor)</span><code id="actaExp">—</code></div></div>
+  <div class="botones"><button class="b ok" id="actaCopiar">Copiar el acta</button><button class="b" id="actaBajar">Descargar .txt</button><button class="b" id="actaCerrar">Volver a la mesa</button></div>
+  <p class="actaMsg" id="actaMsg" role="status"></p>
+ </div>
+</div>
+<div class="inicio" id="inicio" hidden>
+  <div class="inEscena"><div class="inTorre" id="inTorre"></div><div class="piedra inPiedra" id="inPiedra">60</div>
+    <h1 class="inTitulo" id="inTitulo">Las piezas de Miut</h1></div>
+  <p class="inSalta">toca para empezar</p>
+</div>
 <div class="modal" id="mAyuda" hidden>
  <div class="caja2" role="dialog" aria-modal="true" aria-labelledby="ayTit">
   <h2 id="ayTit">Cómo se juega</h2>
@@ -816,8 +901,10 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>En <b>Ajustes</b> se cambia a la mesa oscura, de nogal, para aulas con poca luz. Con <b>Aula</b> todo se ve más grande y en una pantalla. Las flechas ‹ › pasan de reto; con el teclado, las flechas o Av Pág / Re Pág, que es lo que manda un mando de diapositivas.</p>
   <h3>Miut se asoma</h3>
   <p>De vez en cuando Miut se asoma por abajo con un bocadillo: una pista si llevas un rato parado, el criterio de divisibilidad si el gato naranja te ha parado la pata dos veces, o el aviso de que cambia la etapa. Tócala y se va.</p>
+  <h3>El acta</h3>
+  <p>En <b>Acta</b> está el resumen de lo hecho en este aparato: retos por juego y etapa, práctica, vidas y récords, con un <b>código de verificación</b>. Se copia o se descarga para entregarla. En Ajustes, «Empezar de cero» lo borra todo.</p>
   <h3>Practicar</h3>
-  <p>Ejercicios nuevos cada vez, que no cuentan para los retos. Se elige la dificultad —<b>fácil</b>, <b>media</b>, <b>difícil</b> o <b>sin piezas</b>—; en difícil y sin piezas, a veces el mcd o el mcm son de <b>tres o cuatro números</b>. Con <b>«Poner mis números»</b> se ponen los que se quieran, con primos hasta el 13; en el mcd y el mcm, de dos a cuatro, con + y −. Con <b>«enlace de este ejercicio»</b> se copia una dirección que abre justo ese ejercicio, para ponerla en una ficha con un QR.</p>
+  <p>Ejercicios nuevos cada vez, que no cuentan para los retos. Se elige la dificultad —<b>fácil</b>, <b>media</b>, <b>difícil</b> o <b>sin piezas</b>—; en difícil y sin piezas, a veces el mcd o el mcm son de <b>tres o cuatro números</b>. Con <b>«Poner mis números»</b> se ponen los que se quieran, con primos hasta el 13; en el mcd y el mcm, de dos a cuatro, con + y −. Con <b>Auto</b>, la dificultad sube tras tres ejercicios seguidos sin fallar y baja si uno cuesta tres vidas o más. En «Más» se pueden <b>mezclar los cuatro juegos</b> y <b>repasar lo fallado</b>. En Ajustes, «Para el profesor» da la dirección del ejercicio que hay en la mesa, para ponerla en una ficha con un QR.</p>
   <div class="botones"><button class="b ok" id="ayCerrar">Volver a las piezas</button></div>
  </div>
 </div>
@@ -1704,13 +1791,19 @@ const PREGUNTA = {
   pareja: ([a, b]) => 'El mcd del ' + a + ' y el ' + b + ' es <b>' + mcd(a, b) + '</b> y su producto, <b>' + a + ' · ' + b + ' = ' + a * b + '</b>. ¿Cuánto vale el <b>mcm</b>?'
 };
 
-const est = {juego:'romper', practica:false, dif:0, marcas:{romper:{}, comun:{}, todo:{}, pareja:{}}, records:{}, nivel:{romper:0, comun:0, todo:0, pareja:0}, hechos:{romper:[], comun:[], todo:[], pareja:[]}, ayuda:{romper:[], comun:[], todo:[], pareja:[]}};
+const est = {juego:'romper', practica:false, dif:0, auto:false, mezcla:false, autoBien:0, seg:0, mejorSeguidos:0, seguidos:0,
+  stats:{romper:{n:0, primera:0, perdidas:0, ayuda:0}, comun:{n:0, primera:0, perdidas:0, ayuda:0}, todo:{n:0, primera:0, perdidas:0, ayuda:0}, pareja:{n:0, primera:0, perdidas:0, ayuda:0}},
+  marcas:{romper:{}, comun:{}, todo:{}, pareja:{}}, records:{}, nivel:{romper:0, comun:0, todo:0, pareja:0}, hechos:{romper:[], comun:[], todo:[], pareja:[]}, ayuda:{romper:[], comun:[], todo:[], pareja:[]}};
 const GUARDA = 'miut.piezas.v2';          /* v2: los retos van por etapas */
 try{ const g = JSON.parse(localStorage.getItem(GUARDA) || 'null');
   if(g && g.nivel && g.hechos){ ['nivel', 'hechos', 'ayuda'].forEach(k => Object.assign(est[k], g[k] || {})); if(RETOS[g.juego]) est.juego = g.juego;
     if(DIFS[g.dif]) est.dif = g.dif; est.practica = !!g.practica;
     if(g.marcas) Object.keys(est.marcas).forEach(j => Object.assign(est.marcas[j], g.marcas[j] || {}));
-    if(g.records) Object.assign(est.records, g.records); } }catch(e){}
+    if(g.records) Object.assign(est.records, g.records);
+    if(g.stats) Object.keys(est.stats).forEach(j => Object.assign(est.stats[j], g.stats[j] || {}));
+    ['auto', 'mezcla', 'autoBien', 'seg', 'mejorSeguidos', 'seguidos', 'nombre'].forEach(k => { if(g[k] !== undefined) est[k] = g[k]; }); } }catch(e){}
+/* el tiempo en la app: de quince en quince segundos, solo con la pestaña a la vista */
+setInterval(() => { if(!document.hidden){ est.seg = (est.seg || 0) + 15; if(est.seg % 60 === 0) guarda(); } }, 15000);
 /* el reto libre del final ya no está en la escalera: quien lo tuviera
    guardado vuelve al último reto */
 Object.keys(est.nivel).forEach(j => { est.nivel[j] = Math.max(0, Math.min(RETOS[j].length - 1, est.nivel[j] | 0)); });
@@ -2208,7 +2301,7 @@ function pierdeVida(){
 /* EL RETO DE LAS 7 VIDAS: ejercicios seguidos en Practicar, cada uno con
    siete vidas; si uno se queda sin ellas, la serie se acaba */
 const racha = () => esPractica() && est.racha && est.racha.activo;
-const recordClave = () => est.juego + '-' + est.dif;
+const recordClave = () => (est.mezcla ? 'mezcla' : est.juego) + '-' + est.dif;
 function empiezaRacha(){ est.racha = {activo: true, hechos: 0}; guarda(); otroEjercicio(); }
 function finRacha(){
   const h = est.racha.hechos, k = recordClave(), antes = est.records[k] || 0;
@@ -2249,6 +2342,18 @@ function gana(txt){
   setTimeout(chocaCinco, est.juego === 'romper' && !enPregunta() ? 2300 : 150);
   const conVidas = ' <span class="conVidas">con ' + P.vidas + (P.vidas === 1 ? ' vida' : ' vidas') + ' de ' + VIDAS + '</span>';
   if(esPractica()){
+    /* lo que se lleva el acta, por juego */
+    const X = est.stats[est.juego], limpio = P.vidas === VIDAS && !P.ayuda;
+    X.n++; X.perdidas += VIDAS - P.vidas; if(limpio) X.primera++; if(P.ayuda) X.ayuda++;
+    est.seguidos = limpio ? (est.seguidos || 0) + 1 : 0; est.mejorSeguidos = Math.max(est.mejorSeguidos || 0, est.seguidos);
+    /* LA DIFICULTAD AUTOMÁTICA: sube tras tres ejercicios limpios seguidos;
+       baja si en uno se han perdido tres vidas o más */
+    if(est.auto){
+      if(limpio && ++est.autoBien >= 3 && est.dif < DIFS.length - 1){ est.dif++; est.autoBien = 0; setTimeout(() => asoma('¡Tres seguidos sin fallar! Subimos a <b>' + DIFS[est.dif].n.toLowerCase() + '</b>.'), 1500); }
+      else if(VIDAS - P.vidas >= 3 && est.dif > 0){ est.dif--; est.autoBien = 0; setTimeout(() => asoma('Este ha costado: bajamos a <b>' + DIFS[est.dif].n.toLowerCase() + '</b> un rato.'), 1500); }
+      else if(!limpio) est.autoBien = 0;
+    }
+    guarda();
     if(racha()){ est.racha.hechos++; guarda(); pintaVidas();
       return dice(txt + '<br><span class="sellazo">Hecho</span>' + conVidas + ' <span class="conVidas">· llevas ' + est.racha.hechos + '</span> <button class="b otro" onclick="otroEjercicio()">Siguiente ›</button>', 'bien'); }
     dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>' + conVidas + ' <button class="b otro" onclick="otroEjercicio()">Otro ejercicio ›</button>', 'bien');
@@ -2319,21 +2424,34 @@ function pintaLibre(t){
 function pintaCabecera(){
   document.querySelectorAll('.juegos button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.j === est.juego)));
   $('bPracticar').setAttribute('aria-pressed', String(esPractica()));
-  $('bPracticar').textContent = esPractica() ? 'Volver a los retos' : 'Practicar';
+  $('bPracticar').textContent = 'Practicar';
   $('nivel').hidden = esPractica();
   if(esPractica()){
     /* en Practicar, en vez de los puntos: la dificultad y otro ejercicio */
+    /* tres cosas a la vista: la dificultad, «Más» y otro ejercicio */
+    const peor = juegoMasFallado();
     $('puntos').innerHTML = '<span class="ops difs" role="group" aria-label="Dificultad">'
-      + DIFS.map((d, k) => '<button data-dif="' + k + '" aria-pressed="' + (k === est.dif) + '">' + d.n + '</button>').join('') + '</span>'
-      + '<button class="b" id="bPropios" aria-pressed="' + !!P.propios + '">' + (P.propios ? 'Esconder mis números' : 'Poner mis números') + '</button>'
-      + '<button class="enlace" id="bEnlace">enlace de este ejercicio</button>'
-      + '<button class="b" id="bRacha" aria-pressed="' + !!racha() + '">' + (racha() ? 'Dejar el reto' : 'Reto de las 7 vidas') + '</button>'
-      + '<button class="b otro" id="bOtro">Otro ejercicio ›</button>';
-    $('puntos').querySelectorAll('[data-dif]').forEach(x => x.addEventListener('click', () => { est.dif = +x.dataset.dif; if(est.racha) est.racha.activo = false; guarda(); otroEjercicio(); }));
+      + DIFS.map((d, k) => '<button data-dif="' + k + '" aria-pressed="' + (!est.auto && k === est.dif) + '">' + d.n + '</button>').join('')
+      + '<button data-dif="auto" aria-pressed="' + !!est.auto + '" title="La dificultad se ajusta sola">Auto</button></span>'
+      + '<span class="masCaja"><button class="b" id="bMas" aria-expanded="' + !!P.mas + '">Más ▾</button>'
+      + (P.mas ? '<span class="masMenu" role="menu">'
+        + '<button role="menuitem" id="bMezcla" aria-pressed="' + !!est.mezcla + '">' + (est.mezcla ? '✓ ' : '') + 'Mezclar los cuatro juegos</button>'
+        + '<button role="menuitem" id="bRacha" aria-pressed="' + !!racha() + '">' + (racha() ? 'Dejar el reto de las 7 vidas' : 'Reto de las 7 vidas') + '</button>'
+        + (peor ? '<button role="menuitem" id="bRepaso">Repasar lo fallado: ' + NOMBRE_J[peor] + '</button>' : '')
+        + '<button role="menuitem" id="bPropios">' + (P.propios ? 'Esconder mis números' : 'Poner mis números') + '</button>'
+        + '</span>' : '') + '</span>'
+      + '<button class="b ok otro" id="bOtro">Otro ejercicio ›</button>';
+    $('puntos').querySelectorAll('[data-dif]').forEach(x => x.addEventListener('click', () => {
+      if(x.dataset.dif === 'auto') est.auto = true; else { est.auto = false; est.dif = +x.dataset.dif; }
+      est.autoBien = 0; if(est.racha) est.racha.activo = false; guarda(); otroEjercicio(); }));
     $('bOtro').addEventListener('click', otroEjercicio);
-    $('bRacha').addEventListener('click', () => { if(racha()){ est.racha.activo = false; guarda(); pinta(); } else empiezaRacha(); });
-    $('bPropios').addEventListener('click', () => { P.propios = !P.propios; pinta(); if(P.propios) document.querySelector('.propios input').focus(); });
-    $('bEnlace').addEventListener('click', copiaEnlace);
+    $('bMas').addEventListener('click', () => { P.mas = !P.mas; pintaCabecera(); });
+    if(P.mas){
+      $('bMezcla').addEventListener('click', () => { est.mezcla = !est.mezcla; P.mas = false; guarda(); otroEjercicio(); });
+      $('bRacha').addEventListener('click', () => { P.mas = false; if(racha()){ est.racha.activo = false; guarda(); pinta(); } else empiezaRacha(); });
+      if(peor) $('bRepaso').addEventListener('click', () => { P.mas = false; est.mezcla = false; est.juego = peor; est.auto = false; est.dif = Math.max(0, est.dif - 1); guarda(); otroEjercicio(); });
+      $('bPropios').addEventListener('click', () => { P.mas = false; P.propios = !P.propios; pinta(); if(P.propios) document.querySelector('.propios input').focus(); });
+    }
     return;
   }
   const lista = RETOS[est.juego], i = est.nivel[est.juego];
@@ -2355,7 +2473,7 @@ function pinta(nuevo){
   /* la etapa manda en cómo se ven las piezas; con la pista abierta en una
      pregunta, se ven lisas */
   document.body.dataset.etapa = E.id === 'pregunta' ? (P.verPiezas ? 'lisa' : 'pregunta') : E.id;
-  $('encTxt').innerHTML = '<span class="chipEtapa">' + (esPractica() ? 'Practicar · ' + DIFS[est.dif].n : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
+  $('encTxt').innerHTML = '<span class="chipEtapa">' + (esPractica() ? 'Practicar · ' + (est.mezcla ? 'mezcla · ' : '') + DIFS[est.dif].n + (est.auto ? ' (auto)' : '') : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
     + (enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Rompe primero las piedras ' + yLista(ns.map(n => 'del <b>' + n + '</b>')) + '. Luego: ' + INTRO[est.juego](ns).replace(/^./, c => c.toLowerCase()) : INTRO[est.juego](ns));
   const t = $('tablero'); t.innerHTML = '';
   if(esPractica() && P.propios) pintaLibre(t);
@@ -2375,8 +2493,17 @@ function pinta(nuevo){
 }
 function otroEjercicio(){
   est.practica = true;
+  /* con la mezcla, cada ejercicio de un juego, y nunca el mismo dos veces seguidas */
+  if(est.mezcla){ const js = Object.keys(RETOS).filter(j => j !== est.juego); est.juego = js[azar(0, js.length - 1)]; }
   PRAC[est.juego] = nuevoEjercicio(est.juego, est.dif);
   guarda(); empieza();
+}
+const NOMBRE_J = {romper:'Romper', comun:'Lo común', todo:'Todo', pareja:'La pareja'};
+/* el juego en que más vidas se pierden por ejercicio (con al menos dos hechos) */
+function juegoMasFallado(){
+  let peor = null, max = .9;
+  Object.keys(est.stats || {}).forEach(j => { const x = est.stats[j]; if(x.n >= 2 && x.perdidas / x.n > max){ max = x.perdidas / x.n; peor = j; } });
+  return peor;
 }
 $('bPracticar').addEventListener('click', () => { est.practica = !est.practica; if(est.racha) est.racha.activo = false; guarda(); empieza(); });
 function vaA(juego, nivel){
@@ -2453,6 +2580,131 @@ const AVISO_ETAPA = {
   pregunta: '¡Última etapa! <b>Sin piezas</b>: piénsalo de cabeza… y si hace falta, sácalas.'
 };
 
+/* ── EL ACTA ──────────────────────────────────────────────────────────────
+   Un resumen de lo hecho en este aparato, para entregarlo: por juego, los
+   retos (y cuántos con ayuda), la etapa a la que se ha llegado, la
+   práctica y el récord del reto de las 7 vidas. Lleva una firma corta para
+   comprobar que no se ha retocado a mano, y un código de expediente con
+   todo dentro. */
+const firma = txt => { let h = 2166136261; for(let i = 0; i < txt.length; i++){ h ^= txt.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  const x = h.toString(16).toUpperCase().padStart(8, '0'); return x.slice(0, 4) + '-' + x.slice(4); };
+const codifica = obj => 'MIUT1.' + btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const tiempo = sg => { const m = Math.round((sg || 0) / 60); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; };
+function datosActa(){
+  const J = Object.keys(RETOS), hoy = new Date();
+  const fila = j => {
+    const L = RETOS[j], h = est.hechos[j], ay = est.ayuda[j], X = est.stats[j];
+    const etapa = h.length ? Math.max(...h.map(i => L[i].e)) : -1;
+    const record = Math.max(0, ...Object.keys(est.records).filter(k => k.startsWith(j + '-')).map(k => est.records[k]));
+    return {j, retos: h.length, total: L.length, ayuda: ay.length, etapa: etapa < 0 ? '—' : ETAPAS[etapa].n,
+      n: X.n, primera: X.primera, media: X.n ? (X.perdidas / X.n).toFixed(1).replace('.', ',') : '—', record};
+  };
+  const filas = J.map(fila);
+  const mezcla = Math.max(0, ...Object.keys(est.records).filter(k => k.startsWith('mezcla-')).map(k => est.records[k]));
+  return {nombre: (est.nombre || '').trim(), fecha: hoy.toLocaleDateString('es-ES') + ' ' + hoy.toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'}),
+    tiempo: tiempo(est.seg), seguidos: est.mejorSeguidos || 0, mezcla, filas,
+    retos: filas.reduce((x, f) => x + f.retos, 0), total: filas.reduce((x, f) => x + f.total, 0), practica: filas.reduce((x, f) => x + f.n, 0)};
+}
+function textoActa(d){
+  return ['ACTA · LAS PIEZAS DE MIUT', 'Nombre: ' + (d.nombre || '(sin nombre)'), 'Fecha: ' + d.fecha, 'Tiempo en la app: ' + d.tiempo,
+    'Retos hechos: ' + d.retos + ' de ' + d.total, 'Ejercicios de práctica: ' + d.practica, 'Mejor racha a la primera: ' + d.seguidos, '']
+    .concat(d.filas.map(f => NOMBRE_J[f.j] + ': retos ' + f.retos + '/' + f.total + (f.ayuda ? ' (' + f.ayuda + ' con ayuda)' : '') + ', etapa ' + f.etapa
+      + '; práctica ' + f.n + ' (' + f.primera + ' a la primera, ' + f.media + ' vidas perdidas de media); récord 7 vidas: ' + f.record))
+    .concat(d.mezcla ? ['Mezcla · récord 7 vidas: ' + d.mezcla] : []).join('\n');
+}
+function pintaActa(){
+  const d = datosActa(), txt = textoActa(d), f = firma(txt);
+  $('actaCuerpo').innerHTML = '<div class="actaDatos">'
+    + [['Retos', d.retos + ' / ' + d.total], ['Práctica', d.practica], ['Racha a la primera', d.seguidos], ['Tiempo', d.tiempo]].map(([k, v]) => '<div><span class="etq">' + k + '</span><b>' + v + '</b></div>').join('')
+    + '</div><table class="actaTabla"><thead><tr><th>Juego</th><th>Retos</th><th>Etapa</th><th>Práctica</th><th>7 vidas</th></tr></thead><tbody>'
+    + d.filas.map(f => '<tr><td><b>' + NOMBRE_J[f.j] + '</b></td><td>' + f.retos + '/' + f.total + (f.ayuda ? '<br><small>' + f.ayuda + ' con ayuda</small>' : '') + '</td><td>' + f.etapa
+      + '</td><td>' + f.n + (f.n ? '<br><small>' + f.primera + ' a la primera · ' + f.media + ' vidas perdidas</small>' : '') + '</td><td>' + (f.record || '—') + '</td></tr>').join('')
+    + '</tbody></table>';
+  $('actaFirma').textContent = f;
+  const exp = {n: d.nombre, f: d.fecha, t: est.seg || 0, s: d.seguidos, h: est.hechos, a: est.ayuda, st: est.stats, r: est.records};
+  exp.v = firma(JSON.stringify(exp));
+  $('actaExp').textContent = codifica(exp);
+  return txt + '\n\nCódigo de verificación: ' + f + '\nCódigo de expediente:\n' + $('actaExp').textContent;
+}
+function abreActa(){ abreAjustes(false); $('actaMsg').textContent = ''; $('actaNombre').value = est.nombre || ''; pintaActa(); $('mActa').hidden = false; $('actaNombre').focus(); }
+const cierraActa = () => { $('mActa').hidden = true; $('bActa').focus(); };
+$('bActa').addEventListener('click', abreActa);
+$('actaCerrar').addEventListener('click', cierraActa);
+$('mActa').addEventListener('click', e => { if(e.target.id === 'mActa') cierraActa(); });
+$('actaNombre').addEventListener('input', () => { est.nombre = $('actaNombre').value; guarda(); pintaActa(); });
+$('actaCopiar').addEventListener('click', () => { const t = pintaActa();
+  try{ navigator.clipboard.writeText(t).then(() => $('actaMsg').textContent = '✓ Acta copiada: pégala donde te diga tu profesor.', () => $('actaMsg').textContent = 'No se ha podido copiar: usa «Descargar .txt».'); }
+  catch(e){ $('actaMsg').textContent = 'No se ha podido copiar: usa «Descargar .txt».'; } });
+$('actaBajar').addEventListener('click', () => { const t = pintaActa(), a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([t], {type: 'text/plain;charset=utf-8'}));
+  a.download = 'acta-miut' + (est.nombre ? '-' + est.nombre.trim().toLowerCase().replace(/[^a-z0-9áéíóúñü]+/gi, '-') : '') + '.txt';
+  document.body.appendChild(a); a.click(); a.remove(); $('actaMsg').textContent = '✓ Acta descargada.'; });
+addEventListener('keydown', e => { if(e.key === 'Escape' && !$('mActa').hidden) cierraActa(); });
+
+/* ── LA ESCENA DE INICIO ─────────────────────────────────────────────────
+   La app en pequeño: cae una piedra con el 60, la pata de Miut la golpea
+   y salen el 2, el 2 y el 3; el 5 que queda ya es primo y se vuelve pieza.
+   Las cuatro se encajan en una torre, la torre se voltea —por detrás, el
+   60— y aparece el nombre. Unos cuatro segundos; se salta tocando. Solo al
+   abrir la app, no al recargar en la misma sesión. */
+function escenaInicio(alAcabar){
+  let vista = false; try{ vista = sessionStorage.getItem('miut.piezas.inicio') === 'visto'; }catch(e){}
+  if(aj.inicio === 'no' || quieto() || vista || RETO_ENLACE){ alAcabar(); return; }
+  try{ sessionStorage.setItem('miut.piezas.inicio', 'visto'); }catch(e){}
+  const ini = $('inicio'), torre = $('inTorre'), piedra = $('inPiedra');
+  ini.hidden = false; document.body.classList.add('enInicio');
+  const lista = [], ts = [];
+  let hecho = false, d = null, anP = null;
+  const fin = () => { if(hecho) return; hecho = true; ts.forEach(clearTimeout); if(anP) anP.cancel(); if(d) d.remove();
+    /* primero se va la escena; luego aparece la mesa */
+    ini.classList.add('fuera'); setTimeout(() => { ini.hidden = true; document.body.classList.remove('enInicio');
+      document.querySelector('.lienzo').animate([{opacity: 0}, {opacity: 1}], {duration: 350, easing: 'ease-out'}); alAcabar(); }, 480); };
+  ini.addEventListener('click', fin);
+  addEventListener('keydown', function salta(e){ if(['Enter', ' ', 'Escape'].includes(e.key)){ fin(); removeEventListener('keydown', salta); } });
+  const pinta = () => { torre.innerHTML = ''; const f = el('div', 'fila'); lista.forEach(p => { const x = el('span', 'pieza', piezaSVG(p)); f.appendChild(x); }); torre.appendChild(f); return f; };
+  /* cada golpe: la piedra tiembla, cambia de número y su pieza sube a la torre */
+  const golpea = (p, resto) => {
+    const rp = piedra.getBoundingClientRect();
+    piedra.classList.remove('pum'); void piedra.offsetWidth; piedra.classList.add('pum');
+    lista.push(p); lista.sort((x, y) => x - y);
+    const f = pinta(), nueva = [...f.children].reverse().find(x => x.textContent.trim() === String(p)) || f.lastChild;
+    const rn = nueva.getBoundingClientRect();
+    nueva.animate([{transform: 'translate(' + (rp.left + rp.width / 2 - rn.left - rn.width / 2) + 'px,' + (rp.top + rp.height / 2 - rn.top - rn.height / 2) + 'px) scale(.6) rotate(-20deg)', opacity: 0},
+      {opacity: 1, offset: .3}, {transform: 'none', opacity: 1}], {duration: 480, easing: 'cubic-bezier(.3,1.3,.5,1)'});
+    if(resto) piedra.textContent = resto;
+  };
+  /* la pata: entra una vez y da cuatro golpes */
+  const T0 = 700, PASO = 480;
+  ts.push(setTimeout(() => {
+    const rp = piedra.getBoundingClientRect(), a = {x: rp.left + rp.width / 2, y: rp.top + rp.height * .55}, esc = escala();
+    const s2 = sacaPata(a.x); d = s2.d; d.style.zIndex = 41;
+    const fuera = {x: a.x + (s2.lado === 'izq' ? -40 : 40), y: innerHeight + 120}, K = [];
+    const n = 4, T = 360 + n * PASO + 420;
+    K.push({transform: postura(fuera.x, fuera.y, s2.lado, esc), filter: AIRE, offset: 0});
+    for(let k = 0; k < n; k++){ const t = 360 + k * PASO;
+      K.push({transform: postura(a.x, a.y - 14, s2.lado, esc), filter: AIRE, offset: (t - 120) / T, easing: 'ease-in'});
+      K.push({transform: postura(a.x, a.y + 5, s2.lado, esc * .97), filter: APOYO, offset: t / T, easing: 'ease-out'});
+      K.push({transform: postura(a.x, a.y - 14, s2.lado, esc), filter: AIRE, offset: (t + 140) / T}); }
+    K.push({transform: postura(fuera.x, fuera.y, s2.lado, esc), filter: AIRE, offset: 1});
+    anP = d.animate(K, {duration: T, fill: 'forwards', easing: 'ease-in-out'});
+    anP.finished.then(() => d.remove(), () => {});
+  }, T0));
+  const golpes = [[2, 30], [2, 15], [3, 5]];
+  golpes.forEach(([p, r], k) => ts.push(setTimeout(() => golpea(p, r), T0 + 360 + k * PASO)));
+  /* el 5 ya es primo: la piedra se hace pieza */
+  ts.push(setTimeout(() => { piedra.classList.add('hecha'); golpea(5, 0); }, T0 + 360 + 3 * PASO));
+  /* la torre se voltea y sale el nombre */
+  const tVolteo = T0 + 360 + 3 * PASO + 700;
+  ts.push(setTimeout(() => {
+    const f = torre.querySelector('.fila'); if(!f) return;
+    const v = el('div', 'volteo'), g = el('div', 'gira'); f.classList.add('frente');
+    const detras = el('div', 'detras', dorsoSVG(lista)); g.appendChild(f); g.appendChild(detras); v.appendChild(g); torre.appendChild(v);
+    void v.offsetWidth; v.classList.add('dorso', 'ida');
+  }, tVolteo));
+  ts.push(setTimeout(() => $('inTitulo').classList.add('ve'), tVolteo + 500));
+  ts.push(setTimeout(fin, tVolteo + 1900));
+}
+
 /* ── LA GUÍA ────────────────────────────────────────────────────────────
    Una visita por la mesa: un foco y un papel en cada parte. Cada parada
    dice qué se toca y qué pasa, y solo salen las que se ven en el juego que
@@ -2484,7 +2736,9 @@ const GUIA = [
   {sel:'#miut', c:'Miut',
    t:'Miut te va diciendo qué pasa, con las palabras del libro: <b>divide</b>, <b>múltiplo</b>, <b>comunes y no comunes</b>…'},
   {sel:'#bPracticar', c:'Practicar',
-   t:'Ejercicios <b>nuevos cada vez</b>, que no cuentan para los retos. Se elige la dificultad —fácil, media, difícil o sin piezas— y también se pueden poner <b>tus números</b>.'},
+   t:'Ejercicios <b>nuevos cada vez</b>, sin fin. Se elige la dificultad —o <b>Auto</b>, que sube y baja sola— y en «Más» se pueden <b>mezclar los cuatro juegos</b>, jugar al <b>reto de las 7 vidas</b> o repasar lo fallado.'},
+  {sel:'#bActa', c:'El acta',
+   t:'Un resumen de lo que has hecho, con tu nombre y un código, para <b>entregárselo a tu profesor</b>.'},
   {sel:'#bAjustes', c:'Ajustes',
    t:'La mesa clara u oscura, <b>decir antes el número</b> para voltear —más exigente—, las patas sin animación y las reglas enteras.'},
   {sel:'#bAula', c:'El aula',
@@ -2539,7 +2793,7 @@ addEventListener('scroll', colocaGuia, {passive:true});
 addEventListener('resize', colocaGuia);
 
 const AJ = 'miut.piezas.ajustes.v2';        /* v2: ya no hay noche ni papiro, sino dos maderas */
-let aj = {modo:'haya', aula:'no', predice:'no', patas:'si', sonido:'si'};
+let aj = {modo:'haya', aula:'no', predice:'no', patas:'si', sonido:'si', inicio:'si'};
 try{ Object.assign(aj, JSON.parse(localStorage.getItem(AJ) || '{}')); }catch(e){}
 const predice = () => aj.predice === 'si';
 function pintaAjustes(){
@@ -2559,7 +2813,17 @@ document.querySelectorAll('[data-aj]').forEach(x => x.addEventListener('click', 
   aj[x.dataset.aj] = x.dataset.v; pintaAjustes();
   if(antes !== aj.predice){ document.querySelectorAll('.pide').forEach(f => f.remove()); }
 }));
-const abreAjustes = si => { $('panelAjustes').hidden = !si; $('bAjustes').setAttribute('aria-pressed', String(si)); };
+const abreAjustes = si => { $('panelAjustes').hidden = !si; $('bAjustes').setAttribute('aria-pressed', String(si)); if(si) $('enlaceEj').value = enlaceEjercicio(); };
+$('bCopiaEnlace').addEventListener('click', () => { const i = $('enlaceEj'); i.select();
+  try{ navigator.clipboard.writeText(i.value).then(() => { $('bCopiaEnlace').textContent = '✓ Copiado'; setTimeout(() => $('bCopiaEnlace').textContent = 'Copiar', 1800); }); }catch(e){ document.execCommand && document.execCommand('copy'); } });
+let borrarT = 0;
+$('bBorrar').addEventListener('click', () => {
+  const b = $('bBorrar');
+  if(!b.classList.contains('seguro')){ b.classList.add('seguro'); b.textContent = 'Pulsa otra vez para borrarlo'; clearTimeout(borrarT);
+    borrarT = setTimeout(() => { b.classList.remove('seguro'); b.textContent = 'Borrar todo'; }, 4000); return; }
+  try{ localStorage.removeItem(GUARDA); }catch(e){}
+  location.href = location.pathname;
+});
 $('bAjustes').addEventListener('click', () => abreAjustes($('panelAjustes').hidden));
 $('ajCerrar').addEventListener('click', () => { abreAjustes(false); $('bAjustes').focus(); });
 $('bAula').addEventListener('click', () => { aj.aula = aj.aula === 'si' ? 'no' : 'si'; pintaAjustes(); });
@@ -2581,14 +2845,9 @@ const RETO_ENLACE = (() => {
     return true;
   }catch(e){ return false; }
 })();
-function copiaEnlace(){
-  const url = location.origin + location.pathname + '?j=' + est.juego + '&n=' + (PRAC[est.juego] || numerosDelReto()).join(',') + '&d=' + est.dif;
-  const texto = c => dice('Enlace de este ejercicio' + (c ? ', copiado' : '') + ': <b style="word-break:break-all">' + url + '</b>. Con un generador de QR se puede poner en una ficha.');
-  texto(false);
-  try{ navigator.clipboard.writeText(url).then(() => texto(true), () => {}); }catch(e){}
-}
+const enlaceEjercicio = () => location.origin + location.pathname + '?j=' + est.juego + '&n=' + numerosDelReto().join(',') + '&d=' + (esPractica() ? est.dif : reto().e);
 pintaAjustes();
 empieza();
-try{ if(!localStorage.getItem('miut.piezas.guia') && !RETO_ENLACE) setTimeout(abreGuia, 500); }catch(e){}
+escenaInicio(() => { try{ if(!localStorage.getItem('miut.piezas.guia') && !RETO_ENLACE) setTimeout(abreGuia, 300); }catch(e){} });
 </script>
 </body></html>
