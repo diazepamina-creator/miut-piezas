@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.4
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.5
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,16 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.5 · SIETE VIDAS PARA TODA LA SERIE
+  · El Reto de las 7 vidas ya no da siete por ejercicio, sino siete para
+    toda la serie, como un gato. Cinco seguidos a la primera devuelven una
+    vida, y cada cuatro hechos la dificultad sube un escalón, hasta
+    difícil. Al acabar, vuelve la dificultad con que se empezó.
+  · Las vidas, en su bandeja: cabezas más grandes y con brillo; la que se
+    pierde recibe el zarpazo y sube como almita, con aureola; la que se
+    gana vuelve de un salto con un destello; la última late. Las cinco
+    huellas de la vida extra y el marcador de hechos y récord, al lado.
 
   VERSIÓN 1.0.4 · LA CABECERA, DESPEJADA
   · La dificultad de Practicar está en su etiqueta: «Difícil ▾» se toca y
@@ -656,21 +666,45 @@ button.enlace:hover{color:var(--oro)}
   80%{opacity:1}
   100%{transform:translate(var(--deriva,0px),var(--cae,220px)) rotate(var(--giro,300deg));opacity:0}}
 
-/* ── LAS SIETE VIDAS ── */
-.vidas{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-top:6px}
-.vidas .etq{margin-right:4px}
-.vida{display:inline-block;width:24px;height:21px;line-height:0}
+/* ── LAS SIETE VIDAS, en su bandeja: las siete cabezas de Miut, las cinco
+   huellas que dan una vida más y el marcador. Al perder una, la cabeza
+   recibe el zarpazo y sube como almita, con su aureola; al ganarla, vuelve
+   de un salto con un destello. Con la última, late. ── */
+.vidas{display:flex;align-items:center;gap:6px 12px;flex-wrap:wrap;margin-top:10px;padding:7px 12px;border-radius:14px;
+  background:var(--noche);border:1px solid var(--linea)}
+.vidas .gatos{display:flex;gap:4px;align-items:flex-end}
+.vida{display:inline-block;width:30px;height:27px;line-height:0;position:relative;transform-origin:50% 90%}
 .vida svg{width:100%;height:100%;overflow:visible}
-.vida .cc{fill:#A48AB8} .vida .oj{fill:#6FBF5C} .vida .na{fill:#E58AA6}
-.vida.gastada .cc{fill:#CFC6D4} .vida.gastada .oj,.vida.gastada .na{fill:#A99FAE}
-.vida.gastada{opacity:.55}
-.vida.pierde{animation:pierde .7s ease both;position:relative}
+.vida .cc{fill:#A48AB8} .vida .oj{fill:#6FBF5C} .vida .na{fill:#E58AA6} .vida .brillo{fill:#FFFFFF;opacity:.55}
+.vida:not(.gastada) svg{filter:drop-shadow(0 2px 0 rgba(0,0,0,.25)) drop-shadow(0 0 5px rgba(240,199,94,.35))}
+.vida .aureola{fill:none;stroke:#F0C75E;stroke-width:2;opacity:0}
+.vida.gastada .cc{fill:#CFC6D4} .vida.gastada .oj,.vida.gastada .na{fill:#A99FAE} .vida.gastada .brillo{opacity:0}
+.vida.gastada{opacity:.4;transform:scale(.82)}
+.vida.gastada .aureola{opacity:.9}
+.vida.ultima{animation:late 1.1s ease-in-out infinite}
+.vida.ultima svg{filter:drop-shadow(0 0 6px rgba(224,120,90,.8))}
+@keyframes late{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}30%{transform:scale(1)}45%{transform:scale(1.08)}}
+.vida.pierde{animation:pierde .9s ease both}
 .vida.pierde::after{content:'';position:absolute;inset:-3px;background:
   linear-gradient(115deg,transparent 40%,#E08A3C 41%,#E08A3C 47%,transparent 48%),
   linear-gradient(115deg,transparent 56%,#E08A3C 57%,#E08A3C 63%,transparent 64%);animation:zarpazo .7s ease forwards}
-@keyframes pierde{0%{transform:none}20%{transform:translateY(-3px) rotate(-12deg) scale(1.15)}45%{transform:translateY(1px) rotate(10deg)}100%{transform:none}}
+@keyframes pierde{0%{transform:none;opacity:1}18%{transform:translateY(-3px) rotate(-12deg) scale(1.2);opacity:1}
+  40%{transform:translateY(1px) rotate(10deg) scale(1);opacity:1}75%{transform:translateY(-12px) scale(.82);opacity:.2}100%{transform:scale(.82);opacity:.4}}
 @keyframes zarpazo{0%{opacity:0;transform:translate(-6px,-6px)}25%{opacity:1;transform:none}100%{opacity:0}}
-.vidas .racha{margin-left:8px;font-family:'Rokkitt',serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:var(--oro)}
+.vida.gana{animation:ganaVida .8s cubic-bezier(.3,1.6,.5,1) both}
+.vida.gana::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid #F0C75E;animation:destello .8s ease-out forwards}
+@keyframes ganaVida{0%{transform:scale(.3) translateY(8px);opacity:0}60%{transform:scale(1.25);opacity:1}100%{transform:none}}
+@keyframes destello{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.vidas .extra{display:flex;align-items:center;gap:3px}
+.huella{display:inline-block;width:15px;height:15px;line-height:0}
+.huella svg{width:100%;height:100%}
+.huella path,.huella ellipse{fill:var(--linea)}
+.huella.llena path,.huella.llena ellipse{fill:#F0C75E}
+.huella.nueva{animation:ganaVida .5s cubic-bezier(.3,1.6,.5,1) both}
+.vidas .extra .etq{margin:0 2px 0 0;font-size:10.5px}
+.vidas .marcador{margin-left:auto;font-family:'Rokkitt',serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:var(--tenue);white-space:nowrap}
+.vidas .marcador b{color:var(--oro);font-size:17px;letter-spacing:0}
+body[data-movimiento="menos"] .vida{animation:none !important}
 .conVidas{font-family:'Rokkitt',serif;font-size:14px;letter-spacing:.5px;color:var(--tenue);margin-left:4px}
 
 /* ── PRACTICAR: la dificultad y otro ejercicio, donde van los puntos ── */
@@ -868,7 +902,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.4
+  · versión 1.0.5
 </footer>
 </div>
 
@@ -937,7 +971,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <h3>La pareja · mcd · mcm = a · b</h3>
   <p>Las torres del mcd y del mcm, ya hechas. Se juntan y salen exactamente las piezas de los dos números: por eso <b>mcd · mcm = a · b</b>, siempre.</p>
   <h3>El reto de las siete vidas</h3>
-  <p>En <b>Practicar</b>, en «Más», el <b>Reto de las 7 vidas</b> encadena ejercicios. Cada uno empieza con <b>siete vidas de gato</b>, y se pierde una al comprobar mal, al contestar mal y al decir «ya no se rompe» antes de tiempo; y, desde la etapa lisa, con cada golpe que no cae justo. En colores y texturas, probar golpes no cuesta: es como se aprende el criterio. Cuando un ejercicio se queda sin vidas, la serie se acaba y se guarda tu récord.</p>
+  <p>En <b>Practicar</b>, en «Más», el <b>Reto de las 7 vidas</b> encadena ejercicios con <b>siete vidas de gato para toda la serie</b>. Se pierde una al comprobar mal, al contestar mal y al decir «ya no se rompe» antes de tiempo; y, desde la etapa lisa, con cada golpe que no cae justo. En colores y texturas, probar golpes no cuesta: es como se aprende el criterio. <b>Cinco ejercicios seguidos a la primera</b> —las cinco huellas— devuelven una vida, y cada cuatro hechos la dificultad sube un escalón, hasta difícil. Con la séptima vida perdida, la serie se acaba y se guarda tu récord.</p>
   <h3>Ya no se rompe</h3>
   <p>Desde la etapa lisa, cuando lo que queda de la piedra es un primo, no se convierte sola en pieza: hay que pulsar <b>«Ya no se rompe»</b>. Si todavía se podía romper, el gato naranja para la pata. El 17, el 19 y el 23 no tienen herramienta, así que en sus piedras siempre hay que decirlo. Basta probar los primos cuyo cuadrado no se pasa: si 7 · 7 = 49 ya es más que 47 y ninguno menor lo parte, el 47 es primo.</p>
   <h3>El cuaderno</h3>
@@ -1867,6 +1901,8 @@ try{ const g = JSON.parse(localStorage.getItem(GUARDA) || 'null');
     ['auto', 'mezcla', 'autoBien', 'seg', 'mejorSeguidos', 'seguidos', 'nombre'].forEach(k => { if(g[k] !== undefined) est[k] = g[k]; }); } }catch(e){}
 /* el tiempo en la app: de quince en quince segundos, solo con la pestaña a la vista */
 setInterval(() => { if(!document.hidden){ est.seg = (est.seg || 0) + 15; if(est.seg % 60 === 0) guarda(); } }, 15000);
+/* una serie guardada de antes, con vidas por ejercicio, no sigue */
+if(est.racha && est.racha.vidas === undefined) est.racha = null;
 /* el reto libre del final ya no está en la escalera: quien lo tuviera
    guardado vuelve al último reto */
 Object.keys(est.nivel).forEach(j => { est.nivel[j] = Math.max(0, Math.min(RETOS[j].length - 1, est.nivel[j] | 0)); });
@@ -2346,48 +2382,67 @@ function corrigePregunta(J, ns, v){
 }
 
 /* ── LAS SIETE VIDAS ─────────────────────────────────────────────────────
-   Cada ejercicio empieza con siete vidas de gato. Cuestan vida comprobar
-   mal, contestar mal y decir «ya no se rompe» antes de tiempo; y, desde la
-   etapa lisa, los golpes que no caen justo. En colores y texturas golpear
-   para probar es aprender el criterio, y no cuesta. En los retos las
-   vidas son una marca: se acaba igual, y se guarda la mejor. En el Reto de
-   las 7 vidas de Practicar, quedarse sin ellas acaba la serie. */
+   El Reto de las 7 vidas de Practicar: siete vidas para TODA la serie,
+   como un gato. Cuestan vida comprobar mal, contestar mal y decir «ya no
+   se rompe» antes de tiempo; y, desde la etapa lisa, los golpes que no
+   caen justo. En colores y texturas golpear para probar es aprender el
+   criterio, y no cuesta. Cinco ejercicios seguidos a la primera devuelven
+   una vida, y cada cuatro hechos la dificultad sube un escalón. Fuera del
+   reto las vidas de cada ejercicio no se ven, pero se cuentan: el acta y
+   el modo Auto las usan. */
 const VIDAS = 7;
-const CABEZA = '<svg viewBox="0 0 46 40" aria-hidden="true">'
+const CABEZA = '<svg viewBox="0 0 46 40" aria-hidden="true"><ellipse class="aureola" cx="23" cy="-3" rx="10" ry="3"/>'
   + '<path d="M8.8 16.6 C7.4 12.4 6.6 7.6 7.4 3.6 Q7.9 1.7 9.7 2.5 C13 4.2 16.6 6.6 19.4 9.6 Z M37.2 16.6 C38.6 12.4 39.4 7.6 38.6 3.6 Q38.1 1.7 36.3 2.5 C33 4.2 29.4 6.6 26.6 9.6 Z" class="cc" stroke="#3B2A4A" stroke-width="2" stroke-linejoin="round"/>'
   + '<ellipse cx="23" cy="22" rx="14.5" ry="13" class="cc" stroke="#3B2A4A" stroke-width="2"/>'
   + '<ellipse cx="17.5" cy="21" rx="2.6" ry="3" class="oj"/><ellipse cx="28.5" cy="21" rx="2.6" ry="3" class="oj"/>'
-  + '<path d="M21.3 26 H24.7 L23 27.8 Z" class="na"/></svg>';
-function pintaVidas(){
+  + '<path d="M21.3 26 H24.7 L23 27.8 Z" class="na"/><ellipse class="brillo" cx="16.5" cy="19.8" rx=".9" ry="1.1"/><ellipse class="brillo" cx="27.5" cy="19.8" rx=".9" ry="1.1"/></svg>';
+const HUELLA = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 9.5c-3.2 0-5.6 2.9-5.6 5.4 0 1.9 1.6 2.6 3 2.2 1-.3 1.7-.6 2.6-.6s1.6.3 2.6.6c1.4.4 3-.3 3-2.2 0-2.5-2.4-5.4-5.6-5.4z"/>'
+  + '<ellipse cx="3.6" cy="8.6" rx="1.9" ry="2.4"/><ellipse cx="7.6" cy="4.6" rx="1.9" ry="2.5"/><ellipse cx="12.4" cy="4.6" rx="1.9" ry="2.5"/><ellipse cx="16.4" cy="8.6" rx="1.9" ry="2.4"/></svg>';
+const EXTRA = 5;                    // seguidos a la primera para ganar una vida
+function pintaVidas(anima){
   const v = $('vidas'); if(!v || !P) return;
   /* las vidas solo se ven en el Reto de las 7 vidas */
   v.hidden = !racha(); if(v.hidden){ v.innerHTML = ''; return; }
-  const n = P.vidas === undefined ? VIDAS : P.vidas;
-  v.innerHTML = '<span class="etq">vidas</span>' + Array.from({length: VIDAS}, (_, k) => '<i class="vida' + (k < n ? '' : ' gastada') + '">' + CABEZA + '</i>').join('')
-    + (racha() ? '<span class="racha">Reto de las 7 vidas · ' + est.racha.hechos + ' hecho' + (est.racha.hechos === 1 ? '' : 's') + ' · récord ' + (est.records[recordClave()] || 0) + '</span>' : '');
-  v.setAttribute('aria-label', n + ' vidas de ' + VIDAS);
+  const R = est.racha, n = R.vidas, h = R.hechos, rec = est.records[R.clave] || 0;
+  v.innerHTML = '<span class="gatos">' + Array.from({length: VIDAS}, (_, k) => '<i class="vida' + (k < n ? '' : ' gastada') + (k === 0 && n === 1 ? ' ultima' : '')
+      + (anima && anima.gana === k ? ' gana' : '') + (anima && anima.pierde === k ? ' pierde' : '') + '">' + CABEZA + '</i>').join('') + '</span>'
+    + '<span class="extra" title="' + EXTRA + ' seguidos a la primera: una vida más"><span class="etq">+1 vida</span>'
+    + Array.from({length: EXTRA}, (_, k) => '<i class="huella' + (k < R.limpios ? ' llena' : '') + (anima && anima.huella === k ? ' nueva' : '') + '">' + HUELLA + '</i>').join('') + '</span>'
+    + '<span class="marcador"><b>' + h + '</b> hecho' + (h === 1 ? '' : 's') + ' · récord <b>' + Math.max(rec, h) + '</b></span>';
+  v.setAttribute('aria-label', n + ' vidas de ' + VIDAS + '; ' + h + ' hechos; récord ' + rec);
 }
 function pierdeVida(){
   if(!P || P.ganado || !(P.vidas > 0)) return;
   P.vidas--;
-  pintaVidas();
-  /* la que se pierde: un zarpazo naranja y se queda gris */
-  const vs = document.querySelectorAll('#vidas .vida'), cae = vs[P.vidas];
-  if(cae && !quieto()){ cae.classList.add('pierde'); }
   /* fuera del reto no se ven, pero se cuentan: el acta y el modo Auto las usan */
-  if(P.vidas === 0 && racha()) setTimeout(finRacha, 900);
+  if(!racha() || !(est.racha.vidas > 0)) return;
+  const R = est.racha; R.vidas--; R.limpios = 0; guarda();
+  /* la que se pierde: un zarpazo naranja y sube como almita */
+  pintaVidas(quieto() ? null : {pierde: R.vidas});
+  if(R.vidas === 0) setTimeout(finRacha, 1000);
 }
-/* EL RETO DE LAS 7 VIDAS: ejercicios seguidos en Practicar, cada uno con
-   siete vidas; si uno se queda sin ellas, la serie se acaba */
+/* EL RETO DE LAS 7 VIDAS: ejercicios seguidos en Practicar con siete vidas
+   para toda la serie; el récord se guarda por juego y dificultad de salida */
 const racha = () => esPractica() && est.racha && est.racha.activo;
 const recordClave = () => (est.mezcla ? 'mezcla' : est.juego) + '-' + est.dif;
-function empiezaRacha(){ est.racha = {activo: true, hechos: 0}; guarda(); otroEjercicio(); }
+const SUBE = 4;                     // cada cuántos hechos sube la dificultad
+function empiezaRacha(){
+  if(est.racha && est.racha.dif0 !== undefined && !est.racha.activo) est.dif = est.racha.dif0;
+  est.racha = {activo: true, hechos: 0, vidas: VIDAS, limpios: 0, dif0: est.dif, clave: recordClave()};
+  guarda(); otroEjercicio();
+  asomaUltima = 0; setTimeout(() => asoma('<b>Siete vidas para toda la serie.</b> Cada fallo cuesta una; ' + EXTRA + ' seguidos sin fallar te devuelven una. ¿Hasta dónde llegas?', 7000), 600);
+}
+function dejaRacha(){
+  if(!est.racha) return;
+  if(est.racha.activo && est.racha.dif0 !== undefined) est.dif = est.racha.dif0;
+  est.racha.activo = false;
+}
 function finRacha(){
-  const h = est.racha.hechos, k = recordClave(), antes = est.records[k] || 0;
+  const R = est.racha, h = R.hechos, k = R.clave || recordClave(), antes = est.records[k] || 0, llego = DIFS[est.dif].n.toLowerCase();
   if(h > antes) est.records[k] = h;
-  est.racha.activo = false; guarda();
-  dice('<b>Se acabaron las vidas.</b> Has hecho <b>' + h + '</b> ejercicio' + (h === 1 ? '' : 's') + ' seguido' + (h === 1 ? '' : 's') + ' en ' + DIFS[est.dif].n.toLowerCase() + '.'
-    + (h > antes ? ' <b>¡Récord nuevo!</b>' : ' Tu récord aquí es ' + antes + '.')
+  dejaRacha(); guarda();
+  dice('<b>Se acabaron las siete vidas.</b> Has hecho <b>' + h + '</b> ejercicio' + (h === 1 ? '' : 's') + (est.dif !== R.dif0 || h ? ' y llegaste a <b>' + llego + '</b>' : '') + '.'
+    + (h > antes ? ' <b>¡Récord nuevo!</b>' : ' Tu récord es ' + antes + '.')
     + ' <button class="b otro" onclick="empiezaRacha()">Otra vez ›</button>', 'mal');
   pintaCabecera(); pintaVidas();
 }
@@ -2419,7 +2474,6 @@ function gana(txt){
   if(est.juego !== 'romper') celebra();
   /* el choque de manos; en Romper, cuando la pata ya ha dejado la última pieza */
   setTimeout(chocaCinco, est.juego === 'romper' && !enPregunta() ? 2300 * VEL() : 150);
-  const conVidas = !racha() ? '' : ' <span class="conVidas">con ' + P.vidas + (P.vidas === 1 ? ' vida' : ' vidas') + ' de ' + VIDAS + '</span>';
   if(esPractica()){
     /* lo que se lleva el acta, por juego */
     const X = est.stats[est.juego], limpio = P.vidas === VIDAS && !P.ayuda;
@@ -2427,15 +2481,26 @@ function gana(txt){
     est.seguidos = limpio ? (est.seguidos || 0) + 1 : 0; est.mejorSeguidos = Math.max(est.mejorSeguidos || 0, est.seguidos);
     /* LA DIFICULTAD AUTOMÁTICA: sube tras tres ejercicios limpios seguidos;
        baja si en uno se han perdido tres vidas o más */
-    if(est.auto){
+    if(est.auto && !racha()){
       if(limpio && ++est.autoBien >= 3 && est.dif < DIFS.length - 1){ est.dif++; est.autoBien = 0; setTimeout(() => asoma('¡Tres seguidos sin fallar! Subimos a <b>' + DIFS[est.dif].n.toLowerCase() + '</b>.'), 1500); }
       else if(VIDAS - P.vidas >= 3 && est.dif > 0){ est.dif--; est.autoBien = 0; setTimeout(() => asoma('Este ha costado: bajamos a <b>' + DIFS[est.dif].n.toLowerCase() + '</b> un rato.'), 1500); }
       else if(!limpio) est.autoBien = 0;
     }
     guarda();
-    if(racha()){ est.racha.hechos++; guarda(); pintaVidas();
-      return dice(txt + '<br><span class="sellazo">Hecho</span>' + conVidas + ' <span class="conVidas">· llevas ' + est.racha.hechos + '</span> <button class="b otro" onclick="otroEjercicio()">Siguiente ›</button>', 'bien'); }
-    dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>' + conVidas + ' <button class="b otro" onclick="otroEjercicio()">Otro ejercicio ›</button>', 'bien');
+    if(racha()){
+      const R = est.racha; R.hechos++;
+      let anima = {}, extra = '';
+      if(P.vidas === VIDAS && !P.ayuda){
+        anima.huella = R.limpios; R.limpios++;
+        if(R.limpios >= EXTRA){ R.limpios = 0; anima.huella = -1;
+          if(R.vidas < VIDAS){ anima.gana = R.vidas; R.vidas++; extra = ' <span class="conVidas">· ¡una vida más!</span>'; } }
+      }
+      /* la serie se pone más difícil: un escalón cada cuatro hechos, hasta difícil */
+      if(R.hechos % SUBE === 0 && est.dif < Math.max(2, R.dif0)){ est.dif++;
+        setTimeout(() => asoma('¡' + R.hechos + ' hechos! Subimos a <b>' + DIFS[est.dif].n.toLowerCase() + '</b>.'), 1500); }
+      guarda(); pintaVidas(quieto() ? null : anima);
+      return dice(txt + '<br><span class="sellazo">Hecho</span> <span class="conVidas">llevas ' + R.hechos + '</span>' + extra + ' <button class="b otro" onclick="otroEjercicio()">Siguiente ›</button>', 'bien'); }
+    dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span> <button class="b otro" onclick="otroEjercicio()">Otro ejercicio ›</button>', 'bien');
     return;
   }
   const J = est.juego, h = est.hechos[J], i = est.nivel[J];
@@ -2519,7 +2584,7 @@ function pintaCabecera(){
     $('bMas').addEventListener('click', () => { P.mas = !P.mas; if(P.difs){ P.difs = false; pintaEncargo(); } pintaCabecera(); });
     if(P.mas){
       $('bMezcla').addEventListener('click', () => { est.mezcla = !est.mezcla; P.mas = false; guarda(); otroEjercicio(); });
-      $('bRacha').addEventListener('click', () => { P.mas = false; if(racha()){ est.racha.activo = false; guarda(); pinta(); } else empiezaRacha(); });
+      $('bRacha').addEventListener('click', () => { P.mas = false; if(racha()){ dejaRacha(); guarda(); otroEjercicio(); } else empiezaRacha(); });
       if(peor) $('bRepaso').addEventListener('click', () => { P.mas = false; est.mezcla = false; est.juego = peor; est.auto = false; est.dif = Math.max(0, est.dif - 1); guarda(); otroEjercicio(); });
       $('bPropios').addEventListener('click', () => { P.mas = false; P.propios = !P.propios; pinta(); if(P.propios) document.querySelector('.propios input').focus(); });
     }
@@ -2594,9 +2659,9 @@ function juegoMasFallado(){
   Object.keys(est.stats || {}).forEach(j => { const x = est.stats[j]; if(x.n >= 2 && x.perdidas / x.n > max){ max = x.perdidas / x.n; peor = j; } });
   return peor;
 }
-$('bPracticar').addEventListener('click', () => { est.practica = !est.practica; if(est.racha) est.racha.activo = false; guarda(); empieza(); });
+$('bPracticar').addEventListener('click', () => { est.practica = !est.practica; dejaRacha(); guarda(); empieza(); });
 function vaA(juego, nivel){
-  if(juego !== est.juego && est.racha) est.racha.activo = false;
+  if(juego !== est.juego) dejaRacha();
   est.juego = juego;
   if(nivel !== undefined) est.nivel[juego] = Math.max(0, Math.min(RETOS[juego].length - 1, nivel));
   guarda(); empieza();
