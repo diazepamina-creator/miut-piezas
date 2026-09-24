@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.12
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.13
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,14 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.13 · DOS CIFRAS
+  · Las piezas de dos cifras (11, 13, 17, 19, 23) llevan el número corrido
+    a la parte libre de la pieza y un poco más estrecho: antes la primera
+    cifra se metía en el hueco y su contorno pisaba el borde de la
+    lengüeta de la anterior.
+  · Las patas, un poco más largas: la de Miut se desvanece a 450 puntos
+    (antes, 420) y la naranja a 410 (antes, 380).
 
   VERSIÓN 1.0.12 · MUY DIFÍCIL
   · El Reto de las 7 vidas se llama ahora MUY DIFÍCIL, para no tener dos
@@ -634,13 +642,13 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
    llegaba a parecer un palo larguísimo. Se ve un trozo fijo —la mano y un
    buen tramo de brazo— y a partir de ahí se desvanece, como si el gato
    estuviera al otro lado de la mesa, fuera de la vista */
-.pataM.naranja{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 230px,transparent 380px);
-  mask-image:linear-gradient(to bottom,#000 0,#000 230px,transparent 380px)}
+.pataM.naranja{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 410px);
+  mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 410px)}
 /* la de Miut, igual: se ve la mano, el antebrazo y el codo, y el brazo se
    desvanece hacia el hombro, que está debajo de la pantalla. Un poco más
    larga que la naranja, porque Miut es quien trabaja */
-.pataM.deMiut{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 420px);
-  mask-image:linear-gradient(to bottom,#000 0,#000 250px,transparent 420px)}
+.pataM.deMiut{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 270px,transparent 450px);
+  mask-image:linear-gradient(to bottom,#000 0,#000 270px,transparent 450px)}
 /* el chispazo del manotazo */
 .zas{position:fixed;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:42;pointer-events:none;animation:zas .38s ease-out forwards}
 .zas svg{width:100%;height:100%;overflow:visible}
@@ -966,7 +974,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.12
+  · versión 1.0.13
 </footer>
 </div>
 
@@ -1112,6 +1120,11 @@ const FORMA = 'M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z';
 const formaCon = (hueco, lengua) => 'M9 5 ' + (hueco ? 'H22 A7 7 0 0 0 36 5 ' : '') + 'H49 V20 A7 7 0 0 1 49 34 V49 '
   + (lengua ? 'H36 A7 7 0 0 1 22 49 ' : '') + 'H9 V34 A7 7 0 0 0 9 20 Z';
 const TEXTURAS = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+/* DOS CIFRAS. El número va centrado en el cuerpo, pero a la izquierda está
+   el hueco donde entra la lengüeta de la anterior: con dos cifras, la
+   primera se metía en él y su contorno pisaba el borde. Se corre a la
+   parte libre (de 16 a 49) y se estrecha un poco */
+const CIFRAS = p => p > 9 ? 'x="32.5"' : 'x="29"';
 function piezaSVG(p, forma, hueco){
   forma = forma || FORMA;
   return '<svg viewBox="0 0 64 54" aria-hidden="true">'
@@ -1119,7 +1132,7 @@ function piezaSVG(p, forma, hueco){
     + (TEXTURAS.includes(p) ? '<path class="textura" fill="url(#tx' + p + ')" d="' + forma + '"/>' : '')
     + '<path class="cuerpo" fill="none" d="' + forma + '"/>'
     + '<path class="brillo" d="' + (hueco ? 'M12 8 H20 V13 H12 Z M38 8 H46 V13 H38 Z' : 'M12 8 H46 V13 H12 Z') + '"/>'
-    + '<text x="29" y="28" style="stroke:' + colorDe(p) + '">' + p + '</text></svg>';
+    + '<text ' + CIFRAS(p) + ' y="28" style="stroke:' + colorDe(p) + (p > 9 ? ';font-size:22px' : '') + '">' + p + '</text></svg>';
 }
 function pieza(p, opts){
   opts = opts || {};
@@ -1779,7 +1792,7 @@ function morfea(r, p, destino){
     + anima('d', roca, FORMA_C) + anima('fill', gris, color) + '</path>'
     + '<text x="29" y="28" font-family="Space Mono, monospace" font-weight="700" font-size="30" fill="' + tinta + '" text-anchor="middle" dominant-baseline="central">'
     + anima('opacity', 1, 0) + p + '</text>'
-    + '<text x="29" y="28" font-family="Rokkitt, serif" font-weight="700" font-size="25" fill="#1A1226" text-anchor="middle" dominant-baseline="central"'
+    + '<text ' + CIFRAS(p) + ' y="28" font-family="Rokkitt, serif" font-weight="700" font-size="' + (p > 9 ? 22 : 25) + '" fill="#1A1226" text-anchor="middle" dominant-baseline="central"'
     + ' stroke="' + color + '" stroke-width="5" paint-order="stroke" opacity="0">' + anima('opacity', 0, 1) + p + '</text></svg>');
   ov.style.cssText = 'position:fixed;left:' + (cx - W / 2) + 'px;top:' + (cy - H / 2) + 'px;width:' + W + 'px;height:' + H + 'px;z-index:39;pointer-events:none;'
     + 'filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))';
@@ -1833,7 +1846,7 @@ function desprende(r, p, antes, destino){
   const roca = rocaC(52, 44);
   const ov = el('div', 'morfo', '<svg viewBox="0 0 64 54" width="' + W + '" height="' + H + '" style="overflow:visible;display:block">'
     + '<path d="' + roca + '" fill="' + gris + '" stroke="#1A1226" stroke-width="2.2" stroke-linejoin="round">' + anima('d', roca, FORMA_C) + anima('fill', gris, color) + '</path>'
-    + '<text x="29" y="28" font-family="Rokkitt, serif" font-weight="700" font-size="25" fill="#1A1226" text-anchor="middle" dominant-baseline="central"'
+    + '<text ' + CIFRAS(p) + ' y="28" font-family="Rokkitt, serif" font-weight="700" font-size="' + (p > 9 ? 22 : 25) + '" fill="#1A1226" text-anchor="middle" dominant-baseline="central"'
     + ' stroke="' + color + '" stroke-width="5" paint-order="stroke" opacity="0">' + anima('opacity', 0, 1) + p + '</text></svg>');
   const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
   ov.style.cssText = 'position:fixed;left:' + (cx - W / 2) + 'px;top:' + (cy - H / 2) + 'px;width:' + W + 'px;height:' + H + 'px;z-index:39;pointer-events:none;opacity:0;'
