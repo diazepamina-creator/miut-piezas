@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.3
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.4
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,13 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.4 · LA CABECERA, DESPEJADA
+  · La dificultad de Practicar está en su etiqueta: «Difícil ▾» se toca y
+    se elige en un menú. Fuera la fila de botones, que en el móvil se
+    partía en dos.
+  · Las vidas solo se ven en el Reto de las 7 vidas. Fuera de él se siguen
+    contando, sin enseñarlas, para el acta y para el modo Auto.
 
   VERSIÓN 1.0.3 · EL ENCARGO, EN UNA LÍNEA
   · Arriba solo queda qué hacer y con qué números («Rompe el 12 en
@@ -667,8 +674,10 @@ button.enlace:hover{color:var(--oro)}
 .conVidas{font-family:'Rokkitt',serif;font-size:14px;letter-spacing:.5px;color:var(--tenue);margin-left:4px}
 
 /* ── PRACTICAR: la dificultad y otro ejercicio, donde van los puntos ── */
-.puntos .difs{margin-right:4px}
-.puntos .difs button{min-height:30px;padding:4px 10px;font-size:12px}
+.chipDif{cursor:pointer;background:none;min-height:30px;padding:3px 11px;font-size:12.5px}
+.chipDif:hover,.chipDif[aria-expanded="true"]{background:var(--brillo)}
+.difMenu{min-width:200px}
+.difMenu small{color:var(--tenue);font-size:12.5px}
 .puntos .b.otro{margin-left:auto;min-height:34px;padding:5px 12px}
 .masCaja{position:relative;display:inline-block}
 .puntos #bMas{min-height:34px;padding:5px 12px}
@@ -859,7 +868,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.3
+  · versión 1.0.4
 </footer>
 </div>
 
@@ -927,8 +936,8 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <p>Hay que construir la torre <b>más pequeña</b> en la que quepan los dos números, pieza a pieza. Esa torre es el <b>mínimo común múltiplo</b>: hace falta cada pieza tantas veces como la tenga el que más.</p>
   <h3>La pareja · mcd · mcm = a · b</h3>
   <p>Las torres del mcd y del mcm, ya hechas. Se juntan y salen exactamente las piezas de los dos números: por eso <b>mcd · mcm = a · b</b>, siempre.</p>
-  <h3>Las siete vidas</h3>
-  <p>Cada ejercicio empieza con <b>siete vidas de gato</b>. Se pierde una al comprobar mal, al contestar mal y al decir «ya no se rompe» antes de tiempo; y, desde la etapa lisa, con cada golpe que no cae justo. En colores y texturas, probar golpes no cuesta: es como se aprende el criterio. En los retos, las vidas que quedan son tu marca y se guarda la mejor. En <b>Practicar</b>, el <b>Reto de las 7 vidas</b> encadena ejercicios hasta que uno se queda sin vidas, y guarda tu récord.</p>
+  <h3>El reto de las siete vidas</h3>
+  <p>En <b>Practicar</b>, en «Más», el <b>Reto de las 7 vidas</b> encadena ejercicios. Cada uno empieza con <b>siete vidas de gato</b>, y se pierde una al comprobar mal, al contestar mal y al decir «ya no se rompe» antes de tiempo; y, desde la etapa lisa, con cada golpe que no cae justo. En colores y texturas, probar golpes no cuesta: es como se aprende el criterio. Cuando un ejercicio se queda sin vidas, la serie se acaba y se guarda tu récord.</p>
   <h3>Ya no se rompe</h3>
   <p>Desde la etapa lisa, cuando lo que queda de la piedra es un primo, no se convierte sola en pieza: hay que pulsar <b>«Ya no se rompe»</b>. Si todavía se podía romper, el gato naranja para la pata. El 17, el 19 y el 23 no tienen herramienta, así que en sus piedras siempre hay que decirlo. Basta probar los primos cuyo cuadrado no se pasa: si 7 · 7 = 49 ya es más que 47 y ninguno menor lo parte, el 47 es primo.</p>
   <h3>El cuaderno</h3>
@@ -2351,6 +2360,8 @@ const CABEZA = '<svg viewBox="0 0 46 40" aria-hidden="true">'
   + '<path d="M21.3 26 H24.7 L23 27.8 Z" class="na"/></svg>';
 function pintaVidas(){
   const v = $('vidas'); if(!v || !P) return;
+  /* las vidas solo se ven en el Reto de las 7 vidas */
+  v.hidden = !racha(); if(v.hidden){ v.innerHTML = ''; return; }
   const n = P.vidas === undefined ? VIDAS : P.vidas;
   v.innerHTML = '<span class="etq">vidas</span>' + Array.from({length: VIDAS}, (_, k) => '<i class="vida' + (k < n ? '' : ' gastada') + '">' + CABEZA + '</i>').join('')
     + (racha() ? '<span class="racha">Reto de las 7 vidas · ' + est.racha.hechos + ' hecho' + (est.racha.hechos === 1 ? '' : 's') + ' · récord ' + (est.records[recordClave()] || 0) + '</span>' : '');
@@ -2363,10 +2374,8 @@ function pierdeVida(){
   /* la que se pierde: un zarpazo naranja y se queda gris */
   const vs = document.querySelectorAll('#vidas .vida'), cae = vs[P.vidas];
   if(cae && !quieto()){ cae.classList.add('pierde'); }
-  if(P.vidas === 0){
-    if(racha()) setTimeout(finRacha, 900);
-    else setTimeout(() => asoma('¡Sin vidas! Pero el reto se puede acabar igual. La próxima vez, <b>piénsalo antes de tocar</b>.'), 900);
-  }
+  /* fuera del reto no se ven, pero se cuentan: el acta y el modo Auto las usan */
+  if(P.vidas === 0 && racha()) setTimeout(finRacha, 900);
 }
 /* EL RETO DE LAS 7 VIDAS: ejercicios seguidos en Practicar, cada uno con
    siete vidas; si uno se queda sin ellas, la serie se acaba */
@@ -2410,7 +2419,7 @@ function gana(txt){
   if(est.juego !== 'romper') celebra();
   /* el choque de manos; en Romper, cuando la pata ya ha dejado la última pieza */
   setTimeout(chocaCinco, est.juego === 'romper' && !enPregunta() ? 2300 * VEL() : 150);
-  const conVidas = ' <span class="conVidas">con ' + P.vidas + (P.vidas === 1 ? ' vida' : ' vidas') + ' de ' + VIDAS + '</span>';
+  const conVidas = !racha() ? '' : ' <span class="conVidas">con ' + P.vidas + (P.vidas === 1 ? ' vida' : ' vidas') + ' de ' + VIDAS + '</span>';
   if(esPractica()){
     /* lo que se lleva el acta, por juego */
     const X = est.stats[est.juego], limpio = P.vidas === VIDAS && !P.ayuda;
@@ -2434,11 +2443,9 @@ function gana(txt){
   const ay = est.ayuda[J];
   if(P.ayuda){ if(!ay.includes(i)) ay.push(i); } else if(ay.includes(i)) ay.splice(ay.indexOf(i), 1);
   /* la marca: las vidas que quedaban, y la mejor de este reto */
-  const M = est.marcas[J], mejor = Math.max(M[i] || 0, P.vidas), nueva = P.vidas > (M[i] || 0) && M[i] !== undefined;
-  M[i] = mejor;
+  const M = est.marcas[J]; M[i] = Math.max(M[i] || 0, P.vidas);
   guarda();
-  dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>' + conVidas
-    + (nueva ? ' <span class="conVidas">· ¡mejor marca!</span>' : mejor > P.vidas ? ' <span class="conVidas">· tu mejor: ' + mejor + '</span>' : ''), 'bien');
+  dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span>', 'bien');
   /* el último reto de una etapa: Miut se asoma a felicitar */
   const L = RETOS[J];
   if(i === L.length - 1) setTimeout(() => asoma('¡Has terminado <b>' + ({romper:'Romper', comun:'Lo común', todo:'Todo', pareja:'La pareja'})[J] + '</b>! Ahora prueba en <b>Practicar</b>, con números nuevos.'), 1200);
@@ -2500,10 +2507,7 @@ function pintaCabecera(){
     /* en Practicar, en vez de los puntos: la dificultad y otro ejercicio */
     /* tres cosas a la vista: la dificultad, «Más» y otro ejercicio */
     const peor = juegoMasFallado();
-    $('puntos').innerHTML = '<span class="ops difs" role="group" aria-label="Dificultad">'
-      + DIFS.map((d, k) => '<button data-dif="' + k + '" aria-pressed="' + (!est.auto && k === est.dif) + '">' + d.n + '</button>').join('')
-      + '<button data-dif="auto" aria-pressed="' + !!est.auto + '" title="La dificultad se ajusta sola">Auto</button></span>'
-      + '<span class="masCaja"><button class="b" id="bMas" aria-expanded="' + !!P.mas + '">Más ▾</button>'
+    $('puntos').innerHTML = '<span class="masCaja"><button class="b" id="bMas" aria-expanded="' + !!P.mas + '">Más ▾</button>'
       + (P.mas ? '<span class="masMenu" role="menu">'
         + '<button role="menuitem" id="bMezcla" aria-pressed="' + !!est.mezcla + '">' + (est.mezcla ? '✓ ' : '') + 'Mezclar los cuatro juegos</button>'
         + '<button role="menuitem" id="bRacha" aria-pressed="' + !!racha() + '">' + (racha() ? 'Dejar el reto de las 7 vidas' : 'Reto de las 7 vidas') + '</button>'
@@ -2511,11 +2515,8 @@ function pintaCabecera(){
         + '<button role="menuitem" id="bPropios">' + (P.propios ? 'Esconder mis números' : 'Poner mis números') + '</button>'
         + '</span>' : '') + '</span>'
       + '<button class="b ok otro" id="bOtro">Otro ejercicio ›</button>';
-    $('puntos').querySelectorAll('[data-dif]').forEach(x => x.addEventListener('click', () => {
-      if(x.dataset.dif === 'auto') est.auto = true; else { est.auto = false; est.dif = +x.dataset.dif; }
-      est.autoBien = 0; if(est.racha) est.racha.activo = false; guarda(); otroEjercicio(); }));
     $('bOtro').addEventListener('click', otroEjercicio);
-    $('bMas').addEventListener('click', () => { P.mas = !P.mas; pintaCabecera(); });
+    $('bMas').addEventListener('click', () => { P.mas = !P.mas; if(P.difs){ P.difs = false; pintaEncargo(); } pintaCabecera(); });
     if(P.mas){
       $('bMezcla').addEventListener('click', () => { est.mezcla = !est.mezcla; P.mas = false; guarda(); otroEjercicio(); });
       $('bRacha').addEventListener('click', () => { P.mas = false; if(racha()){ est.racha.activo = false; guarda(); pinta(); } else empiezaRacha(); });
@@ -2537,14 +2538,32 @@ function pintaCabecera(){
   });
   $('puntos').innerHTML = h + '</span>';
 }
+/* EL ENCARGO. En Practicar, la etiqueta es también el selector de la
+   dificultad: se toca y se elige, sin una fila de botones que en el móvil
+   se parte en dos */
+function pintaEncargo(){
+  const ns = numerosDelReto(), E = etapa();
+  const que = enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Primero, rompe ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + ' en primos.' : INTRO[est.juego](ns);
+  if(!esPractica()){ $('encTxt').innerHTML = '<span class="chipEtapa">Etapa ' + (reto().e + 1) + ' · ' + E.n + '</span> ' + que; return; }
+  $('encTxt').innerHTML = '<span class="masCaja"><button class="chipEtapa chipDif" id="bDif" aria-haspopup="menu" aria-expanded="' + !!P.difs + '" aria-label="Dificultad: '
+    + DIFS[est.dif].n + (est.auto ? ', automática' : '') + '. Cambiar">' + (est.mezcla ? 'Mezcla · ' : '') + DIFS[est.dif].n + (est.auto ? ' · auto' : '') + ' ▾</button>'
+    + (P.difs ? '<span class="masMenu difMenu" role="menu">'
+      + DIFS.map((d, k) => '<button role="menuitem" data-dif="' + k + '" aria-pressed="' + (!est.auto && k === est.dif) + '">' + d.n + '</button>').join('')
+      + '<button role="menuitem" data-dif="auto" aria-pressed="' + !!est.auto + '">Auto <small>· sube y baja sola</small></button></span>' : '')
+    + '</span> ' + que;
+  $('bDif').addEventListener('click', () => { P.difs = !P.difs; P.mas = false; pintaEncargo(); pintaCabecera(); });
+  $('encTxt').querySelectorAll('[data-dif]').forEach(x => x.addEventListener('click', () => {
+    P.difs = false;
+    if(x.dataset.dif === 'auto') est.auto = true; else { est.auto = false; est.dif = +x.dataset.dif; }
+    est.autoBien = 0; if(est.racha) est.racha.activo = false; guarda(); otroEjercicio(); }));
+}
 function pinta(nuevo){
   pintaCabecera(); pintaVidas();
   const ns = numerosDelReto(), [a, b] = ns, E = etapa();
   /* la etapa manda en cómo se ven las piezas; con la pista abierta en una
      pregunta, se ven lisas */
   document.body.dataset.etapa = E.id === 'pregunta' ? (P.verPiezas ? 'lisa' : 'pregunta') : E.id;
-  $('encTxt').innerHTML = '<span class="chipEtapa">' + (esPractica() ? 'Practicar · ' + (est.mezcla ? 'mezcla · ' : '') + DIFS[est.dif].n + (est.auto ? ' (auto)' : '') : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
-    + (enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Primero, rompe ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + ' en primos.' : INTRO[est.juego](ns));
+  pintaEncargo();
   const t = $('tablero'); t.innerHTML = '';
   if(esPractica() && P.propios) pintaLibre(t);
   if(enPregunta()) pintaPregunta(t);
@@ -2806,7 +2825,7 @@ const GUIA = [
   {sel:'#miut', c:'Miut',
    t:'Miut te va diciendo qué pasa, con las palabras del libro: <b>divide</b>, <b>múltiplo</b>, <b>comunes y no comunes</b>…'},
   {sel:'#bPracticar', c:'Practicar',
-   t:'Ejercicios <b>nuevos cada vez</b>, sin fin. Se elige la dificultad —o <b>Auto</b>, que sube y baja sola— y en «Más» se pueden <b>mezclar los cuatro juegos</b>, jugar al <b>reto de las 7 vidas</b> o repasar lo fallado.'},
+   t:'Ejercicios <b>nuevos cada vez</b>, sin fin. La dificultad se elige tocando la <b>etiqueta de arriba</b> —o <b>Auto</b>, que sube y baja sola— y en «Más» se pueden <b>mezclar los cuatro juegos</b>, jugar al <b>reto de las 7 vidas</b> o repasar lo fallado.'},
   {sel:'#bActa', c:'El acta',
    t:'Un resumen de lo que has hecho, con tu nombre y un código, para <b>entregárselo a tu profesor</b>.'},
   {sel:'#bAjustes', c:'Ajustes',
