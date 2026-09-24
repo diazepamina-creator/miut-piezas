@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.13
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.14
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,13 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.14 · LA MUÑECA
+  · Las patas tienen muñeca, como las de un gato de verdad: el brazo se
+    estrecha un poco al acabar la mano, y la mano gira sobre ella. En
+    reposo queda un poco hacia dentro; al posarse sobre una pieza o dar
+    un toque, se dobla —se aplasta hacia la muñeca y gira— y vuelve; y
+    arrastrando, se queda un poco atrás.
 
   VERSIÓN 1.0.13 · DOS CIFRAS
   · Las piezas de dos cifras (11, 13, 17, 19, 23) llevan el número corrido
@@ -634,6 +641,16 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
 .pataM{position:absolute;left:0;top:0;width:96px;height:1500px;transform-origin:0 0;will-change:transform,filter;
   filter:drop-shadow(10px 16px 10px rgba(40,20,5,.30))}
 .pataM svg{width:96px;height:1500px;display:block;overflow:visible}
+/* LA MUÑECA: la mano gira sobre ella. En reposo, un poco hacia dentro;
+   al posarse en la mesa se dobla —la mano se aplasta hacia la muñeca y se
+   gira al otro lado— y vuelve, como cuando un gato apoya la mano */
+.muneca{transform-box:view-box;transform-origin:48px 84px;transform:rotate(var(--dobla,0deg))}
+.pataM.posa .muneca{animation:posa calc(300ms * var(--vel,1)) ease-out}
+@keyframes posa{0%{transform:rotate(var(--dobla,0deg))}
+  35%{transform:rotate(calc(var(--dobla,0deg) * -1.4)) scaleY(.88)}
+  100%{transform:rotate(var(--dobla,0deg))}}
+/* arrastrando, la mano se queda un poco atrás, más doblada */
+.pataM.arrastra .muneca{transform:rotate(calc(var(--dobla,0deg) * 2.2));transition:transform .2s ease}
 .fantasma.pieza{position:fixed;left:0;top:0;z-index:39;pointer-events:none;will-change:transform;line-height:0;transition:none;
   filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))}
 .fantasma svg{width:100%;height:100%;overflow:visible}
@@ -974,7 +991,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.13
+  · versión 1.0.14
 </footer>
 </div>
 
@@ -1302,11 +1319,15 @@ const pataSVG = (quien, lado) => {
   /* los puntos de control del antebrazo, siempre por encima del codo: si
      se pasan, el trazo da una vuelta sobre sí mismo y el recorte del
      calcetín se come la palma */
-  const c1 = Math.round((CODO - J - 44) * .4 + 44), c2 = Math.round((CODO - J - 44) * .8 + 44);
-  const brazo = 'M26 44 C25.5 ' + c1 + ' 25 ' + c2 + ' 23.6 ' + (CODO - J) + junta(-1)
+  const c1 = Math.round((CODO - J - 44) * .4 + 44), c2 = Math.round((CODO - J - 44) * .8 + 44), MU = 84;
+  /* LA MUÑECA. Justo al acabar la mano el brazo se estrecha un poco —así
+     lo tienen los gatos de verdad— y luego se ensancha hacia el codo. Por
+     arriba acaba en cúpula, bien metido bajo la palma: al girar la mano
+     no asoma ninguna esquina */
+  const brazo = 'M29 64 C28.9 72 28.8 78 28.8 ' + MU + ' C28.6 ' + (MU + 22) + ' 24.5 ' + c2 + ' 23.6 ' + (CODO - J) + junta(-1)
     + ' C' + R(21, 900) + ' ' + R(15, 1700) + ' ' + R(11, 2600) + ' L' + R(85, 2600)
     + ' C' + R(81, 1700) + ' ' + R(75, 900) + ' ' + R(72.6, CODO + J) + juntaSube()
-    + ' C71 ' + c2 + ' 70.5 ' + c1 + ' 70 44 Z';
+    + ' C71.5 ' + c2 + ' 67.4 ' + (MU + 22) + ' 67.2 ' + MU + ' C67.2 78 67.1 72 67 64 Q48 48 29 64 Z';
   const codo = '';
   const doblado = x => '<g transform="rotate(' + giro + ' 48 ' + CODO + ')">' + x + '</g>';
   /* el hueso del codo, en sombra suave por fuera, y el pliegue por dentro */
@@ -1316,7 +1337,11 @@ const pataSVG = (quien, lado) => {
       + '" fill="none" stroke="' + C.borde + '" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>';
   const palma = '<ellipse cx="48" cy="50" rx="25" ry="23"/>';
   const dedos = '<circle cx="27.5" cy="35" r="9.2"/><circle cx="40" cy="24.5" r="10.2"/><circle cx="56" cy="24.5" r="10.2"/><circle cx="68.5" cy="35" r="9.2"/>';
-  const contorno = '<path d="' + brazo + '"/>' + palma + dedos;
+  /* LA MANO, aparte del brazo: gira sobre la muñeca. En reposo, un poco
+     hacia dentro; al posarse, se dobla (véase .muneca) */
+  const dobla = -fuera * 5;
+  const mano = x => '<g class="muneca" style="--dobla:' + dobla + 'deg">' + x + '</g>';
+  const contorno = '<path d="' + brazo + '"/>' + mano(palma + dedos);
   /* el calcetín blanco: hasta pasada la muñeca, con el borde de pelo en
      zigzag irregular */
   const picos = [4, 9, 3, 8, 5, 10, 4, 7, 3, 9, 5];
@@ -1339,25 +1364,26 @@ const pataSVG = (quien, lado) => {
     + '<linearGradient id="pelo-' + id + '" gradientUnits="userSpaceOnUse" x1="16" y1="0" x2="80" y2="0">' + C.pelo.map((c, k) => '<stop offset="' + [0, .22, .48, .78, 1][k] + '" stop-color="' + c + '"/>').join('') + '</linearGradient>'
     + '<radialGradient id="calcetin-' + id + '" cx=".45" cy=".35" r=".65"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F6F1F5"/>'
     + '<stop offset="1" stop-color="#D8CCE0"/></radialGradient>'
-    + '<clipPath id="soloMano-' + id + '"><path d="' + brazo + '"/>' + palma + dedos + '</clipPath>'
+    + '<clipPath id="soloMano-' + id + '"><path d="' + brazo + '"/></clipPath>'
     + '<clipPath id="soloBrazo-' + id + '"><path d="' + brazo + '"/></clipPath></defs>'
     + '<g fill="none" stroke="' + C.borde + '" stroke-width="3.2" stroke-linejoin="round">' + contorno + '</g>'
-    + '<g fill="url(#pelo-' + id + ')">' + contorno + '</g>'
+    + '<g fill="url(#pelo-' + id + ')"><path d="' + brazo + '"/></g>'
     /* más allá del codo, la luz gira con el brazo: el mismo degradado,
        girado, pintado solo dentro del contorno */
     + '<g clip-path="url(#soloBrazo-' + id + ')">' + doblado('<rect x="-60" y="' + CODO + '" width="216" height="2400" fill="url(#pelo-' + id + ')"/>') + '</g>'
     + '<g fill="' + C.raya + '" opacity=".55">' + rayas + '</g>' + detalleCodo
-    + '<g clip-path="url(#soloMano-' + id + ')"><path d="' + zig + '" fill="url(#calcetin-' + id + ')"/>'
-    + palma.replace('/>', ' fill="url(#calcetin-' + id + ')"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin-' + id + ')"/>')
+    /* el calcetín, en el brazo; encima, la mano entera, que se mueve sola */
+    + '<g clip-path="url(#soloMano-' + id + ')"><path d="' + zig + '" fill="url(#calcetin-' + id + ')"/></g>'
+    + mano(palma.replace('/>', ' fill="url(#calcetin-' + id + ')"/>') + dedos.replace(/\/>/g, ' fill="url(#calcetin-' + id + ')"/>')
     /* la sombra de la mano sobre la muñeca: separa el mitón del brazo */
-    + '<path d="M28 68 Q48 80 68 68" fill="none" stroke="#B9A9C4" stroke-width="2.4" stroke-linecap="round" opacity=".7"/></g>'
+    + '<path d="M33 70 Q48 79 63 70" fill="none" stroke="#B9A9C4" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>'
     /* los surcos entre los dedos, y un mechón blanco en cada punta */
     + '<g fill="none" stroke="#9A89A6" stroke-width="1.7" stroke-linecap="round">'
     + '<path d="M33.5 29 Q34.5 35 36.5 40"/><path d="M48 18 Q48 26 48 33"/><path d="M62.5 29 Q61.5 35 59.5 40"/></g>'
     + '<g fill="none" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round" opacity=".95">'
     + '<path d="M38 15 l-1 -3 M47 14.5 l-.5 -3 M49.5 14.5 l1 -3 M58 15 l1 -3 M20 30 l-2.5 -1.5 M76 30 l2.5 -1.5"/></g>'
     /* la luz de la lámpara sobre los nudillos */
-    + '<path d="M31 43 Q48 34 65 43" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".6"/>'
+    + '<path d="M31 43 Q48 34 65 43" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".6"/>')
     + '</svg>';
 };
 /* una pata por gato y por lado, dibujadas una vez: el codo va hacia fuera */
@@ -1381,9 +1407,14 @@ function postura(x, y, lado, esc, arriba){
   const ang = Math.atan2(-(hx - x), hy - y) * 180 / Math.PI;
   return 'translate(' + x + 'px,' + y + 'px) rotate(' + ang.toFixed(1) + 'deg) scale(' + esc + ') translate(-48px,-14px)';
 }
+/* la muñeca se dobla al posarse: en el momento t del movimiento */
+function posa(d, t){
+  if(quieto()) return;
+  setTimeout(() => { d.classList.remove('posa'); void d.offsetWidth; d.classList.add('posa'); }, t);
+}
 function sacaPata(x){
   const lado = x < innerWidth / 2 ? 'izq' : 'der';
-  const d = el('div', 'pataM deMiut', pata('miut', lado));
+  const d = el('div', 'pataM deMiut', pata('miut', lado)); d.style.setProperty('--vel', VEL());
   $('patas').appendChild(d);
   return {d, lado};
 }
@@ -1428,6 +1459,11 @@ function mueve(p, r0, destino, desaparece){
   const fin = () => { if(hecho) return; hecho = true; clearTimeout(suelta); destino.style.visibility = ''; g.remove(); d.remove(); anP.cancel(); anG.cancel(); };
   /* la pieza de destino aparece cuando la pata la suelta, no al final */
   const suelta = setTimeout(() => { destino.style.visibility = ''; if(!desaparece) g.style.visibility = 'hidden'; }, T * .72);
+  /* se posa sobre la pieza, la arrastra con la mano algo atrás, y la suelta */
+  posa(d, T * .22);
+  setTimeout(() => d.classList.add('arrastra'), T * .34);
+  setTimeout(() => d.classList.remove('arrastra'), T * .68);
+  posa(d, T * .7);
   anP.finished.then(fin, fin);
   enCurso.push(fin);
 }
@@ -1450,6 +1486,7 @@ function toca(r, alTocar){
   let hecho = false, tocado = false;
   const toque = () => { if(tocado) return; tocado = true; alTocar && alTocar(); };
   const t = setTimeout(toque, T * .45);
+  posa(d, T * .4);
   const fin = () => { if(hecho) return; hecho = true; clearTimeout(t); toque(); d.remove(); an.cancel(); };
   an.finished.then(fin, fin);
   enCurso.push(fin);
