@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.1
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.2
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,13 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.2 · LA MESA DE ROMPER, QUIETA
+  · Al romper, nada cambia de sitio de golpe: arriba la fila de piezas,
+    que crece hacia la derecha, con «voltear» encima; debajo, la piedra y
+    el cuaderno, cada uno en su columna. Antes, al llegar la primera pieza,
+    la piedra saltaba a otra línea y las piezas volaban por encima del
+    botón de voltear.
 
   VERSIÓN 1.0.1 · PARA LA PIZARRA
   · «Ya no se rompe», en dorado y más grande: en la mesa oscura y con
@@ -427,7 +434,18 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 .piedraVieja.rota .grieta{animation:grieta .6s ease forwards}
 @keyframes grieta{0%{opacity:0}10%{opacity:.8}60%{opacity:.6}100%{opacity:0}}
 @keyframes golpe{20%{transform:translateX(-5px) rotate(-2deg)}40%{transform:translateX(5px) rotate(2deg)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
-.romper{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;padding:10px 0}
+.romper{display:flex;flex-direction:column;gap:10px;width:min(100%,460px);margin:0 auto;padding:10px 0}
+/* la mesa de romper no se mueve: arriba la fila de piezas, que crece hacia
+   la derecha, con «voltear» encima, fuera del camino de las piezas; debajo,
+   la piedra y el cuaderno, cada uno en su columna. Así, al desprenderse una
+   pieza, nada cambia de sitio de golpe */
+.romper .bloque{flex-direction:column;align-items:flex-start;flex-wrap:nowrap;gap:6px}
+.romper .bloque .voltear{order:-1;align-self:flex-end}
+.romper .abajo{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.romper .abajo > .piedra,.romper .abajo > .sinPiedra{justify-self:end}
+.romper .abajo > .sinPiedra{width:96px;height:80px}
+.romper .abajo > .cuaderno{justify-self:start}
+.romper .barra{min-height:calc(4 * 1.35em);align-content:start}
 .herr{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .herr button{font-family:'Rokkitt',serif;font-weight:700;font-size:17px;min-width:58px;min-height:46px;border-radius:10px;cursor:pointer;
   border:2px solid #1A1226;color:#1A1226;box-shadow:0 3px 0 rgba(0,0,0,.3)}
@@ -836,7 +854,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.1
+  · versión 1.0.2
 </footer>
 </div>
 
@@ -1977,9 +1995,11 @@ function pintaRomper(t){
   if(P.cadena) t.appendChild(el('div', 'rot', 'Primero, las piedras · ' + (P.rotos.length + 1) + ' de ' + P.cadena.length));
   const r = el('div', 'romper');
   r.appendChild(bloque('rotas', R.piezas, {vacio:'aún ninguna pieza'}));
-  if(R.resto > 1) r.appendChild(el('div', 'piedra', String(R.resto)));
+  const abajo = el('div', 'abajo');
+  abajo.appendChild(R.resto > 1 ? el('div', 'piedra', String(R.resto)) : el('div', 'sinPiedra'));
   const cuaderno = el('div', 'cuaderno'); cuaderno.appendChild(el('span', 'etq', 'en el cuaderno')); cuaderno.appendChild(barra(R));
-  r.appendChild(cuaderno);
+  abajo.appendChild(cuaderno);
+  r.appendChild(abajo);
   t.appendChild(r);
   /* LA LÍNEA QUE SE EVALÚA: grande, y en potencias en cuanto se repite una pieza */
   t.appendChild(el('div', 'cuenta grande', R.piezas.length
