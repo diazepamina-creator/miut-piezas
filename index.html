@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 0.9.2
+  Manipulativo para 1.º y 2.º de ESO · versión 0.9.3
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,12 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 0.9.3
+  · SE DESPRENDE UNA PIEZA: al partir la piedra, se agrieta, tiembla y de
+    su costado sale un trozo de roca que se vuelve la pieza mientras la
+    piedra cambia su número. Ya no aparece la pieza de la nada.
+  · El antebrazo, un poco más corto todavía (codo a 248).
 
   VERSIÓN 0.9.2
   · EL ANTEBRAZO, MÁS CORTO: el codo pasa de 330 a 270 puntos de la punta
@@ -374,6 +380,19 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
   border-radius:12px;border:2.2px solid #1A1226;background:linear-gradient(180deg,var(--piedraL),var(--piedra));
   font-family:'Space Mono',monospace;font-weight:700;font-size:34px;color:var(--tinta);box-shadow:0 4px 0 rgba(0,0,0,.3)}
 .piedra.golpe{animation:golpe .35s ease}
+/* la piedra de antes, mientras se desprende la pieza */
+.barra.espera,.cuenta.grande.espera{opacity:.25}
+.barra,.cuenta.grande{transition:opacity .3s ease}
+.piedraVieja{display:grid !important;place-items:center;box-sizing:border-box}
+.piedraVieja > span{grid-area:1/1;transition:opacity .22s ease .06s, transform .3s ease .04s}
+.piedraVieja .nB{opacity:0;transform:scale(.7)}
+.piedraVieja.rota .nA{opacity:0;transform:scale(1.2)}
+.piedraVieja.rota .nB{opacity:1;transform:scale(1)}
+.piedraVieja .grieta{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:0;transition:opacity .08s}
+.piedraVieja .grieta path{fill:none;stroke:#1A1226;stroke-width:2.4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.piedraVieja.rota .grieta{opacity:.75;transition:opacity .5s ease .25s}
+.piedraVieja.rota .grieta{animation:grieta .6s ease forwards}
+@keyframes grieta{0%{opacity:0}10%{opacity:.8}60%{opacity:.6}100%{opacity:0}}
 @keyframes golpe{20%{transform:translateX(-5px) rotate(-2deg)}40%{transform:translateX(5px) rotate(2deg)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
 .romper{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;padding:10px 0}
 .herr{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
@@ -500,8 +519,8 @@ input.num{font-family:'Space Mono',monospace;font-size:18px;width:92px;padding:7
 /* la de Miut, igual: se ve la mano, el antebrazo y el codo, y el brazo se
    desvanece hacia el hombro, que está debajo de la pantalla. Un poco más
    larga que la naranja, porque Miut es quien trabaja */
-.pataM.deMiut{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 290px,transparent 480px);
-  mask-image:linear-gradient(to bottom,#000 0,#000 290px,transparent 480px)}
+.pataM.deMiut{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 270px,transparent 460px);
+  mask-image:linear-gradient(to bottom,#000 0,#000 270px,transparent 460px)}
 /* el chispazo del manotazo */
 .zas{position:fixed;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:42;pointer-events:none;animation:zas .38s ease-out forwards}
 .zas svg{width:100%;height:100%;overflow:visible}
@@ -707,7 +726,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 0.9.2
+  · versión 0.9.3
 </footer>
 </div>
 
@@ -940,7 +959,7 @@ const pataSVG = (quien, lado) => {
      al codo, y ahí el brazo se dobla un poco —nueve grados— hacia el
      hombro. El codo asoma por fuera, redondeado, y queda del lado de fuera
      de la pantalla, como en un brazo de verdad apoyado en la mesa. */
-  const CODO = 270, giro = (lado === 'izq' ? -1 : 1) * 9, fuera = lado === 'izq' ? -1 : 1;
+  const CODO = 248, giro = (lado === 'izq' ? -1 : 1) * 9, fuera = lado === 'izq' ? -1 : 1;
   /* Todo el brazo es UN solo contorno: el antebrazo recto, el brazo girado
      alrededor del codo y, entre los dos, dos curvas. Por fuera, el codo
      abomba un poco, que es el hueso; por dentro, la piel se recoge en un
@@ -1005,8 +1024,8 @@ const pataSVG = (quien, lado) => {
       + ' Q' + mx.toFixed(1) + ' ' + (y - 13 + 2 * g) + ' ' + xa.toFixed(1) + ' ' + (y + t) + ' Z"/>';
   };
   /* las del antebrazo, rectas; las de más allá del codo, dobladas con él */
-  const rayas = [raya(142, 5, 3), raya(168, 2.5, -2, 0, .55), raya(205, 6, -3)].join('')
-    + doblado([raya(330, 6.5, -4), raya(392, 5, 3), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4),
+  const rayas = [raya(138, 5, 3), raya(162, 2.5, -2, 0, .55), raya(192, 6, -3)].join('')
+    + doblado([raya(305, 6.5, -4), raya(372, 5, 3), raya(452, 5, 3), raya(482, 2.5, -2, 0, .6), raya(548, 6, -3), raya(640, 5, 4),
       raya(730, 6, -3), raya(768, 2.5, 2, .5, 1), raya(850, 6.5, 4), raya(960, 5.5, -3), raya(1000, 2.5, -2, 0, .5), raya(1090, 6, 3), raya(1220, 6.5, -4), raya(1360, 6, 3)].join(''));
   return '<svg viewBox="0 0 96 1500" aria-hidden="true"><defs>'
     + '<linearGradient id="pelo-' + id + '" gradientUnits="userSpaceOnUse" x1="16" y1="0" x2="80" y2="0">' + C.pelo.map((c, k) => '<stop offset="' + [0, .22, .48, .78, 1][k] + '" stop-color="' + c + '"/>').join('') + '</linearGradient>'
@@ -1483,6 +1502,74 @@ function morfea(r, p, destino){
   enCurso.push(fin);
 }
 
+/* SE DESPRENDE UNA PIEZA. Cuando el primo cae justo pero la piedra no es
+   todavía un primo, la pata golpea, la piedra se agrieta y tiembla, y de
+   su costado sale un trozo de roca que, mientras se aparta, se vuelve la
+   pieza del primo —el mismo paso de roca a puzle que la última pieza, en
+   pequeño—. La piedra, a la vez, cambia su número por el que queda. Luego
+   la pata lleva la pieza a la fila. */
+function desprende(r, p, antes, destino){
+  const nueva = document.querySelector('.piedra');
+  if(quieto() || !r || !nueva) return;
+  const z = parseFloat(getComputedStyle(document.body).getPropertyValue('--zAula')) || 1;
+  const rn = nueva.getBoundingClientRect();
+  const cs = getComputedStyle(document.body);
+  const gris = cs.getPropertyValue('--piedraL').trim() || '#C2B9B0', tinta = cs.getPropertyValue('--tinta').trim() || '#2E2218';
+  const carton = ['textura', 'lisa'].includes(document.body.dataset.etapa), color = carton ? '#E4D2B2' : colorDe(p);
+  /* la piedra de antes, encima de la nueva, con su número */
+  const vieja = el('div', 'piedra piedraVieja', '<span class="nA">' + antes + '</span><span class="nB">' + (antes / p) + '</span>'
+    + '<svg class="grieta" viewBox="0 0 100 80" preserveAspectRatio="none"><path d="M58 0 L50 22 L60 34 L46 52 L55 64 L49 80" /></svg>');
+  vieja.style.cssText = 'position:fixed;left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px;margin:0;z-index:38;pointer-events:none;zoom:' + z;
+  if(z !== 1){ vieja.style.left = r.left / z + 'px'; vieja.style.top = r.top / z + 'px'; vieja.style.width = r.width / z + 'px'; vieja.style.height = r.height / z + 'px'; }
+  document.body.appendChild(vieja);
+  nueva.style.visibility = 'hidden';
+  if(destino) destino.style.visibility = 'hidden';
+  /* el trozo que se desprende: roca del tamaño de una pieza, escondido tras la piedra */
+  const W = 76 * z, H = 64 * z, D = 560;
+  const anima = (atr, de, a) => '<animate attributeName="' + atr + '" from="' + de + '" to="' + a + '" dur="' + D + 'ms" begin="indefinite" fill="freeze"'
+    + ' calcMode="spline" keyTimes="0;1" keySplines=".5 0 .2 1"/>';
+  const roca = rocaC(52, 44);
+  const ov = el('div', 'morfo', '<svg viewBox="0 0 64 54" width="' + W + '" height="' + H + '" style="overflow:visible;display:block">'
+    + '<path d="' + roca + '" fill="' + gris + '" stroke="#1A1226" stroke-width="2.2" stroke-linejoin="round">' + anima('d', roca, FORMA_C) + anima('fill', gris, color) + '</path>'
+    + '<text x="29" y="28" font-family="Rokkitt, serif" font-weight="700" font-size="25" fill="#1A1226" text-anchor="middle" dominant-baseline="central"'
+    + ' stroke="' + color + '" stroke-width="5" paint-order="stroke" opacity="0">' + anima('opacity', 0, 1) + p + '</text></svg>');
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  ov.style.cssText = 'position:fixed;left:' + (cx - W / 2) + 'px;top:' + (cy - H / 2) + 'px;width:' + W + 'px;height:' + H + 'px;z-index:39;pointer-events:none;opacity:0;'
+    + 'filter:drop-shadow(3px 6px 5px rgba(40,20,5,.35))';
+  document.body.appendChild(ov);
+  /* sale del costado de la piedra que mira a la fila, y se aparta hasta
+     quedar fuera, con aire */
+  const d = destino ? destino.getBoundingClientRect() : null;
+  const lado = d && d.left + d.width / 2 > cx ? 1 : -1;
+  const x0 = lado * (r.width / 2 - W * .3), sx = lado * (r.width / 2 + W / 2 + 8 * z), sy = -4 * z;
+  /* lo que se escribe —la barra y la línea— espera al golpe */
+  const textos = [...document.querySelectorAll('.barra, .cuenta.grande')];
+  textos.forEach(x => x.classList.add('espera'));
+  let hecho = false, t = 0;
+  const fin = () => { if(hecho) return; hecho = true; clearTimeout(t); ov.remove(); vieja.remove(); nueva.style.visibility = ''; if(destino) destino.style.visibility = ''; textos.forEach(x => x.classList.remove('espera')); };
+  toca(r, () => {
+    vieja.classList.add('rota');
+    textos.forEach(x => x.classList.remove('espera'));
+    vieja.animate([{transform: 'translateX(0)'}, {transform: 'translateX(' + (-lado * 4) + 'px) rotate(' + (-lado * 2) + 'deg)'}, {transform: 'translateX(' + (lado * 2) + 'px)'}, {transform: 'translateX(0)'}], {duration: 320, easing: 'ease-out'});
+    /* la piedra se acomoda a su tamaño nuevo y cambia de número */
+    vieja.animate([{left: r.left / z + 'px', width: r.width / z + 'px', top: r.top / z + 'px'}, {left: rn.left / z + 'px', width: rn.width / z + 'px', top: rn.top / z + 'px'}],
+      {duration: 420, delay: 180, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'forwards'});
+    ov.querySelectorAll('animate').forEach(a => a.beginElement());
+    ov.animate([{transform: 'translate(' + x0 + 'px,0) scale(.55) rotate(' + (lado * 14) + 'deg)', opacity: 1, offset: 0},
+                {transform: 'translate(' + (x0 + sx) / 2 + 'px,' + sy * 3 + 'px) scale(.85) rotate(' + (lado * 6) + 'deg)', opacity: 1, offset: .35},
+                {transform: 'translate(' + sx + 'px,' + sy + 'px) scale(1) rotate(0)', opacity: 1, offset: 1}],
+      {duration: D, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'forwards'});
+    t = setTimeout(() => {
+      vieja.remove(); nueva.style.visibility = '';
+      if(destino && destino.isConnected){
+        const q = ov.getBoundingClientRect();
+        mueve(p, {left: q.left, top: q.top, width: q.width, height: q.height}, destino);
+      }else fin();
+    }, D + 60);
+  });
+  enCurso.push(fin);
+}
+
 /* dónde acaba cada pieza, después de repintar */
 const conEtiqueta = (cont, p) => cont ? [...cont.querySelectorAll('.pieza[aria-label]')].filter(x => x.getAttribute('aria-label').endsWith(' ' + p)) : [];
 function enTorre(clave, p, ultima){
@@ -1724,7 +1811,7 @@ function parte(p, rp, nota){
   pinta();
   /* la pata arranca la pieza de la piedra y la lleva a la fila */
   if(rp && R.resto === 1) morfea(rp, p, enTorre('rotas', p, true));
-  else if(rp) mueve(p, {left: rp.left + rp.width / 2 - 38, top: rp.top + rp.height / 2 - 32, width: 76, height: 64}, enTorre('rotas', p, true));
+  else if(rp) desprende(rp, p, R.resto * p, enTorre('rotas', p, true));
 }
 /* LA BARRA DEL CUADERNO: lo mismo que pasa en la mesa, escrito como en la
    libreta. A la izquierda lo que queda de la piedra; a la derecha, el
