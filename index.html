@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.1
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,13 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.1 · PARA LA PIZARRA
+  · «Ya no se rompe», en dorado y más grande: en la mesa oscura y con
+    piezas lisas apenas se leía.
+  · EL RITMO, en Ajustes: automático, normal o pausado. Pausado —y en el
+    aula, en automático— va un 35 % más despacio y las patas no animan su
+    sombra, que es lo que más atascaba en la pizarra.
 
   VERSIÓN 1.0
   · La primera versión completa: cuatro juegos con cuatro etapas cada uno,
@@ -427,7 +434,8 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
 .herr button:active{transform:translateY(2px);box-shadow:none}
 .herr button:disabled{opacity:.35;cursor:default}
 .herr .etq{width:100%;text-align:center}
-.herr .yaNo{flex-basis:100%;max-width:260px;margin:4px auto 0;min-height:44px;background:linear-gradient(180deg,var(--panel2),var(--panel)) !important;color:var(--tinta);border:2px solid var(--oro)}
+body .herr button.b.yaNo{flex-basis:100%;max-width:280px;margin:6px auto 0;min-height:48px;font-size:18px;letter-spacing:1.5px;
+  background:linear-gradient(180deg,#F4CB72,#DDA23A) !important;color:#2A1D06 !important;border:2px solid #7E4C12;box-shadow:0 3px 0 #7E4C12}
 /* LA BARRA DEL CUADERNO: dos columnas y la raya vertical, como en la libreta */
 .cuaderno{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:6px 10px;border-radius:10px;background:var(--noche);border:1px solid var(--linea)}
 .barra{display:grid;grid-template-columns:auto auto;font-family:'Space Mono',monospace;font-size:19px;line-height:1.35;min-width:84px}
@@ -777,6 +785,9 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
     <small>Solo suena la riña del gato naranja —un maullido enfadado—, bajito.</small></div>
   <div class="aj"><span class="etq">Las patas</span>
     <span class="ops" role="group" aria-label="Las patas"><button data-aj="patas" data-v="si">Se ven</button><button data-aj="patas" data-v="no">Sin animaciones</button></span></div>
+  <div class="aj"><span class="etq">El ritmo</span>
+    <span class="ops" role="group" aria-label="El ritmo de las animaciones"><button data-aj="vel" data-v="auto">Automático</button><button data-aj="vel" data-v="normal">Normal</button><button data-aj="vel" data-v="pausada">Pausado</button></span>
+    <small>«Pausado» hace las animaciones un poco más lentas y más ligeras, para la pizarra. En automático, es pausado cuando está puesto el modo Aula.</small></div>
   <div class="aj"><span class="etq">Al abrir</span>
     <span class="ops" role="group" aria-label="La animación de inicio"><button data-aj="inicio" data-v="si">Con animación</button><button data-aj="inicio" data-v="no">Sin animación</button></span></div>
   <div class="aj profe"><span class="etq">Para el profesor</span>
@@ -825,7 +836,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0
+  · versión 1.0.1
 </footer>
 </div>
 
@@ -1176,6 +1187,13 @@ const pataSVG = (quien, lado) => {
 const PATAS = {};
 const pata = (quien, lado) => PATAS[quien + lado] || (PATAS[quien + lado] = pataSVG(quien, lado));
 const quieto = () => document.body.dataset.movimiento === 'menos';
+/* EL RITMO. En la pizarra las animaciones se veían rápidas y a veces se
+   atascaban. Con «pausadas» —o en el aula, si se deja en automático— todo
+   va un 35 % más despacio, y las patas dejan de animar su sombra, que es
+   lo que más le cuesta a un ordenador de pizarra. */
+const VEL = () => aj.vel === 'pausada' || (aj.vel !== 'normal' && aj.aula === 'si') ? 1.35 : 1;
+const ligero = () => VEL() > 1;
+const sinSombra = frames => ligero() ? frames.map(f => { const g = Object.assign({}, f); delete g.filter; return g; }) : frames;
 let enCurso = [];                                    // lo que se está moviendo ahora
 function acabaTodo(){ enCurso.splice(0).forEach(f => f()); }
 /* la pata, colocada con la punta de los dedos en (x, y) y el brazo hacia
@@ -1214,14 +1232,14 @@ function mueve(p, r0, destino, desaparece){
   const a = punto(r0, true), b = punto(r1, true), esc = escala();
   const {d, lado} = sacaPata(a.x);
   const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
-  const T = 1150;                                  // más pausado: en la pizarra, a 860 apenas se veía
-  const anP = d.animate([
+  const T = 1150 * VEL();                          // más pausado: en la pizarra, a 860 apenas se veía
+  const anP = d.animate(sinSombra([
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
     {transform: postura(a.x, a.y, lado, esc), filter: APOYO, offset: .26, easing: 'ease-in-out'},
     {transform: postura(a.x, a.y + 3, lado, esc), filter: APOYO, offset: .32, easing: 'ease-in-out'},
     {transform: postura(b.x, b.y, lado, esc), filter: APOYO, offset: .72, easing: 'ease-out'},
     {transform: postura(b.x, innerHeight + 140, lado, esc), filter: AIRE, offset: 1}
-  ], {duration: T, fill: 'forwards'});
+  ]), {duration: T, fill: 'forwards'});
   const x0 = r0.left + (r0.width - r1.width) / 2, y0 = r0.top + (r0.height - r1.height) / 2;
   const anG = g.animate([
     {transform: 'translate(' + x0 + 'px,' + y0 + 'px)', opacity: 1, offset: 0},
@@ -1244,14 +1262,14 @@ function toca(r, alTocar){
   const a = punto(r), esc = escala();
   const {d, lado} = sacaPata(a.x);
   const fuera = {x: a.x + (lado === 'izq' ? -40 : 40), y: innerHeight + 120};
-  const T = 720;
-  const an = d.animate([
+  const T = 720 * VEL();
+  const an = d.animate(sinSombra([
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
     {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .4, easing: 'ease-in'},
     {transform: postura(a.x, a.y + 6, lado, esc * .97), filter: APOYO, offset: .5},
     {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .58, easing: 'ease-in'},
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 1}
-  ], {duration: T, easing: 'ease-in-out', fill: 'forwards'});
+  ]), {duration: T, easing: 'ease-in-out', fill: 'forwards'});
   let hecho = false, tocado = false;
   const toque = () => { if(tocado) return; tocado = true; alTocar && alTocar(); };
   const t = setTimeout(toque, T * .45);
@@ -1266,20 +1284,20 @@ function toca(r, alTocar){
 function cancela(r, siQuieto){
   if(quieto() || !r){ siQuieto && siQuieto(); rina(0); return; }
   acabaTodo();
-  const esc = escala(), T = 760, GOLPE = .44;                        // el manotazo llega al 44 %
+  const esc = escala(), T = 760 * VEL(), GOLPE = .44;                        // el manotazo llega al 44 %
   const a = {x: r.left + r.width / 2, y: r.bottom + 14 * esc};         // la punta de los dedos, justo antes de la piedra
   const {d, lado} = sacaPata(a.x);
   const lejos = lado === 'izq' ? -1 : 1;                              // hacia dónde sale despedida: hacia su lado
   const fuera = {x: a.x + lejos * 40, y: innerHeight + 120};
   const baja = {x: a.x + lejos * 30 * esc, y: a.y + 58 * esc};        // adonde la manda el manotazo
-  const anM = d.animate([
+  const anM = d.animate(sinSombra([
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 0},
     {transform: postura(a.x, a.y, lado, esc), filter: AIRE, offset: .3, easing: 'ease-out'},
     {transform: postura(a.x, a.y - 4, lado, esc), filter: AIRE, offset: GOLPE, easing: 'cubic-bezier(.1,.9,.3,1)'},
     {transform: postura(baja.x, baja.y, lado, esc * .93), filter: APOYO, offset: GOLPE + .07, easing: 'ease-out'},
     {transform: postura(baja.x, baja.y + 4, lado, esc * .95), filter: APOYO, offset: .66, easing: 'ease-in'},
     {transform: postura(fuera.x, fuera.y, lado, esc), filter: AIRE, offset: 1}
-  ], {duration: T, fill: 'forwards'});
+  ]), {duration: T, fill: 'forwards'});
   /* el naranja entra por arriba, por el otro lado: coge impulso hacia
      atrás y da un manotazo rápido encima de la mano de Miut */
   const ladoO = lado === 'izq' ? 'der' : 'izq';
@@ -1288,7 +1306,7 @@ function cancela(r, siQuieto){
   const sobre = {x: a.x - lejos * 6, y: a.y + 70 * esc}, sobre2 = {x: baja.x - lejos * 6, y: baja.y + 70 * esc};
   const arriba = {x: sobre.x - lejos * 70, y: -170};
   const impulso = {x: sobre.x - lejos * 46 * esc, y: sobre.y - 96 * esc};
-  const anO = o.animate([
+  const anO = o.animate(sinSombra([
     {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: 0},
     {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: .14, easing: 'ease-out'},
     {transform: postura(impulso.x, impulso.y, ladoO, esc * 1.06, true), filter: AIRE, offset: .34, easing: 'cubic-bezier(.6,0,.9,.5)'},
@@ -1296,7 +1314,7 @@ function cancela(r, siQuieto){
     {transform: postura(sobre2.x, sobre2.y, ladoO, esc * .95, true), filter: APOYO, offset: GOLPE + .07, easing: 'ease-out'},
     {transform: postura(sobre2.x, sobre2.y + 4, ladoO, esc * .97, true), filter: APOYO, offset: .7, easing: 'ease-in'},
     {transform: postura(arriba.x, arriba.y, ladoO, esc, true), filter: AIRE, offset: 1}
-  ], {duration: T, fill: 'forwards'});
+  ]), {duration: T, fill: 'forwards'});
   /* en el golpe: un chispazo de rayitas sobre las manos y la riña */
   const tz = setTimeout(() => {
     const z = el('div', 'zas', '<svg viewBox="-30 -30 60 60">' + [0, 1, 2, 3, 4, 5, 6].map(k => { const g = k * 51.4 - 90, c = Math.cos(g * Math.PI / 180), s2 = Math.sin(g * Math.PI / 180);
@@ -1396,7 +1414,7 @@ function chocaCinco(){
   const v = el('div', 'vineta', VINETA_SVG);
   v.style.cssText = 'left:' + (cx - S / 2) + 'px;top:' + (cy - S / 2) + 'px;width:' + S + 'px;height:' + S + 'px';
   document.body.appendChild(v);
-  const T = 1250;
+  const T = 1250 * VEL();
   /* la viñeta aparece con un saltito y se cierra al final */
   const anV = v.animate([
     {transform: 'scale(.4) rotate(-8deg)', opacity: 0, offset: 0},
@@ -1432,7 +1450,7 @@ function chocaCinco(){
   /* y un destello en cada choque */
   const ra = v.querySelector('.vRayos'), destello = (a) => [{opacity: 0, offset: a + ms(120)}, {opacity: 1, offset: a + ms(130)}, {opacity: 0, offset: a + ms(260)}];
   ra.animate([{opacity: 0, offset: 0}].concat(destello(A), [{opacity: 0, offset: 1}]), {duration: T, fill: 'forwards'});
-  plas(230 + 125, true);
+  plas((230 + 125) * VEL(), true);
   const fin = () => v.remove();
   anV.finished.then(fin, fin);
 }
@@ -1586,7 +1604,7 @@ function morfea(r, p, destino){
   const cs = getComputedStyle(document.body);
   const gris = cs.getPropertyValue('--piedraL').trim() || '#C2B9B0', tinta = cs.getPropertyValue('--tinta').trim() || '#2E2218';
   const carton = ['textura', 'lisa'].includes(document.body.dataset.etapa), color = carton ? '#E4D2B2' : colorDe(p);
-  const D = 620, anima = (atr, de, a) => '<animate attributeName="' + atr + '" from="' + de + '" to="' + a + '" dur="' + D + 'ms" begin="indefinite" fill="freeze"'
+  const D = 620 * VEL(), anima = (atr, de, a) => '<animate attributeName="' + atr + '" from="' + de + '" to="' + a + '" dur="' + D + 'ms" begin="indefinite" fill="freeze"'
     + ' calcMode="spline" keyTimes="0;1" keySplines=".5 0 .2 1"/>';
   const roca = rocaC(r.width / z / TAM, r.height / z / TAM);
   /* las esquirlas: cinco trocitos de piedra que saltan hacia fuera */
@@ -1645,7 +1663,7 @@ function desprende(r, p, antes, destino){
   nueva.style.visibility = 'hidden';
   if(destino) destino.style.visibility = 'hidden';
   /* el trozo que se desprende: roca del tamaño de una pieza, escondido tras la piedra */
-  const W = 76 * z, H = 64 * z, D = 560;
+  const W = 76 * z, H = 64 * z, D = 560 * VEL();
   const anima = (atr, de, a) => '<animate attributeName="' + atr + '" from="' + de + '" to="' + a + '" dur="' + D + 'ms" begin="indefinite" fill="freeze"'
     + ' calcMode="spline" keyTimes="0;1" keySplines=".5 0 .2 1"/>';
   const roca = rocaC(52, 44);
@@ -2345,7 +2363,7 @@ function gana(txt){
   P.ganado = true; clearTimeout(quietoT);
   if(est.juego !== 'romper') celebra();
   /* el choque de manos; en Romper, cuando la pata ya ha dejado la última pieza */
-  setTimeout(chocaCinco, est.juego === 'romper' && !enPregunta() ? 2300 : 150);
+  setTimeout(chocaCinco, est.juego === 'romper' && !enPregunta() ? 2300 * VEL() : 150);
   const conVidas = ' <span class="conVidas">con ' + P.vidas + (P.vidas === 1 ? ' vida' : ' vidas') + ' de ' + VIDAS + '</span>';
   if(esPractica()){
     /* lo que se lleva el acta, por juego */
@@ -2799,7 +2817,7 @@ addEventListener('scroll', colocaGuia, {passive:true});
 addEventListener('resize', colocaGuia);
 
 const AJ = 'miut.piezas.ajustes.v2';        /* v2: ya no hay noche ni papiro, sino dos maderas */
-let aj = {modo:'haya', aula:'no', predice:'no', patas:'si', sonido:'si', inicio:'si'};
+let aj = {modo:'haya', aula:'no', predice:'no', patas:'si', sonido:'si', inicio:'si', vel:'auto'};
 try{ Object.assign(aj, JSON.parse(localStorage.getItem(AJ) || '{}')); }catch(e){}
 const predice = () => aj.predice === 'si';
 function pintaAjustes(){
