@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.5
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.6
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,11 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.6 · EL RETO ES EL MODO DIFÍCIL
+  · El Reto de las 7 vidas se juega siempre en difícil, desde el primer
+    ejercicio: ya no sube poco a poco. Gana quien menos falla. Que los
+    golpes que no caen justo cuestan vida no se avisa: se descubre.
 
   VERSIÓN 1.0.5 · SIETE VIDAS PARA TODA LA SERIE
   · El Reto de las 7 vidas ya no da siete por ejercicio, sino siete para
@@ -711,7 +716,7 @@ body[data-movimiento="menos"] .vida{animation:none !important}
 .chipDif{cursor:pointer;background:none;min-height:30px;padding:3px 11px;font-size:12.5px}
 .chipDif:hover,.chipDif[aria-expanded="true"]{background:var(--brillo)}
 .difMenu{min-width:200px}
-.difMenu small{color:var(--tenue);font-size:12.5px}
+.masMenu small{color:var(--tenue);font-size:12.5px}
 .puntos .b.otro{margin-left:auto;min-height:34px;padding:5px 12px}
 .masCaja{position:relative;display:inline-block}
 .puntos #bMas{min-height:34px;padding:5px 12px}
@@ -902,7 +907,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.5
+  · versión 1.0.6
 </footer>
 </div>
 
@@ -971,7 +976,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <h3>La pareja · mcd · mcm = a · b</h3>
   <p>Las torres del mcd y del mcm, ya hechas. Se juntan y salen exactamente las piezas de los dos números: por eso <b>mcd · mcm = a · b</b>, siempre.</p>
   <h3>El reto de las siete vidas</h3>
-  <p>En <b>Practicar</b>, en «Más», el <b>Reto de las 7 vidas</b> encadena ejercicios con <b>siete vidas de gato para toda la serie</b>. Se pierde una al comprobar mal, al contestar mal y al decir «ya no se rompe» antes de tiempo; y, desde la etapa lisa, con cada golpe que no cae justo. En colores y texturas, probar golpes no cuesta: es como se aprende el criterio. <b>Cinco ejercicios seguidos a la primera</b> —las cinco huellas— devuelven una vida, y cada cuatro hechos la dificultad sube un escalón, hasta difícil. Con la séptima vida perdida, la serie se acaba y se guarda tu récord.</p>
+  <p>En <b>Practicar</b>, en «Más», el <b>Reto de las 7 vidas</b> es el <b>modo difícil</b>: encadena ejercicios en difícil con <b>siete vidas de gato para toda la serie</b>, y gana quien menos falla. Se pierde una al comprobar mal, al contestar mal, al decir «ya no se rompe» antes de tiempo y con cada golpe que no cae justo. <b>Cinco ejercicios seguidos a la primera</b> —las cinco huellas— devuelven una vida. Con la séptima vida perdida, la serie se acaba y se guarda tu récord.</p>
   <h3>Ya no se rompe</h3>
   <p>Desde la etapa lisa, cuando lo que queda de la piedra es un primo, no se convierte sola en pieza: hay que pulsar <b>«Ya no se rompe»</b>. Si todavía se podía romper, el gato naranja para la pata. El 17, el 19 y el 23 no tienen herramienta, así que en sus piedras siempre hay que decirlo. Basta probar los primos cuyo cuadrado no se pasa: si 7 · 7 = 49 ya es más que 47 y ninguno menor lo parte, el 47 es primo.</p>
   <h3>El cuaderno</h3>
@@ -2386,8 +2391,8 @@ function corrigePregunta(J, ns, v){
    como un gato. Cuestan vida comprobar mal, contestar mal y decir «ya no
    se rompe» antes de tiempo; y, desde la etapa lisa, los golpes que no
    caen justo. En colores y texturas golpear para probar es aprender el
-   criterio, y no cuesta. Cinco ejercicios seguidos a la primera devuelven
-   una vida, y cada cuatro hechos la dificultad sube un escalón. Fuera del
+   criterio, y no cuesta. El reto se juega siempre en difícil, y cinco
+   ejercicios seguidos a la primera devuelven una vida. Fuera del
    reto las vidas de cada ejercicio no se ven, pero se cuentan: el acta y
    el modo Auto las usan. */
 const VIDAS = 7;
@@ -2425,12 +2430,15 @@ function pierdeVida(){
    para toda la serie; el récord se guarda por juego y dificultad de salida */
 const racha = () => esPractica() && est.racha && est.racha.activo;
 const recordClave = () => (est.mezcla ? 'mezcla' : est.juego) + '-' + est.dif;
-const SUBE = 4;                     // cada cuántos hechos sube la dificultad
+/* el reto es el modo difícil: siempre en la etapa lisa, donde también
+   cuestan los golpes que no caen justo. Eso no se avisa: se descubre */
+const RETO_DIF = 2;
 function empiezaRacha(){
   if(est.racha && est.racha.dif0 !== undefined && !est.racha.activo) est.dif = est.racha.dif0;
-  est.racha = {activo: true, hechos: 0, vidas: VIDAS, limpios: 0, dif0: est.dif, clave: recordClave()};
+  const dif0 = est.dif; est.dif = RETO_DIF; est.auto = false;
+  est.racha = {activo: true, hechos: 0, vidas: VIDAS, limpios: 0, dif0, clave: recordClave()};
   guarda(); otroEjercicio();
-  asomaUltima = 0; setTimeout(() => asoma('<b>Siete vidas para toda la serie.</b> Cada fallo cuesta una; ' + EXTRA + ' seguidos sin fallar te devuelven una. ¿Hasta dónde llegas?', 7000), 600);
+  asomaUltima = 0; setTimeout(() => asoma('<b>Siete vidas para toda la serie</b>, en difícil. Cada fallo cuesta una; ' + EXTRA + ' seguidos sin fallar te devuelven una. ¿Hasta dónde llegas?', 7000), 600);
 }
 function dejaRacha(){
   if(!est.racha) return;
@@ -2438,10 +2446,10 @@ function dejaRacha(){
   est.racha.activo = false;
 }
 function finRacha(){
-  const R = est.racha, h = R.hechos, k = R.clave || recordClave(), antes = est.records[k] || 0, llego = DIFS[est.dif].n.toLowerCase();
+  const R = est.racha, h = R.hechos, k = R.clave || recordClave(), antes = est.records[k] || 0;
   if(h > antes) est.records[k] = h;
   dejaRacha(); guarda();
-  dice('<b>Se acabaron las siete vidas.</b> Has hecho <b>' + h + '</b> ejercicio' + (h === 1 ? '' : 's') + (est.dif !== R.dif0 || h ? ' y llegaste a <b>' + llego + '</b>' : '') + '.'
+  dice('<b>Se acabaron las siete vidas.</b> Has hecho <b>' + h + '</b> ejercicio' + (h === 1 ? '' : 's') + '.'
     + (h > antes ? ' <b>¡Récord nuevo!</b>' : ' Tu récord es ' + antes + '.')
     + ' <button class="b otro" onclick="empiezaRacha()">Otra vez ›</button>', 'mal');
   pintaCabecera(); pintaVidas();
@@ -2495,9 +2503,6 @@ function gana(txt){
         if(R.limpios >= EXTRA){ R.limpios = 0; anima.huella = -1;
           if(R.vidas < VIDAS){ anima.gana = R.vidas; R.vidas++; extra = ' <span class="conVidas">· ¡una vida más!</span>'; } }
       }
-      /* la serie se pone más difícil: un escalón cada cuatro hechos, hasta difícil */
-      if(R.hechos % SUBE === 0 && est.dif < Math.max(2, R.dif0)){ est.dif++;
-        setTimeout(() => asoma('¡' + R.hechos + ' hechos! Subimos a <b>' + DIFS[est.dif].n.toLowerCase() + '</b>.'), 1500); }
       guarda(); pintaVidas(quieto() ? null : anima);
       return dice(txt + '<br><span class="sellazo">Hecho</span> <span class="conVidas">llevas ' + R.hechos + '</span>' + extra + ' <button class="b otro" onclick="otroEjercicio()">Siguiente ›</button>', 'bien'); }
     dice(txt + '<br><span class="sellazo">' + (P.ayuda ? 'Hecho con ayuda' : 'Hecho') + '</span> <button class="b otro" onclick="otroEjercicio()">Otro ejercicio ›</button>', 'bien');
@@ -2575,7 +2580,7 @@ function pintaCabecera(){
     $('puntos').innerHTML = '<span class="masCaja"><button class="b" id="bMas" aria-expanded="' + !!P.mas + '">Más ▾</button>'
       + (P.mas ? '<span class="masMenu" role="menu">'
         + '<button role="menuitem" id="bMezcla" aria-pressed="' + !!est.mezcla + '">' + (est.mezcla ? '✓ ' : '') + 'Mezclar los cuatro juegos</button>'
-        + '<button role="menuitem" id="bRacha" aria-pressed="' + !!racha() + '">' + (racha() ? 'Dejar el reto de las 7 vidas' : 'Reto de las 7 vidas') + '</button>'
+        + '<button role="menuitem" id="bRacha" aria-pressed="' + !!racha() + '">' + (racha() ? 'Dejar el reto de las 7 vidas' : 'Reto de las 7 vidas <small>· difícil</small>') + '</button>'
         + (peor ? '<button role="menuitem" id="bRepaso">Repasar lo fallado: ' + NOMBRE_J[peor] + '</button>' : '')
         + '<button role="menuitem" id="bPropios">' + (P.propios ? 'Esconder mis números' : 'Poner mis números') + '</button>'
         + '</span>' : '') + '</span>'
@@ -2611,7 +2616,7 @@ function pintaEncargo(){
   const que = enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Primero, rompe ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + ' en primos.' : INTRO[est.juego](ns);
   if(!esPractica()){ $('encTxt').innerHTML = '<span class="chipEtapa">Etapa ' + (reto().e + 1) + ' · ' + E.n + '</span> ' + que; return; }
   $('encTxt').innerHTML = '<span class="masCaja"><button class="chipEtapa chipDif" id="bDif" aria-haspopup="menu" aria-expanded="' + !!P.difs + '" aria-label="Dificultad: '
-    + DIFS[est.dif].n + (est.auto ? ', automática' : '') + '. Cambiar">' + (est.mezcla ? 'Mezcla · ' : '') + DIFS[est.dif].n + (est.auto ? ' · auto' : '') + ' ▾</button>'
+    + DIFS[est.dif].n + (est.auto ? ', automática' : '') + '. Cambiar">' + (racha() ? '7 vidas · ' : '') + (est.mezcla ? 'Mezcla · ' : '') + DIFS[est.dif].n + (est.auto ? ' · auto' : '') + ' ▾</button>'
     + (P.difs ? '<span class="masMenu difMenu" role="menu">'
       + DIFS.map((d, k) => '<button role="menuitem" data-dif="' + k + '" aria-pressed="' + (!est.auto && k === est.dif) + '">' + d.n + '</button>').join('')
       + '<button role="menuitem" data-dif="auto" aria-pressed="' + !!est.auto + '">Auto <small>· sube y baja sola</small></button></span>' : '')
