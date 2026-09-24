@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.7
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.8
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,12 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.8 · LA PIEZA QUE NO CABÍA
+  · Cuando una fila de piezas no cabe y salta de línea —el 128 = 2⁷ en una
+    caja estrecha—, la primera pieza de abajo ya no queda suelta: lleva un
+    hueco arriba, la de encima una lengüeta abajo, y encajan. El bloque
+    sigue siendo uno solo, aunque doble la esquina.
 
   VERSIÓN 1.0.7 · LOS ANGELITOS
   · Las siete cabezas, centradas en su bandeja, y debajo las huellas y el
@@ -416,6 +422,10 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
    La torre se lee como un solo bloque, sin rendijas. */
 .fila{display:flex;align-items:center;flex-wrap:wrap;row-gap:6px;min-height:68px}
 .fila .pieza + .pieza{margin-left:-28.5px}
+/* la primera de una línea partida: sin solape de lado, y subida hasta
+   encajar en la de encima (translate no toca el hover ni el volteo) */
+.fila .pieza.baja{margin-left:0}
+.fila .pieza[style*="--sube"]{translate:0 var(--sube);position:relative}
 .fila .vacio{font-family:'Rokkitt',serif;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue);
   border:2px dashed var(--linea);border-radius:10px;padding:14px 16px;line-height:1}
 
@@ -537,6 +547,7 @@ body[data-movimiento="menos"] .volteo .gira{animation:none !important}
 .plano .ok.si{color:var(--verde)} .plano .ok.no{color:var(--rojo)}
 .fila.chica .pieza{width:52px;height:44px}
 .fila.chica .pieza + .pieza{margin-left:-19.5px}
+.fila.chica .pieza.baja{margin-left:0}
 /* en el almacén las piezas están SUELTAS: con aire entre ellas, para que no
    se lean como una torre (un 2 y un 3 pegados parecerían un 6) */
 .fila.suelta .pieza + .pieza{margin-left:-6px}
@@ -933,7 +944,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.7
+  · versión 1.0.8
 </footer>
 </div>
 
@@ -1072,20 +1083,27 @@ const colorDe = p => COLORP[p] || '#E8DCC8';
    de la clase */
 const TAM = 76 / 64;
 const FORMA = 'M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z';
+/* LAS FORMAS PARA ENGANCHAR POR ABAJO. Cuando una fila no cabe y salta de
+   línea, la primera pieza de abajo lleva un hueco arriba y la de encima,
+   una lengüeta abajo, en el centro: la torre sigue siendo un solo bloque,
+   aunque doble la esquina. */
+const formaCon = (hueco, lengua) => 'M9 5 ' + (hueco ? 'H22 A7 7 0 0 0 36 5 ' : '') + 'H49 V20 A7 7 0 0 1 49 34 V49 '
+  + (lengua ? 'H36 A7 7 0 0 1 22 49 ' : '') + 'H9 V34 A7 7 0 0 0 9 20 Z';
 const TEXTURAS = [2, 3, 5, 7, 11, 13, 17, 19, 23];
-function piezaSVG(p){
+function piezaSVG(p, forma, hueco){
+  forma = forma || FORMA;
   return '<svg viewBox="0 0 64 54" aria-hidden="true">'
-    + '<path class="cuerpo relleno" fill="' + colorDe(p) + '" d="' + FORMA + '"/>'
-    + (TEXTURAS.includes(p) ? '<path class="textura" fill="url(#tx' + p + ')" d="' + FORMA + '"/>' : '')
-    + '<path class="cuerpo" fill="none" d="' + FORMA + '"/>'
-    + '<path class="brillo" d="M12 8 H46 V13 H12 Z"/>'
+    + '<path class="cuerpo relleno" fill="' + colorDe(p) + '" d="' + forma + '"/>'
+    + (TEXTURAS.includes(p) ? '<path class="textura" fill="url(#tx' + p + ')" d="' + forma + '"/>' : '')
+    + '<path class="cuerpo" fill="none" d="' + forma + '"/>'
+    + '<path class="brillo" d="' + (hueco ? 'M12 8 H20 V13 H12 Z M38 8 H46 V13 H38 Z' : 'M12 8 H46 V13 H12 Z') + '"/>'
     + '<text x="29" y="28" style="stroke:' + colorDe(p) + '">' + p + '</text></svg>';
 }
 function pieza(p, opts){
   opts = opts || {};
   const b = document.createElement('button');
   b.className = 'pieza' + (opts.cls ? ' ' + opts.cls : '');
-  b.innerHTML = piezaSVG(p);
+  b.innerHTML = piezaSVG(p); b.dataset.p = p;
   b.setAttribute('aria-label', (opts.etq || 'pieza') + ' ' + p);
   if(opts.usada){ b.disabled = true; b.classList.add('usada'); }
   if(opts.al) b.addEventListener('click', () => opts.al(b));
@@ -1098,6 +1116,33 @@ function fila(lista, opts){
     usada: opts && opts.usada ? opts.usada(p, i) : false})));
   return f;
 }
+/* ENGANCHAR LAS LÍNEAS. Se mira dónde ha partido la fila el navegador; la
+   primera pieza de cada línea nueva no se monta sobre nada (sin el
+   solape de lado), se engancha por arriba a la primera de la línea de
+   encima, y las líneas se juntan hasta encajar */
+function enganchaFila(f){
+  if(f.classList.contains('suelta') || f.classList.contains('almacen') || f.closest('.frente')) return;
+  const ps = [...f.children].filter(x => x.classList.contains('pieza'));
+  ps.forEach(b => { b.classList.remove('baja'); b.style.removeProperty('--sube'); if(b.dataset.forma){ delete b.dataset.forma; b.innerHTML = piezaSVG(+b.dataset.p); } });
+  f.style.marginBottom = '';
+  if(ps.length < 2) return;
+  const filas = () => { const rs = []; let top = -1e9;
+    ps.forEach(b => { if(b.offsetTop > top + 8){ rs.push([]); top = b.offsetTop; } rs[rs.length - 1].push(b); }); return rs; };
+  let rs = filas();
+  if(rs.length < 2) return;
+  /* sin el solape, la primera de abajo es más ancha: puede mover el corte */
+  for(let k = 0; k < 3; k++){ rs.slice(1).forEach(r => r[0].classList.add('baja')); ps.forEach(b => { if(!rs.slice(1).some(r => r[0] === b)) b.classList.remove('baja'); }); const n = filas(); if(n.map(r => r.length).join() === rs.map(r => r.length).join()){ rs = n; break; } rs = n; }
+  const h = ps[0].offsetHeight, gap = parseFloat(getComputedStyle(f).rowGap) || 0, sube = h * 10 / 54 + gap;
+  rs.forEach((r, i) => {
+    r.forEach(b => b.style.setProperty('--sube', (-sube * i).toFixed(1) + 'px'));
+    const b = r[0], hueco = i > 0, lengua = i < rs.length - 1;
+    if(hueco || lengua){ b.dataset.forma = '1'; b.innerHTML = piezaSVG(+b.dataset.p, formaCon(hueco, lengua), hueco); }
+  });
+  f.style.marginBottom = (-sube * (rs.length - 1)).toFixed(1) + 'px';
+}
+const enganchaTodo = () => document.querySelectorAll('#tablero .fila').forEach(enganchaFila);
+let enganchaT = 0;
+addEventListener('resize', () => { clearTimeout(enganchaT); enganchaT = setTimeout(enganchaTodo, 120); });
 /* EL COLOR DEL REVERSO, sacado del propio número: el tono avanza por el
    ángulo de oro (137,5°) —así números cercanos caen lejos en la rueda de
    color— y la luz alterna en tres escalones. Es un color de reverso: más
@@ -2678,6 +2723,7 @@ function pinta(nuevo){
   else if(est.juego === 'comun') pintaComun(t);
   else if(est.juego === 'todo') pintaTodo(t);
   else pintaPareja(t);
+  enganchaTodo();
   if(nuevo) dice(enPregunta() ? 'Piensa en las piezas sin verlas. Si te atascas, puedes sacarlas, pero el reto quedará <b>con ayuda</b>.'
     : P.cadena ? 'Golpea la piedra con los primos que caigan justo, como en Romper.'
     : {
