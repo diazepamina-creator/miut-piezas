@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.2
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.3
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,11 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.3 · EL ENCARGO, EN UNA LÍNEA
+  · Arriba solo queda qué hacer y con qué números («Rompe el 12 en
+    primos.»). Cómo se juega lo cuenta la guía, en «El encargo», y Miut se
+    asoma a contarlo la primera vez que se entra en cada juego.
 
   VERSIÓN 1.0.2 · LA MESA DE ROMPER, QUIETA
   · Al romper, nada cambia de sitio de golpe: arriba la fila de piezas,
@@ -854,7 +859,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.2
+  · versión 1.0.3
 </footer>
 </div>
 
@@ -1819,12 +1824,19 @@ function nuevoEjercicio(juego, d){
   return juego === 'romper' ? [60] : [12, 18];
 }
 const PRAC = {};
+/* EL ENCARGO, en una línea: qué número y qué hay que hacer. Cómo se juega
+   lo cuenta la guía —REGLA— y lo va diciendo Miut */
 const INTRO = {
-  romper: ([n]) => 'Rompe la piedra del <b>' + n + '</b> en piezas: golpéala con un primo que caiga justo, y sigue hasta que quede <b>1</b>.',
-  comun: ns => ns.length === 2 ? 'Con las piezas del <b>' + ns[0] + '</b> y con las del <b>' + ns[1] + '</b>, construye <b>la misma torre</b>, la más grande posible.'
-    : 'Con las piezas de cada número —' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + '—, construye <b>la misma torre</b> en todos, la más grande posible.',
-  todo: ns => 'Construye la torre <b>más pequeña</b> en la que quepan ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + '.',
-  pareja: ([a, b]) => 'Aquí están las torres del <b>mcd</b> y del <b>mcm</b> del <b>' + a + '</b> y el <b>' + b + '</b>. ¿Cuánto dan <b>multiplicadas</b>? Júntalas y compáralas con las piezas de los dos.'
+  romper: ([n]) => 'Rompe el <b>' + n + '</b> en primos.',
+  comun: ns => 'La misma torre con ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + ': la más grande.',
+  todo: ns => 'La torre más pequeña donde caben ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + '.',
+  pareja: ([a, b]) => 'El <b>mcd</b> y el <b>mcm</b> del <b>' + a + '</b> y el <b>' + b + '</b>, multiplicados.'
+};
+const REGLA = {
+  romper: 'Golpea la piedra con un <b>primo que caiga justo</b>: se desprende su pieza y la piedra se hace más pequeña. Sigue hasta que quede <b>1</b>.',
+  comun: 'Con las piezas de cada número, construye <b>la misma torre</b> en todos, la más grande posible: es el <b>mcd</b>.',
+  todo: 'Construye la torre <b>más pequeña</b> en la que quepan todos los números: es el <b>mcm</b>.',
+  pareja: 'Aquí están las torres del mcd y del mcm. <b>Júntalas</b> y compáralas con las piezas de los dos números: ¿cuánto dan multiplicadas?'
 };
 const PREGUNTA = {
   romper: ([n]) => 'Escribe <b>' + n + '</b> en factores primos, en potencias (por ejemplo «2^3·3»).',
@@ -1881,7 +1893,21 @@ function empieza(){
   const e = etapa().id, i = est.nivel[est.juego];
   if(!esPractica() && i > 0 && RETOS[est.juego][i - 1].e !== reto().e && AVISO_ETAPA[e]){
     asomaUltima = 0; setTimeout(() => asoma(AVISO_ETAPA[e] + (e === 'lisa' && est.juego !== 'romper' ? ' Y los números llegan como <b>piedras</b>: hay que romperlos antes.' : '')), 700);
+  }else if(!reglaVista(est.juego)){
+    /* la primera vez en cada juego —con la guía ya vista—, Miut se asoma a
+       contar cómo se juega: el encargo, arriba, es solo una línea */
+    reglaVista(est.juego, true);
+    asomaUltima = 0; setTimeout(() => asoma(REGLA[est.juego], 9000), 900);
   }
+}
+/* qué juegos ya tienen su regla contada: la guía cuenta la del juego en que
+   se abre, y Miut las demás, una vez */
+function reglaVista(j, marca){
+  try{
+    const v = JSON.parse(localStorage.getItem('miut.piezas.reglas') || '[]');
+    if(marca && !v.includes(j)){ v.push(j); localStorage.setItem('miut.piezas.reglas', JSON.stringify(v)); }
+    return v.includes(j) || !localStorage.getItem('miut.piezas.guia');
+  }catch(e){ return true; }
 }
 
 /* ── ROMPER ─────────────────────────────────────────────────────────────
@@ -2518,7 +2544,7 @@ function pinta(nuevo){
      pregunta, se ven lisas */
   document.body.dataset.etapa = E.id === 'pregunta' ? (P.verPiezas ? 'lisa' : 'pregunta') : E.id;
   $('encTxt').innerHTML = '<span class="chipEtapa">' + (esPractica() ? 'Practicar · ' + (est.mezcla ? 'mezcla · ' : '') + DIFS[est.dif].n + (est.auto ? ' (auto)' : '') : 'Etapa ' + (reto().e + 1) + ' · ' + E.n) + '</span> '
-    + (enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Rompe primero las piedras ' + yLista(ns.map(n => 'del <b>' + n + '</b>')) + '. Luego: ' + INTRO[est.juego](ns).replace(/^./, c => c.toLowerCase()) : INTRO[est.juego](ns));
+    + (enPregunta() ? 'Sin piezas: contesta escribiendo.' : P.cadena ? 'Primero, rompe ' + yLista(ns.map(n => 'el <b>' + n + '</b>')) + ' en primos.' : INTRO[est.juego](ns));
   const t = $('tablero'); t.innerHTML = '';
   if(esPractica() && P.propios) pintaLibre(t);
   if(enPregunta()) pintaPregunta(t);
@@ -2758,7 +2784,7 @@ const GUIA = [
   {sel:'.juegos', c:'Los cuatro juegos',
    t:'<b>Romper</b> un número en factores primos, construir la torre <b>común</b> más grande —el mcd—, la más pequeña donde caben <b>todos</b> —el mcm— y ver por qué <b>mcd · mcm = a · b</b>. Todos se juegan igual: tocando piezas.'},
   {sel:'#encTxt', c:'El encargo',
-   t:'Aquí está lo que hay que hacer en cada reto. Las flechas <b>‹ ›</b> pasan de reto, y en el aula también las del teclado o el mando de diapositivas.'},
+   t:() => 'En una línea, lo que hay que hacer. En este juego: ' + REGLA[est.juego] + ' Las flechas <b>‹ ›</b> pasan de reto, y en el aula también las del teclado o el mando de diapositivas.'},
   {sel:'#puntos', c:'Las etapas',
    t:'Cada juego tiene <b>cuatro etapas</b> de tres retos, y en cada una las piezas ayudan menos: primero con <b>colores</b>, luego de cartón con <b>texturas</b>, luego <b>lisas</b> y al final <b>sin piezas</b>, solo la pregunta.'},
   {sel:'.piedra', c:'La piedra',
@@ -2793,6 +2819,7 @@ const seVe = e => !!(e && e.offsetParent !== null && e.getBoundingClientRect().h
 function cierraGuia(){
   $('guia').hidden = true; guiaI = -1; clearTimeout(guiaRetoque);
   try{ localStorage.setItem('miut.piezas.guia', 'vista'); }catch(e){}
+  reglaVista(est.juego, true);
   $('bGuia').focus();
 }
 function vaGuia(i){
@@ -2800,7 +2827,7 @@ function vaGuia(i){
   guiaI = i;
   const g = guiaParadas[i], e = document.querySelector(g.sel);
   if(!seVe(e)) return vaGuia(i + 1);
-  $('guiaTit').textContent = g.c; $('guiaTxt').innerHTML = g.t;
+  $('guiaTit').textContent = g.c; $('guiaTxt').innerHTML = typeof g.t === 'function' ? g.t() : g.t;
   $('guiaNum').textContent = (i + 1) + ' de ' + guiaParadas.length;
   $('guiaSig').textContent = i === guiaParadas.length - 1 ? 'A jugar' : 'Siguiente';
   $('guia').hidden = false;
