@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.18
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.19
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,14 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.19 · LA FILA DE ROMPER, ENGANCHADA
+  · En Romper la fila de piezas ya no se sale por la derecha (el 256 =
+    2⁸ en el móvil): crece desde encima de la piedra hasta el borde y
+    sigue en otra línea, enganchada por abajo como en las cajas. Al
+    voltearla, el reverso tiene las mismas líneas, en espejo.
+  · El alto de esas líneas se reserva desde el principio: cuando la fila
+    salta, la piedra no baja de golpe, y la pieza sube directa a su hueco.
 
   VERSIÓN 1.0.18 · ROMPER, MÁS JUNTO
   · La fila de piezas empieza justo encima de la piedra, no en la esquina,
@@ -556,6 +564,9 @@ body[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-
    pieza, nada cambia de sitio de golpe */
 .romper .bloque{flex-direction:column;align-items:flex-start;flex-wrap:nowrap;gap:6px}
 .romper .bloque .voltear{order:-1;align-self:flex-end}
+/* en Romper la fila se parte en líneas enganchadas; el reverso, igual */
+.romper .volteo .frente{flex-wrap:wrap}
+.volteo .detras.lineas{top:0;margin-top:0;height:auto}
 .romper .abajo{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .romper .abajo > .piedra,.romper .abajo > .sinPiedra{justify-self:end}
 .romper .abajo > .sinPiedra{width:96px;height:80px}
@@ -1017,7 +1028,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.18
+  · versión 1.0.19
 </footer>
 </div>
 
@@ -1199,15 +1210,19 @@ function fila(lista, opts){
    solape de lado), se engancha por arriba a la primera de la línea de
    encima, y las líneas se juntan hasta encajar */
 function enganchaFila(f){
-  if(f.classList.contains('suelta') || f.classList.contains('almacen') || f.closest('.frente')) return;
+  if(f.classList.contains('suelta') || f.classList.contains('almacen') || (f.closest('.frente') && !f.closest('.romper'))) return;
   const ps = [...f.children].filter(x => x.classList.contains('pieza'));
   ps.forEach(b => { b.classList.remove('baja'); b.style.removeProperty('--sube'); if(b.dataset.forma){ delete b.dataset.forma; b.innerHTML = piezaSVG(+b.dataset.p); } });
   f.style.marginBottom = '';
-  if(ps.length < 2) return;
+  const dorso = rs => { const d = f.classList.contains('frente') && f.parentNode.querySelector('.detras');
+    if(d && ps.length){ d.innerHTML = dorsoSVG(ps.map(b => +b.dataset.p), rs.map(r => r.length)); d.classList.toggle('lineas', rs.length > 1);
+      /* gira sobre el centro de las piezas, no de la caja, que al partirse es más ancha */
+      const w = d.querySelector('svg'); f.parentNode.style.transformOrigin = rs.length > 1 && w ? (parseFloat(w.getAttribute('width')) / 2).toFixed(1) + 'px 50%' : ''; } };
+  if(ps.length < 2){ dorso([ps]); return; }
   const filas = () => { const rs = []; let top = -1e9;
     ps.forEach(b => { if(b.offsetTop > top + 8){ rs.push([]); top = b.offsetTop; } rs[rs.length - 1].push(b); }); return rs; };
   let rs = filas();
-  if(rs.length < 2) return;
+  if(rs.length < 2){ dorso(rs); return; }
   /* sin el solape, la primera de abajo es más ancha: puede mover el corte */
   for(let k = 0; k < 3; k++){ rs.slice(1).forEach(r => r[0].classList.add('baja')); ps.forEach(b => { if(!rs.slice(1).some(r => r[0] === b)) b.classList.remove('baja'); }); const n = filas(); if(n.map(r => r.length).join() === rs.map(r => r.length).join()){ rs = n; break; } rs = n; }
   const h = ps[0].offsetHeight, gap = parseFloat(getComputedStyle(f).rowGap) || 0, sube = h * 10 / 54 + gap;
@@ -1217,19 +1232,25 @@ function enganchaFila(f){
     if(hueco || lengua){ b.dataset.forma = '1'; b.innerHTML = piezaSVG(+b.dataset.p, formaCon(hueco, lengua), hueco); }
   });
   f.style.marginBottom = (-sube * (rs.length - 1)).toFixed(1) + 'px';
+  dorso(rs);
 }
-const enganchaTodo = () => { document.querySelectorAll('#tablero .fila').forEach(enganchaFila); alineaRotas(); };
+const enganchaTodo = () => { alineaRotas(); document.querySelectorAll('#tablero .fila').forEach(enganchaFila); };
 /* EN ROMPER, la fila de piezas empieza justo encima de la piedra, no en la
-   esquina: la pieza que se desprende sube a su sitio, al lado. Si la fila
-   es tan larga que no cabe, se corre a la izquierda lo justo */
+   esquina: la pieza que se desprende sube a su sitio, al lado. Crece hasta
+   el borde y, si no cabe, sigue en otra línea enganchada por abajo */
 function alineaRotas(){
   const R = document.querySelector('#tablero .romper'); if(!R) return;
   const v = R.querySelector('.bloque .volteo'), p = R.querySelector('.abajo > .piedra, .abajo > .sinPiedra'); if(!v || !p) return;
-  v.style.marginLeft = '';
+  v.style.marginLeft = ''; v.style.maxWidth = ''; v.style.minHeight = '';
   const z = document.body.dataset.aula === 'si' ? (parseFloat(getComputedStyle(document.body).getPropertyValue('--zAula')) || 1) : 1;
-  const rr = R.getBoundingClientRect(), rp = p.getBoundingClientRect(), rv = v.getBoundingClientRect();
-  const m = Math.max(0, Math.min(rp.left - rr.left, rr.width - rv.width)) / z;
-  v.style.marginLeft = m.toFixed(1) + 'px';
+  const rr = R.getBoundingClientRect(), rp = p.getBoundingClientRect();
+  const m = Math.max(0, rp.left - rr.left) / z;
+  v.style.marginLeft = m.toFixed(1) + 'px'; v.style.maxWidth = (rr.width / z - m).toFixed(1) + 'px';
+  /* el alto de las líneas que va a necesitar, reservado desde el principio:
+     así, cuando la fila salta de línea, la piedra no baja de golpe */
+  v.style.minHeight = '';
+  if(P.romp){ const cab = Math.max(1, 1 + Math.floor((rr.width / z - m - 76) / 47.5)), lineas = Math.ceil(primos(P.romp.n).length / cab);
+    if(lineas > 1) v.style.minHeight = (64 + (lineas - 1) * 52.2).toFixed(1) + 'px'; }
 }
 let enganchaT = 0;
 addEventListener('resize', () => { clearTimeout(enganchaT); enganchaT = setTimeout(enganchaTodo, 120); });
@@ -1243,11 +1264,15 @@ const colorNumero = n => 'hsl(' + Math.round((n * 137.508) % 360) + ' 40% ' + (3
    color del número. Primero todos los contornos gruesos y encima todos los
    rellenos: así se tapan las juntas de dentro y solo queda el borde de
    fuera, y el bloque se lee como una sola pieza. */
-function dorsoSVG(lista){
-  const k = lista.length, W = 64 + 40 * (k - 1), n = producto(lista), col = colorNumero(n);
-  const trozos = lista.map((_, i) => '<path d="' + FORMA + '" transform="translate(' + 40 * i + ' 0)"/>').join('');
+/* Si por delante la fila se ha partido en líneas (enganchadas por abajo),
+   el reverso tiene las mismas líneas, con las mismas formas */
+function dorsoSVG(lista, filas){
+  filas = filas && filas.length ? filas : [lista.length];
+  const k = filas[0], W = 64 + 40 * (k - 1), H = 54 + 44 * (filas.length - 1), n = producto(lista), col = colorNumero(n);
+  const trozos = filas.map((m, i) => Array.from({length: m}, (_, j) => '<path d="' + (j === 0 && filas.length > 1 ? formaCon(i > 0, i < filas.length - 1) : FORMA)
+    + '" transform="translate(' + 40 * j + ' ' + 44 * i + ')"/>').join('')).join('');
   const brillo = '<path d="M12 8 H' + (46 + 40 * (k - 1)) + ' V12 H12 Z" fill="#fff" opacity=".13"/>';
-  return '<svg viewBox="0 0 ' + W + ' 54" width="' + (W * TAM).toFixed(1) + '" height="64" aria-hidden="true">'
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + (W * TAM).toFixed(1) + '" height="' + (H * TAM).toFixed(1) + '" aria-hidden="true">'
     + '<g transform="translate(' + W + ' 0) scale(-1 1)">'
     + '<g fill="none" stroke="#1A1226" stroke-width="4.4" stroke-linejoin="round">' + trozos + '</g>'
     + '<g fill="' + col + '">' + trozos + '</g>' + brillo + '</g>'
