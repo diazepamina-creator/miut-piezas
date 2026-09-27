@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.22
+  Manipulativo para 1.º y 2.º de ESO · versión 1.1.0
   © Andrés Asensio · CC BY-NC-ND 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -44,6 +44,16 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.1.0 · ENTREVISTAS EN LA MESA
+  · En la cabecera, «Entrevistas»: se entrevista a Miut, al gato naranja
+    y al 7, una pieza prima con cara. Se elige qué preguntar; contestan
+    letra a letra, moviendo la boca, y acaban en la postura de la
+    respuesta. Respuestas escritas a mano, con humor y con una idea de la
+    factorización, los primos, el mcd o el mcm dentro; algunas abren una
+    repregunta.
+  · Los tres, dibujados por piezas con varias posturas: habla, celebra,
+    piensa, sorpresa, calla, guiña y, el naranja, bufa.
 
   VERSIÓN 1.0.22 · FUERA DE LOS BUSCADORES
   · La página pide a los buscadores que no la indexen, no sigan sus
@@ -945,6 +955,43 @@ footer a{color:var(--tenue)}
    amplían, que se colocan con la pantalla de verdad. ── */
 body[data-aula="si"] .lienzo{zoom:var(--zAula,1);max-width:900px}
 body[data-aula="si"] .panel{margin-top:8px;padding:11px}
+
+/* ── LAS ENTREVISTAS ── */
+#bEntrevista .micro{display:none;width:13px;height:16px;vertical-align:-3px}
+@media (max-width:520px){
+  #bEntrevista .micro{display:inline-block}
+  #bEntrevista .txt{display:none}
+}
+@media (max-width:380px){ .cab .acc button{letter-spacing:.7px} }
+.entrevista{width:min(680px,100%) !important}
+.ev-quien{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 8px}
+.ev-quien button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;
+  font-family:'Rokkitt',serif;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--tenue);
+  background:var(--panel);border:1.5px solid var(--linea);border-radius:12px}
+.ev-quien button[aria-pressed="true"]{color:var(--oro);border-color:var(--oro);box-shadow:inset 0 0 0 1px var(--oro)}
+.ev-mini{width:52px;height:52px;display:block}
+.ev-mini svg,.ev-cara svg{width:100%;height:100%;display:block}
+.ev-cartel{margin:2px 0 8px;font-style:italic;color:var(--tenue)}
+.ev-cartel b{color:var(--oro)}
+.ev-escena{display:flex;gap:10px;align-items:flex-end;margin:0 0 10px}
+.ev-cara{flex:0 0 auto;width:140px;height:140px}
+.ev-globo{flex:1;position:relative;min-height:116px;padding:10px 14px;border-radius:14px;margin-bottom:16px;
+  background:var(--panel);border:1.5px solid var(--oro)}
+.ev-globo::before{content:'';position:absolute;left:-9px;bottom:16px;width:14px;height:14px;background:inherit;
+  border-left:1.5px solid var(--oro);border-bottom:1.5px solid var(--oro);transform:rotate(45deg)}
+.modal .ev-pregunta{margin:0 0 5px;font-size:13px;color:var(--tenue);font-family:'Rokkitt',serif;letter-spacing:.4px}
+.modal .ev-respuesta{margin:0;font-size:16px;line-height:1.5;color:var(--tinta);min-height:1.5em}
+.ev-respuesta b{color:var(--oro)}
+.ev-rotulo{font-family:'Rokkitt',serif;font-size:13px !important;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin:0 0 6px}
+.ev-lista{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:10px}
+.ev-p{text-align:left;font:inherit;font-size:14.5px;padding:9px 12px;cursor:pointer;color:var(--tinta);
+  background:var(--panel);border:1.5px solid var(--linea);border-radius:11px}
+.ev-p:hover,.ev-p:focus-visible{border-color:var(--oro);outline:none}
+.ev-p.hecha{opacity:.55}
+.ev-p.repregunta{border-style:dashed;border-color:var(--oro)}
+.ev-re{font-family:'Rokkitt',serif;font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--oro)}
+@media (min-width:700px){ .ev-lista{grid-template-columns:1fr 1fr} }
+@media (max-width:480px){ .ev-cara{width:108px;height:108px} .modal .ev-respuesta{font-size:15px} .ev-mini{width:44px;height:44px} }
 </style>
 </head><body>
 <!-- LAS TEXTURAS, una por primo, dibujadas una vez: el 2 con rayas, el 3
@@ -972,6 +1019,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
       <button id="bAjustes" aria-pressed="false" aria-controls="panelAjustes">Ajustes</button>
       <button id="bAula" aria-pressed="false">Aula</button>
       <button id="bActa">Acta</button>
+      <button id="bEntrevista" aria-label="Entrevistas"><svg class="micro" viewBox="0 0 16 20" aria-hidden="true"><rect x="5" y="1" width="6" height="11" rx="3" fill="currentColor"/><path d="M2.5 9 Q2.5 15 8 15 Q13.5 15 13.5 9 M8 15 V19 M4.5 19 H11.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="txt">Entrevistas</span></button>
     </nav>
   </div>
   <div class="juegos" role="tablist" aria-label="Los cuatro juegos">
@@ -1044,7 +1092,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-ND 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.22
+  · versión 1.1.0
 </footer>
 </div>
 
@@ -1078,6 +1126,20 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
     <div class="guia-pie"><span id="guiaNum"></span>
       <span class="botones"><button class="b" id="guiaSalir">Salir</button><button class="b ok" id="guiaSig">Siguiente</button></span></div>
   </div>
+</div>
+<div class="modal" id="mEntrevista" hidden>
+ <div class="caja2 entrevista" role="dialog" aria-modal="true" aria-labelledby="evTit">
+  <h2 id="evTit">Entrevistas en la mesa</h2>
+  <div class="ev-quien" id="evQuien" role="group" aria-label="A quién entrevistar"></div>
+  <p class="ev-cartel" id="evCartel"></p>
+  <div class="ev-escena">
+    <div class="ev-cara" id="evCara" aria-hidden="true"></div>
+    <div class="ev-globo"><p class="ev-pregunta" id="evPregunta"></p><p class="ev-respuesta" id="evRespuesta" aria-live="polite"></p></div>
+  </div>
+  <p class="ev-rotulo">Pregúntale:</p>
+  <div class="ev-lista" id="evLista"></div>
+  <div class="botones"><button class="b" id="evCerrar">Volver a la mesa</button></div>
+ </div>
 </div>
 <div class="modal" id="mActa" hidden>
  <div class="caja2 acta" role="dialog" aria-modal="true" aria-labelledby="actaTit">
@@ -3271,5 +3333,237 @@ const enlaceEjercicio = () => location.origin + location.pathname + '?j=' + est.
 pintaAjustes();
 empieza();
 escenaInicio(() => { try{ if(!localStorage.getItem('miut.piezas.guia') && !RETO_ENLACE) setTimeout(abreGuia, 300); }catch(e){} });
+/* ── LOS ENTREVISTADOS ── dibujados por piezas, como en El pulso de los dioses:
+   el mismo muñeco en cada postura. Miut, lila atigrada de ojos verdes; el
+   gato naranja, de calcetín blanco; y el 7, una pieza prima con cara. */
+const TINTA_G = '#3B2A4A';
+const GATOS = {
+  miut:    {piel:'#A48AB8', osc:'#7F6596', oreja:'#E7A9BE', ojo:'#6FBF5C', pecho:'#F4EEF8', mano:'#F7F2F8', raya:'#7F6596'},
+  naranja: {piel:'#E08A3C', osc:'#B5601E', oreja:'#F2B7A0', ojo:'#E9C23A', pecho:'#FFF4E6', mano:'#E08A3C', calcetin:'#FFFFFF', raya:'#A8521A'}
+};
+const POSES_GATO = {
+  habla:   {boca:.5, ojo:'abierto', manos:[[30,88],[70,88]], oreja:0},
+  celebra: {boca:.8, ojo:'feliz', manos:[[18,52],[82,52]], oreja:-2},
+  piensa:  {boca:0, ojo:'arriba', manos:[[30,88],[56,62]], oreja:0},
+  sorpresa:{boca:1, ojo:'grande', manos:[[24,60],[76,60]], oreja:-4},
+  calla:   {boca:0, ojo:'abierto', manos:[[30,88],[70,88]], oreja:0},
+  enfada:  {boca:.9, ojo:'furia', manos:[[26,82],[74,70]], oreja:6, bufa:true},
+  guina:   {boca:.3, ojo:'guina', manos:[[30,88],[70,88]], oreja:0}
+};
+function gato(quien, pose){
+  const C = GATOS[quien], P = POSES_GATO[pose] || POSES_GATO.habla;
+  const T = TINTA_G;
+  let s = '<svg viewBox="0 0 100 100" class="pj pj-' + quien + ' pose-' + pose + '" aria-hidden="true">';
+  /* cuerpo */
+  s += '<path d="M22 100 Q20 72 36 64 L64 64 Q80 72 78 100 Z" fill="' + C.piel + '" stroke="' + T + '" stroke-width="1.8" stroke-linejoin="round"/>';
+  s += '<path d="M38 100 Q38 76 50 70 Q62 76 62 100 Z" fill="' + C.pecho + '"/>';
+  s += '<path d="M26 80 q4 -2 8 0 M66 80 q4 -2 8 0 M25 90 q4 -2 8 0 M67 90 q4 -2 8 0" fill="none" stroke="' + C.raya + '" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>';
+  if(quien === 'naranja')      /* la cola, detrás, asomando */
+    s = s.replace('<path d="M22', '<path d="M78 96 Q96 90 92 70 Q90 64 86 68 Q90 80 76 88 Z" fill="' + C.piel + '" stroke="' + T + '" stroke-width="1.6"/><path d="M22');
+  /* cabeza: la de Miut de la app, agrandada */
+  const eo = P.oreja;
+  s += '<g transform="translate(4 -2) scale(2)">';
+  s += '<path d="M8.8 ' + (16.6) + ' C7.4 12.4 ' + (6.6 + eo * .3) + ' ' + (7.6 + eo) + ' ' + (7.4 + eo * .4) + ' ' + (3.6 + eo) + ' Q7.9 ' + (1.7 + eo) + ' 9.7 ' + (2.5 + eo) + ' C13 4.2 16.6 6.6 19.4 9.6 Z M37.2 16.6 C38.6 12.4 ' + (39.4 - eo * .3) + ' ' + (7.6 + eo) + ' ' + (38.6 - eo * .4) + ' ' + (3.6 + eo) + ' Q38.1 ' + (1.7 + eo) + ' 36.3 ' + (2.5 + eo) + ' C33 4.2 29.4 6.6 26.6 9.6 Z" fill="' + C.piel + '" stroke="' + T + '" stroke-width=".9" stroke-linejoin="round"/>';
+  s += '<path d="M10.9 13.2 C10 10.4 ' + (9.8 + eo * .2) + ' ' + (7.6 + eo) + ' 10.3 ' + (5.5 + eo) + ' C12.6 6.6 14.6 8 16.2 9.7 C14 10.6 12.2 11.8 10.9 13.2 Z M35.1 13.2 C36 10.4 ' + (36.2 - eo * .2) + ' ' + (7.6 + eo) + ' 35.7 ' + (5.5 + eo) + ' C33.4 6.6 31.4 8 29.8 9.7 C32 10.6 33.8 11.8 35.1 13.2 Z" fill="' + C.oreja + '"/>';
+  s += '<ellipse cx="23" cy="22" rx="14.5" ry="13.5" fill="' + C.piel + '" stroke="' + T + '" stroke-width=".9"/>';
+  s += '<path d="M18 10 Q19 13 18 15 M23 9 V13 M28 10 Q27 13 28 15" stroke="' + C.raya + '" stroke-width="1.2" fill="none" stroke-linecap="round"/>';
+  s += '<ellipse cx="23" cy="28.5" rx="7.2" ry="5.2" fill="' + C.pecho + '" opacity=".9"/>';
+  /* ojos */
+  const ojo = (cx, lado) => {
+    if(P.ojo === 'feliz' || (P.ojo === 'guina' && lado > 0))
+      return '<path d="M' + (cx - 3) + ' 21 q3 -3.4 6 0" fill="none" stroke="' + T + '" stroke-width="1.1" stroke-linecap="round"/>';
+    const ry = P.ojo === 'grande' ? 4.4 : 3.6, dy = P.ojo === 'arriba' ? -1 : 0;
+    let o = '<ellipse cx="' + cx + '" cy="20" rx="3.2" ry="' + ry + '" fill="' + C.ojo + '" stroke="' + T + '" stroke-width=".7"/>' +
+      '<ellipse cx="' + cx + '" cy="' + (20 + dy) + '" rx="' + (P.ojo === 'furia' ? .7 : 1.1) + '" ry="' + (ry * .75) + '" fill="#1D1426"/>' +
+      '<circle cx="' + (cx - 1) + '" cy="' + (18.6 + dy) + '" r=".7" fill="#fff"/>';
+    if(P.ojo === 'furia') o += '<path d="M' + (cx - 3.4 * lado) + ' 15.4 L' + (cx + 3.2 * lado) + ' 17.6" stroke="' + T + '" stroke-width="1.4" stroke-linecap="round"/>';
+    return o;
+  };
+  s += ojo(17.5, -1) + ojo(28.5, 1);
+  /* nariz, boca, bigotes */
+  s += '<path d="M21.4 25.2 H24.6 L23 26.9 Z" fill="#E48CA6" stroke="' + T + '" stroke-width=".5"/>';
+  const ab = P.boca * 3;
+  if(P.boca > .1){
+    s += '<path d="M20 28 Q23 ' + (29 + ab) + ' 26 28 Q23 ' + (30.6 + ab) + ' 20 28 Z" fill="#8E3450" stroke="' + T + '" stroke-width=".6"/>';
+    if(P.bufa) s += '<path d="M20.6 28.2 l.8 1.8 l.8 -1.6 M25.4 28.2 l-.8 1.8 l-.8 -1.6" fill="#fff" stroke="' + T + '" stroke-width=".35"/>';
+  }else s += '<path d="M20.4 27.6 Q21.7 29 23 27.4 Q24.3 29 25.6 27.6" fill="none" stroke="' + T + '" stroke-width=".7" stroke-linecap="round"/>';
+  s += '<path d="M14 26 L6 24.6 M14 27.6 L6.4 28.4 M32 26 L40 24.6 M32 27.6 L39.6 28.4" stroke="' + T + '" stroke-width=".45" opacity=".7"/>';
+  if(quien === 'miut') s += '<circle cx="8.6" cy="15.6" r="1.3" fill="none" stroke="#D9A43A" stroke-width=".7"/>';
+  s += '</g>';
+  /* manos */
+  P.manos.forEach(([x, y], i) => {
+    const blanca = quien === 'miut' || (quien === 'naranja' && i === 1);
+    const col = blanca ? '#FFFFFF' : C.mano;
+    s += '<ellipse cx="' + x + '" cy="' + y + '" rx="7.4" ry="6.2" fill="' + col + '" stroke="' + T + '" stroke-width="1.4"/>' +
+      '<path d="M' + (x - 3) + ' ' + (y - 5) + ' v3.4 M' + x + ' ' + (y - 6) + ' v3.6 M' + (x + 3) + ' ' + (y - 5) + ' v3.4" stroke="' + T + '" stroke-width=".9" stroke-linecap="round"/>';
+  });
+  s += '</svg>';
+  return s;
+}
+/* el 7: una pieza de puzle, prima, con cara */
+const POSES_PIEZA = {
+  habla:{boca:.5, ojo:'abierto', br:[[-150,12],[-30,12]]}, celebra:{boca:.8, ojo:'feliz', br:[[-130,14],[-50,14]]},
+  piensa:{boca:0, ojo:'arriba', br:[[160,12],[-120,10]]}, sorpresa:{boca:1, ojo:'grande', br:[[-120,13],[-60,13]]},
+  calla:{boca:0, ojo:'abierto', br:[[150,11],[30,11]]}, orgullo:{boca:.2, ojo:'cerrado', br:[[150,11],[-40,14]]}
+};
+function piezaCara(pose){
+  const P = POSES_PIEZA[pose] || POSES_PIEZA.habla, T = TINTA_G, col = (typeof colorDe === 'function' ? colorDe(7) : '#6B8E3A');
+  let s = '<svg viewBox="0 0 100 100" class="pj pj-siete pose-' + pose + '" aria-hidden="true">';
+  const brazo = (x, y, [a, l]) => { const r = a * Math.PI / 180, x1 = x + Math.cos(r) * l, y1 = y + Math.sin(r) * l;
+    return '<path d="M' + x + ' ' + y + ' L' + x1.toFixed(1) + ' ' + y1.toFixed(1) + '" stroke="' + T + '" stroke-width="4.6" stroke-linecap="round"/>' +
+      '<path d="M' + x + ' ' + y + ' L' + x1.toFixed(1) + ' ' + y1.toFixed(1) + '" stroke="#F3EAD8" stroke-width="2.6" stroke-linecap="round"/>' +
+      '<circle cx="' + x1.toFixed(1) + '" cy="' + y1.toFixed(1) + '" r="3.4" fill="#F3EAD8" stroke="' + T + '" stroke-width="1.1"/>'; };
+  s += brazo(20, 56, P.br[0]) + brazo(80, 56, P.br[1]);
+  s += '<path d="M42 69 v12 M38 81 h6 M58 69 v12 M56 81 h6" stroke="' + T + '" stroke-width="2.6" stroke-linecap="round"/>';
+  s += '<g transform="translate(14 8) scale(1.25)"><path d="' + (typeof FORMA === 'string' ? FORMA : 'M9 5 H49 V20 A7 7 0 0 1 49 34 V49 H9 V34 A7 7 0 0 0 9 20 Z') + '" fill="' + col + '" stroke="' + T + '" stroke-width="1.6"/>' +
+    '<path d="M12 8 H46 V12 H12 Z" fill="#fff" opacity=".25"/>' +
+    '<text x="29" y="45" text-anchor="middle" font-family="Rokkitt,serif" font-weight="700" font-size="15" fill="#fff" stroke="' + T + '" stroke-width=".6" paint-order="stroke">7</text></g>';
+  const ojo = cx => P.ojo === 'feliz' || P.ojo === 'cerrado'
+    ? '<path d="M' + (cx - 4) + ' 34 q4 -4 8 0" fill="none" stroke="' + T + '" stroke-width="2" stroke-linecap="round"/>'
+    : '<circle cx="' + cx + '" cy="33" r="' + (P.ojo === 'grande' ? 6 : 5) + '" fill="#fff" stroke="' + T + '" stroke-width="1.4"/>' +
+      '<circle cx="' + cx + '" cy="' + (P.ojo === 'arriba' ? 31 : 33.6) + '" r="2.3" fill="#1D1426"/>';
+  s += ojo(40) + ojo(60);
+  const ab = P.boca * 5;
+  s += P.boca > .1 ? '<ellipse cx="50" cy="' + (44 + ab * .3) + '" rx="' + (4 + P.boca * 2) + '" ry="' + (1.4 + ab * .6) + '" fill="#7A2B2B" stroke="' + T + '" stroke-width="1.1"/>'
+                   : '<path d="M44 43 Q50 47 56 43" fill="none" stroke="' + T + '" stroke-width="1.6" stroke-linecap="round"/>';
+  s += '</svg>';
+  return s;
+}
+
+/* ── LAS ENTREVISTAS ──────────────────────────────────────────────────────
+   Se elige a quién entrevistar y qué preguntarle; contesta letra a letra,
+   moviendo la boca, y acaba en la postura de la respuesta. Respuestas
+   escritas a mano: con humor, y cada una con una idea de la factorización,
+   el mcd o el mcm dentro. Algunas abren una repregunta.                    */
+const DIBUJA_E = {miut: p => gato('miut', p), naranja: p => gato('naranja', p), siete: piezaCara};
+const ENTREVISTAS = {
+  miut: {nombre:'Miut', cargo:'gata lila, la que rompe las piedras con la pata',
+    hola:['celebra', '¡Miau! Pregunta lo que quieras, pero rápido, que tengo piedras que romper.'],
+    preguntas:[
+      {id:'m1', p:'¿Por qué rompes los números como si fueran piedras?', pose:'habla',
+       r:'Porque por dentro están hechos de piezas. El 60 parece una piedra, pero es <b>2 · 2 · 3 · 5</b> pegados. Romperlo es descubrir de qué está hecho: eso es <b>descomponer en factores primos</b>.'},
+      {id:'m2', p:'¿Cómo sabes cuándo ya no se rompe más?', pose:'piensa',
+       r:'Cuando lo que queda es <b>primo</b>: ninguna herramienta lo parte. Y hay truco: solo hace falta probar los primos cuyo cuadrado no se pasa. Si 7 · 7 = 49 ya es más que 47 y ni el 2, ni el 3, ni el 5 lo parten, <b>el 47 es primo</b>.'},
+      {id:'m3', p:'¿Y el 1? ¿Es primo?', pose:'guina',
+       r:'El 1 no es una pieza: es la mesa vacía. Si fuera primo, el 6 sería 2 · 3, pero también 1 · 2 · 3, y 1 · 1 · 2 · 3… ¡no acabaríamos nunca! Por eso <b>el 1 no es primo</b>.'},
+      {id:'m4', p:'¿Por qué da igual por qué herramienta empieces?', pose:'celebra',
+       r:'Porque las piezas son siempre las mismas. Empiece por el 2 o por el 5, el 60 acaba en <b>2² · 3 · 5</b>. Cada número tiene <b>una sola bolsa de piezas</b>, y eso no hay golpe que lo cambie.'},
+      {id:'m5', p:'¿Qué es el mcd, en palabras de gata?', pose:'habla',
+       r:'La <b>torre más grande</b> que puedo hacer con piezas de los dos números a la vez. Solo valen las que tienen <b>los dos</b>, y tantas veces como las tenga <b>el que menos</b>.'},
+      {id:'m6', p:'¿Y el mcm?', pose:'habla',
+       r:'La <b>torre más pequeña</b> en la que caben los dos números enteros. Hace falta cada pieza tantas veces como la tenga <b>el que más</b>.'},
+      {id:'m6b', tras:'m6', p:'¿Y para qué sirve el mcm fuera de la mesa?', pose:'piensa',
+       r:'Si yo como cada 4 horas y el naranja cada 6, ¿cuándo volvemos a comer juntos? Cada <b>12</b>: el mcm de 4 y 6. Y para sumar 1/4 + 1/6, lo mismo: se hace en <b>doceavos</b>.'},
+      {id:'m7', p:'¿Te llevas bien con el gato naranja?', pose:'guina',
+       r:'Me para la pata cuando me equivoco. Da rabia… pero casi siempre tiene razón. <b>No se lo digas.</b>'},
+      {id:'m8', p:'¿Qué pasa con tus siete vidas?', pose:'sorpresa',
+       r:'¡Que en el reto las gasto todas! Cada fallo, una. <b>Cinco aciertos seguidos</b> me devuelven una. Así que, por favor, piensa antes de golpear.'}
+    ]},
+  naranja: {nombre:'el gato naranja', cargo:'gato de calcetín blanco y guardián de la mesa',
+    hola:['enfada', 'Fff. Rápido. Y nada de golpear con primos que no dividen.'],
+    preguntas:[
+      {id:'n1', p:'¿Por qué le paras la pata a Miut?', pose:'enfada',
+       r:'¡Porque iba a golpear el 35 con el 2! El 35 es <b>impar</b>: el 2 no lo parte ni aunque lo intente mil veces. Un golpe que no cae justo no rompe el número: rompe la mesa.'},
+      {id:'n2', p:'¿Cómo sabes tan rápido si un número se puede partir?', pose:'guina',
+       r:'<b>Criterios.</b> Por 2, si acaba en cifra par. Por 3, si la suma de sus cifras es múltiplo de 3: 51 → 5 + 1 = 6, se parte. Por 5, si acaba en 0 o en 5. Lo demás, probando.'},
+      {id:'n2b', tras:'n2', p:'¿Y por 11?', pose:'piensa',
+       r:'Sumo y resto las cifras salteadas: en el 121, 1 − 2 + 1 = 0, así que <b>el 11 lo parte</b>. Pero no se lo cuentes a Miut, que luego se hace la lista.'},
+      {id:'n3', p:'¿Por qué llevas un calcetín blanco?', pose:'calla',
+       r:'No es un calcetín. Es una pata elegante.'},
+      {id:'n3b', tras:'n3', p:'Pero es un calcetín, ¿no?', pose:'enfada', r:'Fffffff.'},
+      {id:'n4', p:'¿Cuál es tu número favorito?', pose:'celebra',
+       r:'El <b>1024</b>. Diez doses seguidos: <b>2¹⁰</b>. Una torre de piezas todas iguales. Precioso y ordenado.'},
+      {id:'n5', p:'¿Qué número te da más miedo?', pose:'sorpresa',
+       r:'Los <b>primos grandes</b>, como el 97. Pruebas el 2, el 3, el 5 y el 7… y ninguno lo parte. Y como 11 · 11 ya se pasa, no hay más que probar: se queda ahí, entero, mirándote.'},
+      {id:'n6', p:'¿Qué le dirías a quien falla mucho?', pose:'habla',
+       r:'Que yo paro la pata para que no te hagas daño. Mira el <b>criterio</b>, prueba otra herramienta y vuelve. Equivocarse con la pata parada es aprender; romper la mesa, no.'},
+      {id:'n7', p:'¿Mcd o mcm?', pose:'piensa',
+       r:'El <b>mcd</b>, que es pequeño y cabe en mi cesta. El mcm ocupa más: siempre es <b>igual o mayor</b> que los dos números, porque los dos tienen que caber dentro.'}
+    ]},
+  siete: {nombre:'el 7', cargo:'pieza prima, de las que no se rompen',
+    hola:['orgullo', 'Encantado. Soy el 7: primo, entero e irrompible.'],
+    preguntas:[
+      {id:'s1', p:'¿Qué se siente al ser primo?', pose:'orgullo',
+       r:'Solo me parten <b>el 1 y yo mismo</b>. Ningún otro. Es un poco solitario, pero muy tranquilo.'},
+      {id:'s2', p:'¿Estás en muchos números?', pose:'celebra',
+       r:'¡En todos los <b>múltiplos de 7</b>! En el 14, en el 21, en el 49 dos veces… y en el 77, con mi amigo el 11.'},
+      {id:'s3', p:'¿Cómo sabe la gente que eres primo?', pose:'habla',
+       r:'Solo hay que probar los primos cuyo cuadrado no se pasa: el 2… y ya, porque 3 · 3 = 9 es más que 7. El 2 no me parte, así que <b>soy primo</b>.'},
+      {id:'s4', p:'¿Qué pasa cuando te juntas contigo mismo?', pose:'celebra',
+       r:'Que salgo 7 · 7 = 49, que se escribe <b>7²</b>. Una torre de dos sietes. El 49 no es primo: está hecho de mí.'},
+      {id:'s5', p:'¿Qué haces en el mcd de 14 y 21?', pose:'orgullo',
+       r:'Soy yo. El 14 es 2 · 7 y el 21 es 3 · 7: la única pieza que tienen los dos soy yo. <b>mcd(14, 21) = 7</b>. Me encanta ser lo común.'},
+      {id:'s6', p:'¿Conoces al 17?', pose:'sorpresa',
+       r:'¡Claro! Es primo como yo, pero en la mesa <b>no tiene herramienta</b>: cuando queda un 17, hay que pulsar «ya no se rompe». Lo lleva con mucha dignidad.'},
+      {id:'s7', p:'¿Se acaban algún día los primos?', pose:'piensa',
+       r:'Nunca. <b>Euclides</b> lo demostró hace más de dos mil años: multiplica todos los primos que conozcas y súmale 1. Ese número no lo parte ninguno de ellos, así que siempre hay <b>otro primo</b> esperando.'}
+    ]}
+};
+let ev = null;
+function abreEntrevista(quien){
+  ev = {quien: quien || (ev && ev.quien) || 'miut', hechas: new Set(), tok: 0};
+  $('mEntrevista').hidden = false;
+  eligeEntrevistado(ev.quien);
+  setTimeout(() => { const b = document.querySelector('#evQuien button[aria-pressed="true"]'); if(b) b.focus(); }, 50);
+}
+function cierraEntrevista(){ if(ev) ev.tok++; $('mEntrevista').hidden = true; $('bEntrevista').focus(); }
+function eligeEntrevistado(quien){
+  ev.quien = quien; ev.hechas = new Set();
+  document.querySelectorAll('#evQuien button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.q === quien)));
+  const E = ENTREVISTAS[quien];
+  $('evCartel').innerHTML = 'Hoy entrevistamos a <b>' + E.nombre + '</b>, ' + E.cargo + '.';
+  $('evPregunta').textContent = '';
+  contestaE(E.hola[0], E.hola[1]);
+  pintaPreguntasE();
+}
+function pintaPreguntasE(){
+  const E = ENTREVISTAS[ev.quien], L = $('evLista');
+  L.innerHTML = '';
+  E.preguntas.filter(q => !q.tras || ev.hechas.has(q.tras)).forEach(q => {
+    const b = document.createElement('button');
+    b.className = 'ev-p' + (ev.hechas.has(q.id) ? ' hecha' : '') + (q.tras ? ' repregunta' : '');
+    b.innerHTML = (q.tras ? '<span class="ev-re">repregunta</span> ' : '') + q.p;
+    b.addEventListener('click', () => {
+      ev.hechas.add(q.id);
+      $('evPregunta').innerHTML = '— ' + q.p;
+      const esc = document.querySelector('.ev-escena');
+      if(esc && esc.getBoundingClientRect().top < 0) esc.scrollIntoView({behavior:'smooth', block:'start'});
+      contestaE(q.pose, q.r);
+      pintaPreguntasE();
+    });
+    L.appendChild(b);
+  });
+}
+function contestaE(pose, html){
+  const tok = ++ev.tok, cara = $('evCara'), dibu = DIBUJA_E[ev.quien], txt = $('evRespuesta');
+  const cierre = () => { if(ev.tok !== tok) return; txt.innerHTML = html; cara.innerHTML = dibu(pose); };
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ cierre(); return; }
+  const trozos = html.split(/(<[^>]+>)/).filter(Boolean);
+  const total = trozos.reduce((n, t) => n + (t[0] === '<' ? 0 : t.length), 0);
+  let n = 0;
+  const paso = () => {
+    if(ev.tok !== tok || $('mEntrevista').hidden) return;
+    n = Math.min(total, n + 2);
+    let quedan = n, h = '';
+    for(const t of trozos){ if(t[0] === '<'){ h += t; continue; } if(quedan <= 0) break; h += t.slice(0, quedan); quedan -= t.length; }
+    txt.innerHTML = h;
+    cara.innerHTML = dibu(Math.floor(n / 6) % 2 ? 'calla' : (pose === 'calla' ? 'calla' : 'habla'));
+    if(n < total) setTimeout(paso, 28); else cierre();
+  };
+  paso();
+}
+(function(){
+  [['miut','Miut'],['naranja','El naranja'],['siete','El 7']].forEach(([id, nom]) => {
+    const b = document.createElement('button');
+    b.dataset.q = id; b.type = 'button';
+    b.innerHTML = '<span class="ev-mini">' + DIBUJA_E[id]('calla') + '</span>' + nom;
+    b.addEventListener('click', () => eligeEntrevistado(id));
+    $('evQuien').appendChild(b);
+  });
+  $('bEntrevista').addEventListener('click', () => abreEntrevista());
+  $('evCerrar').addEventListener('click', cierraEntrevista);
+  $('mEntrevista').addEventListener('click', e => { if(e.target === $('mEntrevista')) cierraEntrevista(); });
+  addEventListener('keydown', e => { if(e.key === 'Escape' && !$('mEntrevista').hidden) cierraEntrevista(); });
+})();
 </script>
 </body></html>
