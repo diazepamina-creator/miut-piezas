@@ -24,4 +24,4 @@ Cada juego sube en cuatro etapas —colores, texturas, lisas y sin piezas— en 
 
 Es un solo archivo, `index.html`, sin dependencias: se abre en el navegador y ya está.
 
-© 2026 Andrés Asensio · [CC BY-NC-SA 4.0](LICENSE.md)
+© 2026 Andrés Asensio · [CC BY-NC-ND 4.0](LICENSE.md)
