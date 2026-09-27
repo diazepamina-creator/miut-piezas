@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <!--
   LAS PIEZAS DE MIUT · el mcd y el mcm con las manos
-  Manipulativo para 1.º y 2.º de ESO · versión 1.0.19
+  Manipulativo para 1.º y 2.º de ESO · versión 1.0.20
   © Andrés Asensio · CC BY-NC-SA 4.0
 
   POR QUÉ OTRA APP. El templo de Miut enseña la divisibilidad con diez
@@ -43,6 +43,11 @@
     número que forman. Delante los factores, detrás el producto: la torre
     ES el número. Por eso la cuenta ya no se escribe debajo de las torres:
     se descubre volteándolas.
+
+  VERSIÓN 1.0.20 · ROTA, AL CENTRO
+  · Cuando la piedra queda rota del todo, la fila de piezas se desliza
+    hasta quedar centrada, antes de que la pata deje la última: ya no
+    tiene que estar encima de la piedra.
 
   VERSIÓN 1.0.19 · LA FILA DE ROMPER, ENGANCHADA
   · En Romper la fila de piezas ya no se sale por la derecha (el 256 =
@@ -1028,7 +1033,7 @@ body[data-aula="si"] .panel{margin-top:8px;padding:11px}
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license">© 2026 Andrés Asensio · CC BY-NC-SA 4.0</a>
   · <a href="https://diazepamina-creator.github.io/templo-de-miut/templo.html">El templo de Miut (anterior)</a>
   · <a href="https://diazepamina-creator.github.io/">Materiales</a>
-  · versión 1.0.19
+  · versión 1.0.20
 </footer>
 </div>
 
@@ -1234,7 +1239,23 @@ function enganchaFila(f){
   f.style.marginBottom = (-sube * (rs.length - 1)).toFixed(1) + 'px';
   dorso(rs);
 }
-const enganchaTodo = () => { alineaRotas(); document.querySelectorAll('#tablero .fila').forEach(enganchaFila); };
+const enganchaTodo = () => { alineaRotas(); document.querySelectorAll('#tablero .fila').forEach(enganchaFila); centraRotas(); };
+/* ROTA DEL TODO, la fila ya no tiene que estar sobre la piedra: se desliza
+   hasta quedar centrada, antes de que la pata deje la última pieza */
+function centraRotas(){
+  const R = document.querySelector('#tablero .romper'); if(!R || !P.romp) return;
+  const v = R.querySelector('.bloque .volteo'); if(!v) return;
+  v.style.transition = ''; v.style.translate = '';
+  if(P.romp.resto !== 1) return;
+  const ps = [...v.querySelectorAll('.frente .pieza')].map(b => b.getBoundingClientRect()); if(!ps.length) return;
+  const z = document.body.dataset.aula === 'si' ? (parseFloat(getComputedStyle(document.body).getPropertyValue('--zAula')) || 1) : 1;
+  const rr = R.getBoundingClientRect(), izq = Math.min(...ps.map(r => r.left)), der = Math.max(...ps.map(r => r.right));
+  const dx = ((rr.left + rr.width / 2) - (izq + der) / 2) / z;
+  if(Math.abs(dx) < 1) return;
+  if(!P.romp.centrada && !quieto()){ void v.offsetWidth; v.style.transition = 'translate .45s cubic-bezier(.3,.7,.3,1)'; }
+  P.romp.centrada = true;
+  v.style.translate = dx.toFixed(1) + 'px 0';
+}
 /* EN ROMPER, la fila de piezas empieza justo encima de la piedra, no en la
    esquina: la pieza que se desprende sube a su sitio, al lado. Crece hasta
    el borde y, si no cabe, sigue en otra línea enganchada por abajo */
